@@ -7,9 +7,12 @@ Usage:
     python query_standards.py --tag ai
 """
 
+from __future__ import annotations
+
 import argparse
 import sys
 from pathlib import Path
+from typing import Optional
 
 import yaml
 
