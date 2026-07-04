@@ -1,0 +1,79 @@
+name: Standards Compliance Check
+
+# Reusable workflow — other repos call this to check their compliance.
+# Usage in a consuming repo:
+#
+#   jobs:
+#     compliance:
+#       uses: bv90dsit/Engineering_standards/.github/workflows/compliance.yml@main
+#       with:
+#         role: engineer
+#         platform: python
+
+on:
+  workflow_call:
+    inputs:
+      role:
+        description: "Role context (engineer, architect, lead)"
+        required: false
+        type: string
+        default: "any"
+      platform:
+        description: "Platform context (python, java, node, any)"
+        required: false
+        type: string
+        default: "any"
+      category:
+        description: "Category filter (ENG, SEC, ARC, OPS, EMG)"
+        required: false
+        type: string
+        default: ""
+
+  # Also runnable directly on this repo for testing
+  workflow_dispatch:
+    inputs:
+      role:
+        description: "Role context"
+        required: false
+        default: "any"
+      platform:
+        description: "Platform context"
+        required: false
+        default: "any"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+        with:
+          path: target-repo
+
+      - name: Checkout standards
+        uses: actions/checkout@v4
+        with:
+          repository: bv90dsit/Engineering_standards
+          path: standards
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install pyyaml
+
+      - name: Run compliance check
+        run: |
+          python standards/scripts/check_compliance.py \
+            --repo-path target-repo \
+            --role "${{ inputs.role }}" \
+            --platform "${{ inputs.platform }}" \
+            --output markdown >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Run compliance check (exit code)
+        run: |
+          python standards/scripts/check_compliance.py \
+            --repo-path target-repo \
+            --role "${{ inputs.role }}" \
+            --platform "${{ inputs.platform }}"
