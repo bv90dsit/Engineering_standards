@@ -1,0 +1,104 @@
+# UK Government Engineering Standards — Index
+# Every standard has one row here. Consumers filter by context (role, platform, data_class).
+# Conformance levels follow RFC 2119: MUST | SHOULD | COULD
+
+standards:
+  - id: ENG-001
+    title: Open source by default
+    conformance: MUST
+    applies_to:
+      role: any
+      platform: any
+    category: ENG
+    source: technology-code-of-practice
+    tags: [open-source, reuse, transparency]
+
+  - id: ENG-002
+    title: Version control for all source code
+    conformance: MUST
+    applies_to:
+      role: any
+      platform: any
+    category: ENG
+    source: technology-code-of-practice
+    tags: [git, source-control, collaboration]
+
+  - id: ENG-003
+    title: Continuous integration and automated testing
+    conformance: MUST
+    applies_to:
+      role: any
+      platform: any
+    category: ENG
+    source: gds-service-standard
+    tags: [ci, testing, automation]
+
+  - id: SEC-001
+    title: HTTPS everywhere
+    conformance: MUST
+    applies_to:
+      role: any
+      platform: any
+    category: SEC
+    source: ncsc-secure-by-design
+    tags: [tls, encryption, transport-security]
+
+  - id: SEC-002
+    title: Dependency vulnerability scanning
+    conformance: MUST
+    applies_to:
+      role: any
+      platform: any
+    category: SEC
+    source: owasp-top-10
+    tags: [dependencies, supply-chain, sca]
+
+  - id: ARC-001
+    title: Cloud-first architecture
+    conformance: SHOULD
+    applies_to:
+      role: any
+      platform: any
+    category: ARC
+    source: technology-code-of-practice
+    tags: [cloud, infrastructure, hosting]
+
+  - id: ARC-002
+    title: Twelve-factor application design
+    conformance: SHOULD
+    applies_to:
+      role: any
+      platform: any
+    category: ARC
+    source: 12-factor
+    tags: [config, stateless, portability]
+
+  - id: OPS-001
+    title: Monitor and alert on service health
+    conformance: MUST
+    applies_to:
+      role: any
+      platform: any
+    category: OPS
+    source: gds-service-standard
+    tags: [observability, monitoring, alerting]
+
+  - id: OPS-002
+    title: Deployment frequency target (weekly minimum)
+    conformance: SHOULD
+    applies_to:
+      role: any
+      platform: any
+    category: OPS
+    source: dora-metrics
+    tags: [dora, deployment, delivery]
+
+  - id: EMG-001
+    title: AI-generated code must be reviewed as any other contribution
+    conformance: MUST
+    applies_to:
+      role: any
+      platform: any
+    category: EMG
+    source: technology-code-of-practice
+    tags: [ai, code-review, generative-ai]
