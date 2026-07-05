@@ -1,0 +1,105 @@
+name: Propose a new standard
+description: Propose a new engineering standard for inclusion
+title: "[Standard] "
+labels: ["new-standard"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Propose a new standard
+        Fill in as much as you can. A maintainer will refine the wording and create the PR.
+
+  - type: input
+    id: standard_id
+    attributes:
+      label: Standard ID
+      description: "e.g. SEC-008, PY-009, JV-007 (check existing IDs to avoid conflicts)"
+      placeholder: "SEC-008"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: Module
+      description: Which module does this belong in?
+      options:
+        - core
+        - python
+        - java
+        - typescript
+        - new module (describe below)
+    validations:
+      required: true
+
+  - type: input
+    id: title
+    attributes:
+      label: Standard title
+      description: "Short, clear title for the standard"
+      placeholder: "All API endpoints must have rate limiting"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: conformance
+    attributes:
+      label: Conformance level
+      options:
+        - MUST
+        - SHOULD
+        - COULD
+    validations:
+      required: true
+
+  - type: dropdown
+    id: enforcement
+    attributes:
+      label: Primary enforcement mechanism
+      description: How should compliance be verified?
+      options:
+        - automated (CI/CD pipeline check)
+        - peer-review (checked during code review)
+        - periodic-audit (service assessment / quarterly)
+        - ways-of-working (team charter / runbooks)
+    validations:
+      required: true
+
+  - type: textarea
+    id: standard_statement
+    attributes:
+      label: Standard statement
+      description: "What MUST/SHOULD/COULD be done? One clear sentence."
+      placeholder: "All public API endpoints MUST implement rate limiting with documented thresholds."
+    validations:
+      required: true
+
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Rationale
+      description: "Why does this matter? 2-4 bullet points."
+      placeholder: |
+        - Prevents denial of service from misbehaving clients
+        - Protects shared infrastructure from resource exhaustion
+    validations:
+      required: true
+
+  - type: textarea
+    id: sources
+    attributes:
+      label: Source frameworks
+      description: "Which published frameworks or standards support this? Include URLs if possible."
+      placeholder: |
+        - OWASP API Security Top 10 — https://owasp.org/API-Security/
+        - GDS API Standards — https://www.gov.uk/guidance/gds-api-technical-and-data-standards
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: "Anything else — examples of what good/bad looks like, existing precedent, etc."
+    validations:
+      required: false

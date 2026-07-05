@@ -1,0 +1,80 @@
+name: Generate Standard from Issue
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  generate:
+    if: contains(github.event.label.name, 'new-standard')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install pyyaml
+
+      - name: Parse issue and generate standard
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          # Extract fields from issue body
+          python -c "
+          import os, re, subprocess, sys
+
+          body = os.environ['ISSUE_BODY']
+          issue_number = os.environ['ISSUE_NUMBER']
+
+          def extract_field(label, body):
+              pattern = rf'### {re.escape(label)}\s*\n\s*\n(.*?)(?=\n### |\Z)'
+              match = re.search(pattern, body, re.DOTALL)
+              return match.group(1).strip() if match else ''
+
+          standard_id = extract_field('Standard ID', body)
+          module = extract_field('Module', body).split(' (')[0]  # strip '(describe below)'
+          title = extract_field('Standard title', body)
+          conformance = extract_field('Conformance level', body)
+          enforcement = extract_field('Primary enforcement mechanism', body).split(' (')[0]
+
+          if not all([standard_id, module, title, conformance]):
+              print('ERROR: Missing required fields in issue')
+              sys.exit(1)
+
+          cmd = [
+              'python', 'scripts/new_standard.py',
+              '--id', standard_id,
+              '--module', module,
+              '--title', title,
+              '--conformance', conformance,
+              '--enforcement', enforcement,
+          ]
+          subprocess.run(cmd, check=True)
+          "
+
+      - name: Create PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          BRANCH="standard/issue-${ISSUE_NUMBER}"
+          git checkout -b "$BRANCH"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Scaffold new standard from issue #${ISSUE_NUMBER}"
+          git push origin "$BRANCH"
+          gh pr create \
+            --title "Add standard from issue #${ISSUE_NUMBER}" \
+            --body "Auto-generated from #${ISSUE_NUMBER}. Fill in the TODO sections and mark ready for review." \
+            --base main \
+            --head "$BRANCH"
+          gh issue comment "$ISSUE_NUMBER" --body "PR created automatically. Please review and fill in the TODO sections."
