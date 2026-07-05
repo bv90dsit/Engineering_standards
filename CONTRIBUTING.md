@@ -125,23 +125,45 @@ Add to `modules/{module}/standards-index.yaml`:
     tags: [relevant, tags, here]
 ```
 
-### 4. (Optional) Add a VS Code rule
+### 4. VS Code rule (the scaffold asks you)
 
-If the standard can be detected by a regex pattern on a single line, add to `modules/{module}/rules.json`:
+The scaffold command asks: **"Can this be detected by a regex on a single line?"**
+
+- **Examples that CAN:** `http://` URLs, `print()`, hardcoded secrets, `@ts-ignore`, `System.out.println`
+- **Examples that CAN'T:** architecture decisions, SLOs, team process, monitoring config
+
+If you answer yes, it prompts for:
+- File pattern (e.g. `**/*.py`, `**/*.{ts,tsx}`)
+- Regex pattern to match violations
+- Severity (`error` / `warning` / `information`)
+- Message shown to the engineer
+
+The rule is added to `modules/{module}/rules.json` automatically — no JSON editing needed.
+
+**What happens after merge:**
+
+```
+PR merges → Build VS Code Extension workflow triggers
+    → compiles, tests, packages .vsix
+    → uploads to latest GitHub Release
+    → engineers get the new rule on next download
+```
+
+No manual packaging, no version bumping, no stale extension.
+
+**If you skipped the prompt** (or are editing rules.json manually), the format is:
 
 ```json
 {
   "id": "SEC-008",
   "pattern": "regex to match violations",
-  "excludePattern": "^\\s*(#|//)",
+  "excludePattern": "^\\s*(#|//|\\*)",
   "filePattern": "**/*.py",
   "excludeFilePattern": "**/test_*",
   "severity": "error",
   "message": "SEC-008: Explanation of what's wrong and what to do instead."
 }
 ```
-
-When your PR merges, the **Build VS Code Extension** workflow automatically rebuilds the `.vsix` and uploads it to the latest release. No manual packaging needed.
 
 ### 5. Update counts
 
