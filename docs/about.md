@@ -157,34 +157,6 @@ permalink: /about/
 
 Government digital services affect millions. These standards ensure services are **secure**, **accessible**, **reliable**, and **maintainable** — backed by published authoritative frameworks, not opinion.
 
-## Conformance breakdown
-
-<div class="bar-chart">
-  <div class="bar-chart__row">
-    <span class="bar-chart__label">MUST</span>
-    <div class="bar-chart__bar" style="width: 50%; background: #d4351c;">35</div>
-  </div>
-  <div class="bar-chart__row">
-    <span class="bar-chart__label">SHOULD</span>
-    <div class="bar-chart__bar" style="width: 47%; background: #f47738;">33</div>
-  </div>
-  <div class="bar-chart__row">
-    <span class="bar-chart__label">COULD</span>
-    <div class="bar-chart__bar" style="width: 2%; min-width: 30px; background: #00703c;">1</div>
-  </div>
-</div>
-
-## How they're enforced
-
-<div class="pill-grid">
-  <span class="pill pill--automated">Automated (IDE + CI)</span>
-  <span class="pill pill--peer">Peer review</span>
-  <span class="pill pill--audit">Service assessment</span>
-  <span class="pill pill--culture">Team practice</span>
-</div>
-
-Standards checked **automatically** give you feedback as you type in VS Code and block non-compliant PRs in CI. Others are checked by reviewers, assessors, or documented in team charters.
-
 ## Who are these for?
 
 <div class="roles-grid">
@@ -239,7 +211,7 @@ Standards checked **automatically** give you feedback as you type in VS Code and
   </div>
 </div>
 
-## Source authority
+## Source frameworks
 
 Every standard traces back to at least one published framework:
 
@@ -256,3 +228,31 @@ Every standard traces back to at least one published framework:
 </div>
 
 See the [Source Graph](/Engineering_standards/sources-graph/) for how they connect.
+
+## How they're enforced
+
+<div class="pill-grid">
+  <span class="pill pill--automated">Automated (IDE + CI)</span>
+  <span class="pill pill--peer">Peer review</span>
+  <span class="pill pill--audit">Service assessment</span>
+  <span class="pill pill--culture">Team practice</span>
+</div>
+
+Standards checked **automatically** give you feedback as you type in VS Code and block non-compliant PRs in CI. Others are checked by reviewers, assessors, or documented in team charters.
+
+## Conformance breakdown
+
+<div class="bar-chart">
+  <div class="bar-chart__row">
+    <span class="bar-chart__label">MUST</span>
+    <div class="bar-chart__bar" style="width: 50%; background: #d4351c;">35</div>
+  </div>
+  <div class="bar-chart__row">
+    <span class="bar-chart__label">SHOULD</span>
+    <div class="bar-chart__bar" style="width: 47%; background: #f47738;">33</div>
+  </div>
+  <div class="bar-chart__row">
+    <span class="bar-chart__label">COULD</span>
+    <div class="bar-chart__bar" style="width: 2%; min-width: 30px; background: #00703c;">1</div>
+  </div>
+</div>
