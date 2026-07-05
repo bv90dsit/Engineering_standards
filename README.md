@@ -29,7 +29,7 @@ cd Engineering_standards && pip install pyyaml
 python scripts/suggest_standards.py --repo-path /path/to/your-service
 ```
 
-Detects your stack and lists applicable standards grouped by MUST/SHOULD/COULD.
+Detects your stack and lists applicable standards grouped by MUST/SHOULD/COULD. For manual mode (specify role/platform explicitly), see [usage by role](docs/usage-by-role.md).
 
 ### Adopt in your service
 
