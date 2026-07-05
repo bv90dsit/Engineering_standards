@@ -2,7 +2,7 @@
   "name": "uk-gov-engineering-standards",
   "displayName": "UK Gov Engineering Standards",
   "description": "Real-time compliance checking against UK Government engineering standards",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "publisher": "uk-gov-engineering",
   "engines": {
     "vscode": "^1.85.0"
