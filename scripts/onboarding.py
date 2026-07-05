@@ -19,7 +19,7 @@ from standards_lib.query import query_standards
 REPO_URL = "https://github.com/bv90dsit/Engineering_standards"
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Onboarding guide — what standards apply and how to adopt them"
     )

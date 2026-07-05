@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 from typing import Optional
 
@@ -26,8 +27,23 @@ def _discover_modules() -> list[Path]:
 def _load_module_index(module_path: Path) -> list[dict]:
     """Load standards from a single module's index, tagging each with the module name."""
     index_file = module_path / "standards-index.yaml"
-    with open(index_file) as f:
-        data = yaml.safe_load(f)
+    try:
+        with open(index_file) as f:
+            data = yaml.safe_load(f)
+    except FileNotFoundError:
+        print(
+            f"Warning: Module index not found: {index_file}",
+            file=sys.stderr,
+        )
+        return []
+    except yaml.YAMLError as e:
+        print(
+            f"Warning: Failed to parse module index {index_file}: {e}",
+            file=sys.stderr,
+        )
+        return []
+    if data is None:
+        return []
     standards = data.get("standards", [])
     module_name = module_path.name
     for s in standards:
@@ -62,8 +78,23 @@ def load_index(module: Optional[str] = None) -> list[dict]:
 
     # Fallback: no modules directory, use root-level index (backwards compatible)
     if INDEX_PATH.exists():
-        with open(INDEX_PATH) as f:
-            data = yaml.safe_load(f)
+        try:
+            with open(INDEX_PATH) as f:
+                data = yaml.safe_load(f)
+        except FileNotFoundError:
+            print(
+                f"Warning: Standards index not found: {INDEX_PATH}",
+                file=sys.stderr,
+            )
+            return []
+        except yaml.YAMLError as e:
+            print(
+                f"Warning: Failed to parse standards index {INDEX_PATH}: {e}",
+                file=sys.stderr,
+            )
+            return []
+        if data is None:
+            return []
         standards = data.get("standards", [])
         for s in standards:
             s["_module"] = "core"
@@ -152,7 +183,13 @@ def get_standard(standard_id: str) -> str:
     if file_path.exists():
         return file_path.read_text()
 
-    raise FileNotFoundError(f"Standard file not found for ID: {standard_id}")
+    searched_locations = [m.name for m in modules]
+    if STANDARDS_DIR.is_dir():
+        searched_locations.append(f"root ({STANDARDS_DIR})")
+    raise FileNotFoundError(
+        f"Standard file not found for ID: {standard_id}. "
+        f"Searched modules: {searched_locations or ['(none — no modules directory found)']}"
+    )
 
 
 def list_modules() -> list[dict]:
@@ -162,8 +199,17 @@ def list_modules() -> list[dict]:
     for m in modules:
         meta_file = m / "module.yaml"
         if meta_file.exists():
-            with open(meta_file) as f:
-                meta = yaml.safe_load(f)
+            try:
+                with open(meta_file) as f:
+                    meta = yaml.safe_load(f)
+            except (yaml.YAMLError, OSError) as e:
+                print(
+                    f"Warning: Skipping module '{m.name}' — failed to load {meta_file}: {e}",
+                    file=sys.stderr,
+                )
+                continue
+            if meta is None:
+                continue
             meta["path"] = str(m)
             result.append(meta)
     return result

@@ -19,9 +19,11 @@ interface RulesFile {
 }
 
 let loadedRules: Rule[] = [];
+let outputCh: vscode.OutputChannel | undefined;
 
-export function loadRules(extensionPath: string): void {
+export function loadRules(extensionPath: string, outputChannel?: vscode.OutputChannel): void {
     loadedRules = [];
+    outputCh = outputChannel;
 
     const modulesDir = findModulesDir(extensionPath);
     if (modulesDir) {
@@ -76,8 +78,10 @@ function loadRulesFromDir(modulesDir: string): void {
                 loadRulesFile(rulesFile);
             }
         }
-    } catch {
-        // modules directory not readable — fall through to hardcoded checks
+    } catch (error) {
+        if (outputCh) {
+            outputCh.appendLine(`[UK Gov Standards] Warning: Failed to load rules from modules directory: ${error}`);
+        }
     }
 }
 
@@ -88,8 +92,11 @@ function loadRulesFile(filePath: string): void {
         if (data.rules && Array.isArray(data.rules)) {
             loadedRules.push(...data.rules);
         }
-    } catch {
-        // invalid rules.json — skip silently
+    } catch (error) {
+        if (outputCh) {
+            const name = path.basename(path.dirname(filePath));
+            outputCh.appendLine(`[UK Gov Standards] Warning: Failed to load rules from modules/${name}/rules.json: ${error}`);
+        }
     }
 }
 
@@ -155,14 +162,103 @@ export function runRuleEngine(document: vscode.TextDocument): CheckResult[] {
 }
 
 function matchesGlob(filePath: string, pattern: string): boolean {
-    const regexPattern = pattern
-        .replace(/\./g, '\\.')
-        .replace(/\*\*/g, '{{GLOBSTAR}}')
-        .replace(/\*/g, '[^/]*')
-        .replace(/\{\{GLOBSTAR\}\}/g, '.*')
-        .replace(/\{([^}]+)\}/g, (_, choices) => `(${choices.split(',').join('|')})`);
+    const regex = globToRegex(pattern);
+    return regex.test(filePath);
+}
 
-    return new RegExp(`^${regexPattern}$`).test(filePath);
+function globToRegex(pattern: string): RegExp {
+    let regexStr = '';
+    let i = 0;
+
+    while (i < pattern.length) {
+        const ch = pattern[i];
+
+        if (ch === '\\') {
+            // Escaped character — take next char literally (regex-escaped)
+            i++;
+            if (i < pattern.length) {
+                regexStr += escapeRegexChar(pattern[i]);
+            }
+        } else if (ch === '*') {
+            if (i + 1 < pattern.length && pattern[i + 1] === '*') {
+                // Globstar **
+                i++; // consume second *
+                // ** may be surrounded by slashes: consume a trailing slash if present
+                if (i + 1 < pattern.length && pattern[i + 1] === '/') {
+                    i++; // consume trailing /
+                }
+                // Match any path depth (zero or more path segments)
+                regexStr += '(?:.+/)?';
+            } else {
+                // Single * — match anything except /
+                regexStr += '[^/]*';
+            }
+        } else if (ch === '?') {
+            // Match any single character except /
+            regexStr += '[^/]';
+        } else if (ch === '{') {
+            // Brace expansion: {a,b,c}
+            const closeIdx = pattern.indexOf('}', i);
+            if (closeIdx === -1) {
+                // No closing brace — treat as literal
+                regexStr += '\\{';
+            } else {
+                const braceContent = pattern.substring(i + 1, closeIdx);
+                const alternatives = splitBraceAlternatives(braceContent);
+                // Recursively convert each alternative (they may contain dots, wildcards, etc.)
+                const altRegexes = alternatives.map(alt => globToRegex(alt).source.slice(1, -1)); // strip ^ and $
+                regexStr += '(?:' + altRegexes.join('|') + ')';
+                i = closeIdx; // will be incremented at end of loop
+            }
+        } else if (ch === '[') {
+            // Character class — pass through to regex as-is until closing ]
+            const closeIdx = pattern.indexOf(']', i + 1);
+            if (closeIdx === -1) {
+                regexStr += '\\[';
+            } else {
+                regexStr += pattern.substring(i, closeIdx + 1);
+                i = closeIdx;
+            }
+        } else {
+            // Literal character — escape regex metacharacters
+            regexStr += escapeRegexChar(ch);
+        }
+
+        i++;
+    }
+
+    return new RegExp('^' + regexStr + '$');
+}
+
+function escapeRegexChar(ch: string): string {
+    if ('.+^${}()|[]\\/?*'.indexOf(ch) !== -1) {
+        return '\\' + ch;
+    }
+    return ch;
+}
+
+function splitBraceAlternatives(content: string): string[] {
+    // Split on commas, but respect nested braces
+    const parts: string[] = [];
+    let depth = 0;
+    let current = '';
+
+    for (const ch of content) {
+        if (ch === '{') {
+            depth++;
+            current += ch;
+        } else if (ch === '}') {
+            depth--;
+            current += ch;
+        } else if (ch === ',' && depth === 0) {
+            parts.push(current);
+            current = '';
+        } else {
+            current += ch;
+        }
+    }
+    parts.push(current);
+    return parts;
 }
 
 export function getRuleCount(): number {

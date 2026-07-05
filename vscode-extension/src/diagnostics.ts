@@ -11,7 +11,7 @@ let debounceTimer: NodeJS.Timeout | undefined;
 let workspaceChecked = false;
 let useRuleEngine = false;
 
-export function activate(context: vscode.ExtensionContext): void {
+export function activate(context: vscode.ExtensionContext, outputChannel?: vscode.OutputChannel): void {
     diagnosticCollection = vscode.languages.createDiagnosticCollection('uk-gov-standards');
     workspaceDiagnosticCollection = vscode.languages.createDiagnosticCollection('uk-gov-standards-workspace');
 
@@ -19,7 +19,7 @@ export function activate(context: vscode.ExtensionContext): void {
     context.subscriptions.push(workspaceDiagnosticCollection);
 
     // Load rules from modules
-    loadRules(context.extensionPath);
+    loadRules(context.extensionPath, outputChannel);
     useRuleEngine = getRuleCount() > 0;
 
     context.subscriptions.push(

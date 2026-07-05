@@ -17,7 +17,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
-def run(cmd: list[str], check: bool = True, capture: bool = False) -> subprocess.CompletedProcess:
+def run(cmd: list[str], check: bool = True, capture: bool = False) -> subprocess.CompletedProcess[str]:
     return subprocess.run(cmd, cwd=REPO_ROOT, check=check, capture_output=capture, text=True)
 
 
@@ -50,10 +50,10 @@ def run_validation() -> None:
     print(result.stdout.strip().split("\n")[-1])
 
 
-def count_standards() -> dict:
+def count_standards() -> dict[str, int]:
     import yaml
     modules_dir = REPO_ROOT / "modules"
-    counts = {}
+    counts: dict[str, int] = {}
     total = 0
     for module_path in sorted(modules_dir.iterdir()):
         index_file = module_path / "standards-index.yaml"
@@ -134,7 +134,7 @@ def create_release(version: str, dry_run: bool) -> None:
     print(f"✓ Created GitHub release: {version}")
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Create a new standards release")
     parser.add_argument("--version", required=True, help="Version tag (e.g. v1.0.0)")
     parser.add_argument("--dry-run", action="store_true", help="Show what would happen without doing it")

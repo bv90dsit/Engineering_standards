@@ -21,7 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from standards_lib.query import query_standards, list_modules, to_json
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Query UK Gov engineering standards by context")
     parser.add_argument("--role", help="e.g. engineer, architect, lead")
     parser.add_argument("--platform", help="e.g. python, java, node, any")
