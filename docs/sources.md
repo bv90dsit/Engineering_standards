@@ -59,10 +59,11 @@ The distinction: source traceability answers "why must we do this?" (authority).
 
 | Source | Publisher | Standards derived |
 |--------|-----------|-------------------|
-| [DORA Metrics / State of DevOps](https://dora.dev/) | Google / DORA team | OPS-002, OPS-005 |
-| [Accelerate](https://itrevolution.com/product/accelerate/) | Forsgren, Humble, Kim | OPS-002, OPS-005 |
-| [12-Factor App](https://12factor.net/) | Heroku / Adam Wiggins | ARC-002, TS-006 |
+| [DORA Metrics / State of DevOps](https://dora.dev/) | Google / DORA team | OPS-002, OPS-005, ENG-007 |
+| [Accelerate](https://itrevolution.com/product/accelerate/) | Forsgren, Humble, Kim | OPS-002, OPS-005, ENG-007 |
+| [12-Factor App](https://12factor.net/) | Heroku / Adam Wiggins | ARC-002, TS-006, OPS-006 |
 | [Google SRE Book](https://sre.google/sre-book/table-of-contents/) | Google | OPS-001, OPS-003 |
+| [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/) | AWS | ARC-005, ARC-006 |
 
 ## Language & Framework Documentation
 
