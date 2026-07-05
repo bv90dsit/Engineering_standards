@@ -19,12 +19,10 @@ This repo contains engineering standards (markdown files), Python scripts (query
 
 If you discover a security issue in this repository:
 
-1. **Do NOT open a public issue**
-2. Email: bharathtvadhoola@gmail.com
-3. Include: description, steps to reproduce, affected versions
-4. Expected response: within 5 working days
+1. Open a [GitHub Issue](https://github.com/bv90dsit/Engineering_standards/issues/new) with the label `security`
+2. Include: description, steps to reproduce, affected versions
 
-We will acknowledge receipt, assess severity, and coordinate disclosure.
+This is a best-endeavour, community-maintained project with no SLA. Issues are triaged as soon as practically possible.
 
 ## What we scan
 
