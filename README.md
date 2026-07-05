@@ -8,9 +8,34 @@ A machine-readable, context-aware set of engineering standards for UK Government
 
 Five layers from raw source material to the engineer at their desk:
 
+### Layer status
+
+| Layer | Component | Status | What exists |
+|-------|-----------|--------|-------------|
+| **0 — Source frameworks** | External published standards | ✅ Complete | Referenced in every standard's traceability table |
+| **1 — Standard files** | `standards/*.md` | ✅ Complete (33) | 7 categories: ENG, SEC, ARC, OPS, DAT, ACC, EMG |
+| **2 — Index file** | `standards-index.yaml` | ✅ Complete | All 33 entries with conformance, enforcement, applies_to, tags |
+| **3 — Query interface** | `standards_lib/` | ✅ Built | Importable Python library + CLI with JSON output, enforcement filter |
+| **4 — Consumers** | Tools calling the query layer | 🔶 Partial | See below |
+
+### Layer 4 consumers — built vs planned
+
+| Consumer | Status | Description |
+|----------|--------|-------------|
+| **CI/CD compliance checker** | ✅ Built | `scripts/check_compliance.py` — automated checks for all 33 standards |
+| **Reusable GitHub Action** | ✅ Built | `.github/workflows/compliance.yml` — any repo can call it |
+| **Onboarding tool** | ✅ Built | `scripts/onboarding.py` — "you just joined, here's what applies" |
+| **Human reader** | ✅ Built | Browse on GitHub, README explains everything |
+| **Compliance dashboard** | 🔲 Planned | Web view: all services × all standards = pass/fail matrix |
+| **IDE plugin** | 🔲 Planned | Inline warnings (hardcoded secret, HTTP URL, missing tests) |
+| **Slack/Teams bot** | 🔲 Planned | Query standards from chat ("what are the SEC standards for my Python service?") |
+
 ## Quick start
 
 ```bash
+# Onboarding — "I just joined, what applies to me?"
+python scripts/onboarding.py --role engineer --platform python
+
 # Query all MUST standards
 python scripts/query_standards.py --conformance MUST
 
@@ -19,6 +44,15 @@ python scripts/query_standards.py --category SEC
 
 # Query what applies to a Python engineer
 python scripts/query_standards.py --role engineer --platform python
+
+# Query only standards enforced via CI/CD
+python scripts/query_standards.py --enforcement automated
+
+# Output as JSON (for programmatic consumers)
+python scripts/query_standards.py --category SEC --json
+
+# Check a repo's compliance
+python scripts/check_compliance.py --repo-path /path/to/repo --role engineer
 
 # Query AI-related standards
 python scripts/query_standards.py --tag ai

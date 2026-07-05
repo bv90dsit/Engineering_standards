@@ -5,6 +5,8 @@ Usage:
     python query_standards.py --role engineer --platform python --data-class OFFICIAL
     python query_standards.py --category SEC
     python query_standards.py --tag ai
+    python query_standards.py --enforcement automated
+    python query_standards.py --role engineer --json
 """
 
 from __future__ import annotations
@@ -12,46 +14,11 @@ from __future__ import annotations
 import argparse
 import sys
 from pathlib import Path
-from typing import Optional
 
-import yaml
+# Ensure the package is importable when running the script directly
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-
-INDEX_PATH = Path(__file__).resolve().parent.parent / "standards-index.yaml"
-
-
-def load_index() -> list[dict]:
-    with open(INDEX_PATH) as f:
-        data = yaml.safe_load(f)
-    return data["standards"]
-
-
-def matches_context(standard: dict, role: str | None, platform: str | None,
-                    data_class: str | None, category: str | None, tag: str | None) -> bool:
-    applies = standard.get("applies_to", {})
-
-    if role:
-        std_role = applies.get("role", "any")
-        if std_role != "any" and role not in std_role.split(","):
-            return False
-
-    if platform:
-        std_platform = applies.get("platform", "any")
-        if std_platform != "any" and platform not in std_platform.split(","):
-            return False
-
-    if category and standard.get("category") != category:
-        return False
-
-    if tag and tag not in standard.get("tags", []):
-        return False
-
-    return True
-
-
-def query_standards(role=None, platform=None, data_class=None, category=None, tag=None) -> list[dict]:
-    standards = load_index()
-    return [s for s in standards if matches_context(s, role, platform, data_class, category, tag)]
+from standards_lib.query import query_standards, to_json
 
 
 def main():
@@ -61,7 +28,9 @@ def main():
     parser.add_argument("--data-class", help="e.g. OFFICIAL, OFFICIAL-SENSITIVE, SECRET")
     parser.add_argument("--category", help="e.g. ENG, SEC, ARC, OPS, EMG")
     parser.add_argument("--tag", help="filter by tag")
+    parser.add_argument("--enforcement", help="filter by enforcement type: automated, peer-review, periodic-audit, ways-of-working")
     parser.add_argument("--conformance", help="filter by conformance level: MUST, SHOULD, COULD")
+    parser.add_argument("--json", action="store_true", dest="json_output", help="output results as JSON")
     args = parser.parse_args()
 
     results = query_standards(
@@ -70,21 +39,22 @@ def main():
         data_class=args.data_class,
         category=args.category,
         tag=args.tag,
+        enforcement=args.enforcement,
+        conformance=args.conformance,
     )
-
-    if args.conformance:
-        results = [r for r in results if r.get("conformance") == args.conformance]
 
     if not results:
         print("No standards match the given context.")
         sys.exit(0)
 
-    print(f"{'ID':<10} {'Conformance':<12} {'Title'}")
-    print("-" * 60)
-    for s in results:
-        print(f"{s['id']:<10} {s['conformance']:<12} {s['title']}")
-
-    print(f"\n{len(results)} standard(s) matched.")
+    if args.json_output:
+        print(to_json(results))
+    else:
+        print(f"{'ID':<10} {'Conformance':<12} {'Title'}")
+        print("-" * 60)
+        for s in results:
+            print(f"{s['id']:<10} {s['conformance']:<12} {s['title']}")
+        print(f"\n{len(results)} standard(s) matched.")
 
 
 if __name__ == "__main__":
