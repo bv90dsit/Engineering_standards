@@ -15,18 +15,12 @@ Layer 2 — standards-index.yaml (lightweight, always loaded)
     ↓ filtered by
 Layer 3 — query_standards(context) → returns only what applies
     ↓ served to
-Layer 4 — Consumers (CI/CD, VS Code extension, onboarding, compliance checker)
+Layer 4 — Consumers (CI/CD, VS Code extension, onboarding, MCP server)
 ```
-
-See the [full architecture diagram](docs/architecture.png) for the visual version.
 
 ## Quick start
 
-Two modes — auto-detect your stack, or manually specify your context:
-
 ### Auto mode (recommended)
-
-Point the scanner at your repo and it tells you what applies:
 
 ```bash
 git clone https://github.com/bv90dsit/Engineering_standards.git
@@ -35,32 +29,16 @@ cd Engineering_standards && pip install pyyaml
 python scripts/suggest_standards.py --repo-path /path/to/your-service
 ```
 
-This detects your languages/frameworks and lists all applicable standards grouped by MUST/SHOULD/COULD.
-
-### Manual mode
-
-Specify your context explicitly:
-
-```bash
-python scripts/onboarding.py --role engineer --platform python
-```
-
-See [usage by role](docs/usage-by-role.md) for detailed workflows per role.
+Detects your stack and lists applicable standards grouped by MUST/SHOULD/COULD.
 
 ### Adopt in your service
 
-**1. Install the VS Code extension (instant feedback)**
-
-Download the `.vsix` from the [latest release](https://github.com/bv90dsit/Engineering_standards/releases/latest), then:
-
+**1. VS Code extension** — inline warnings as you type ([details](vscode-extension/README.md)):
 ```bash
 code --install-extension uk-gov-engineering-standards-1.1.0.vsix
 ```
 
-See the [extension docs](vscode-extension/README.md) for full details.
-
-**2. Add the CI check (2 minutes)**
-
+**2. CI check** — compliance on every PR:
 ```yaml
 # .github/workflows/standards.yml
 jobs:
@@ -71,205 +49,69 @@ jobs:
       platform: python   # or java, typescript, any
 ```
 
-**3. Connect AI agents via MCP (optional)**
-
+**3. MCP server** — AI agents query standards in real time ([details](mcp-server/README.md)):
 ```json
-{
-  "mcpServers": {
-    "uk-gov-standards": {
-      "command": "python",
-      "args": ["mcp-server/server.py"],
-      "cwd": "/path/to/engineering_standards"
-    }
-  }
-}
+{"mcpServers": {"uk-gov-standards": {"command": "python", "args": ["mcp-server/server.py"]}}}
 ```
-
-AI coding agents can then query standards and check code in real time. See [mcp-server/README.md](mcp-server/README.md).
-
-## What's in the box
-
-| Layer | What | Status |
-|-------|------|--------|
-| Source frameworks | GDS, NCSC, DORA, OWASP, WCAG, etc. ([full list](docs/sources.md)) | ✅ Referenced |
-| 69 standards | Across 5 modules ([browse modules](modules/README.md)) | ✅ Complete |
-| Index | `standards-index.yaml` per module — lightweight, always loaded | ✅ Complete |
-| Query library | `standards_lib/` — importable Python package + CLI | ✅ Built |
-| CI/CD checker | `scripts/check_compliance.py` — automated + manual flags | ✅ Built |
-| Reusable GitHub Action | `.github/workflows/compliance.yml` | ✅ Built |
-| Onboarding tool | `scripts/onboarding.py` | ✅ Built |
-| VS Code extension | [`vscode-extension/`](vscode-extension/README.md) — inline warnings as you type | ✅ Built |
-| Repo scanner | `scripts/suggest_standards.py` — auto-detects stack, recommends standards | ✅ Built |
-| MCP server | [`mcp-server/`](mcp-server/README.md) — exposes standards to AI coding agents | ✅ Built |
-| Test suite | `tests/` — 49 tests (29 pytest + 20 mocha) | ✅ Built |
-| GitHub Pages site | Browsable web view with filters | ✅ Built |
-| Compliance dashboard | Cross-service compliance matrix | 🔲 Planned |
 
 ## Modules
 
-Standards are organised into pluggable modules. See [modules/README.md](modules/README.md) for how to create your own.
-
 | Module | Standards | Focus |
 |--------|-----------|-------|
-| [core](modules/core/) | 41 | Cross-cutting UK Gov (security, ops, architecture, data, accessibility, AI) |
+| [core](modules/core/) | 41 | Security, ops, architecture, data, accessibility, AI |
 | [python](modules/python/) | 10 | Python + Django + Flask |
 | [java](modules/java/) | 8 | Java + Spring Boot |
 | [typescript](modules/typescript/) | 8 | TypeScript + React + Node |
-| [org-example](modules/org-example/) | 2 | Demonstrates how an org adds custom rules |
+| [org-example](modules/org-example/) | 2 | Demonstrates custom org rules |
 
-```bash
-python scripts/query_standards.py --list-modules
-python scripts/query_standards.py --module python
-python scripts/query_standards.py --module all
-```
-
-## Adding a new standard
-
-**Quickest path** — one command scaffolds everything:
-
-```bash
-python scripts/new_standard.py --id PY-009 --module python \
-  --title "Use virtual environments" --conformance SHOULD
-```
-
-**Non-technical contributors** — use the [GitHub Issue form](https://github.com/bv90dsit/Engineering_standards/issues/new?template=new-standard.yml) and a bot creates the PR.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide, and [modules/README.md](modules/README.md) for the module structure.
-
-## Categories
-
-| Prefix | Category | Count |
-|--------|----------|-------|
-| ENG | Engineering practice | 6 |
-| SEC | Security | 7 |
-| ARC | Architecture | 5 |
-| OPS | Operations & reliability | 5 |
-| DAT | Data | 4 |
-| ACC | Accessibility | 2 |
-| EMG | Emerging technology (AI) | 4 |
-| PY | Python / Django / Flask | 8 |
-| JV | Java / Spring Boot | 6 |
-| TS | TypeScript / React / Node | 6 |
+See [modules/README.md](modules/README.md) for how to create your own.
 
 ## Conformance and enforcement
 
-Each standard has a **conformance level** (how mandatory) and an **enforcement mechanism** (how it's checked):
-
 | Conformance | Meaning |
 |-------------|---------|
-| **MUST** (35) | Non-negotiable. Exceptions require a documented ADR. |
-| **SHOULD** (33) | Expected unless there is a justified reason to deviate. |
-| **COULD** (1) | Recommended good practice. |
+| **MUST** (35) | Non-negotiable. Exceptions require an [exemption](docs/exemptions.md). |
+| **SHOULD** (33) | Expected unless justified. |
+| **COULD** (1) | Recommended. |
 
-| Enforcement | When | Example standards |
-|-------------|------|-------------------|
-| **automated** | As you type (IDE) + every PR (CI/CD) | ENG-001, SEC-002, SEC-003, PY-001, JV-002, TS-001 |
-| **peer-review** | During code review | SEC-004, ARC-004, EMG-001, PY-002, JV-004 |
-| **periodic-audit** | Service assessment / quarterly | SEC-005, SEC-007, OPS-001, DAT-001 |
-| **ways-of-working** | Team charter / runbooks | OPS-003, ENG-005, ENG-006 |
-
-Standards marked `automated` are checked in two places — the VS Code extension (instant, as you type) and the CI pipeline (on every PR). Not all automated standards have IDE rules; those that do are listed in [modules/README.md](modules/README.md).
-
-Standards can have multiple enforcement types. The compliance checker automates what it can and flags the rest for manual review.
-
-If you genuinely cannot comply with a MUST standard, document an exemption. See [docs/exemptions.md](docs/exemptions.md).
-
-## Source frameworks
-
-Every standard traces back to at least one published framework. Key sources include:
-
-- [Technology Code of Practice](https://www.gov.uk/guidance/the-technology-code-of-practice) — UK Gov
-- [GOV.UK Service Standard](https://www.gov.uk/service-manual/service-standard) — UK Gov
-- [NCSC Secure by Design](https://www.ncsc.gov.uk/collection/developers-collection) — DSIT/NCSC
-- [DORA Metrics](https://dora.dev/) — Google
-- [OWASP Top 10 / ASVS](https://owasp.org/www-project-application-security-verification-standard/) — Industry
-- [WCAG 2.2](https://www.w3.org/TR/WCAG22/) — W3C
-
-See [docs/sources.md](docs/sources.md) for the full list, synthesis methodology, and worked example.
+| Enforcement | When |
+|-------------|------|
+| **automated** | As you type (IDE) + every PR (CI/CD) |
+| **peer-review** | During code review |
+| **periodic-audit** | Service assessment / quarterly |
+| **ways-of-working** | Team charter / runbooks |
 
 ## Documentation
 
 | Document | What it covers |
 |----------|---------------|
-| [docs/usage-by-role.md](docs/usage-by-role.md) | Workflows for engineers, tech leads, delivery managers, security leads |
-| [docs/sources.md](docs/sources.md) | All source frameworks, how standards are synthesised, traceability template |
-| [modules/README.md](modules/README.md) | How to create and use modules |
-| [vscode-extension/README.md](vscode-extension/README.md) | VS Code extension install and configuration |
+| [docs/usage-by-role.md](docs/usage-by-role.md) | Workflows per role (engineer, tech lead, security, delivery) |
+| [docs/sources.md](docs/sources.md) | Source frameworks, synthesis methodology |
 | [docs/versioning.md](docs/versioning.md) | Version policy, pinning, migration windows |
+| [docs/testing.md](docs/testing.md) | Test strategy (49 tests) |
+| [docs/exemptions.md](docs/exemptions.md) | Waiver process for MUST standards |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How to add a standard |
+| [SECURITY.md](SECURITY.md) | Trust model, permissions, vulnerability reporting |
 | [CHANGELOG.md](CHANGELOG.md) | Release history |
-| [docs/testing.md](docs/testing.md) | Test strategy, what's covered, how to add tests |
-| [mcp-server/README.md](mcp-server/README.md) | MCP server for AI agents — tools, resources, setup |
-| [SECURITY.md](SECURITY.md) | Security policy, permissions model, what each component accesses |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | How to add a standard (CLI scaffold, Issue form, CI checks) |
-| [docs/exemptions.md](docs/exemptions.md) | How to document exemptions/waivers from MUST standards |
 
 ## Development
 
 ```bash
-# Install (with dev tools)
-pip install -e ".[dev]"    # or: pip install -r requirements-dev.txt
-
-# Run tests
-pytest
-
-# Lint
-ruff check scripts/ standards_lib/
-
-# Validate all standards
-python scripts/validate_standards.py
-
-# Pre-commit hooks (optional, runs on every commit)
-pip install pre-commit && pre-commit install
+pip install -e ".[dev]"
+pytest                                # 29 Python tests
+cd vscode-extension && npm test       # 20 TypeScript tests
+python scripts/validate_standards.py  # validate all standards
 ```
 
 ## Governance
 
-**All changes require a PR.** Direct pushes to `main` are blocked.
-
-### CI pipelines (run automatically on PRs)
-
-| Pipeline | Triggers on | What it checks |
-|----------|-------------|----------------|
-| **CI — Standards** | `modules/**` | Format validation, trusted sources, source traceability completeness, README counts |
-| **CI — Code** | `scripts/`, `standards_lib/`, `vscode-extension/` | Lint (ruff), security scan (bandit), type check (tsc), npm audit |
-
-Both must pass before merge. A PR touching both standards and code triggers both pipelines.
-
-### Merge requirements
+All changes require a PR. CI must pass. 1 maintainer approval required.
 
 | Control | Status |
 |---------|--------|
-| PR required | ✅ Enforced |
-| CI must pass | ✅ Enforced |
-| 1 maintainer approval | ✅ Required |
+| PR + CI + approval | ✅ Enforced |
 | Force pushes | ❌ Blocked |
-| Branch deletions | ❌ Blocked |
-| Conversations resolved | ✅ Required |
+| Trusted sources gate | ✅ [allowlist](scripts/trusted_sources.yaml) |
+| Versioned releases | ✅ [v1.1.0](https://github.com/bv90dsit/Engineering_standards/releases/tag/v1.1.0) |
 
-### Trusted sources
-
-Source traceability URLs are validated against an [allowlist](scripts/trusted_sources.yaml). Adding a new source domain requires updating this file — which itself goes through PR review.
-
-### Versioning
-
-Standards are released as tagged versions. Teams pin to a version and upgrade on their own schedule.
-
-```yaml
-# Pin to a specific version
-uses: bv90dsit/Engineering_standards/.github/workflows/compliance.yml@v1.1.0
-```
-
-| Version bump | What changed | Teams must act? |
-|:---:|-------------|:---:|
-| **Major** (v2.0.0) | New MUST standard or breaking change | Yes (12-week window) |
-| **Minor** (v1.1.0) | New SHOULD/COULD, new module, refinements | No |
-| **Patch** (v1.0.1) | Typos, URL fixes, docs | No |
-
-See [docs/versioning.md](docs/versioning.md) for the full policy and [CHANGELOG.md](CHANGELOG.md) for release history.
-
-### Future
-
-| Setting | Status |
-|---------|--------|
-| CODEOWNERS per category | Planned |
-| 2 approvals | When more maintainers join |
+See [docs/versioning.md](docs/versioning.md) for release policy.
