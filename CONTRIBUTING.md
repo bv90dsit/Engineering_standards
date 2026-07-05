@@ -1,267 +1,77 @@
-# Contributing a Standard
+# Contributing
 
-## How propagation works
-
-Adding a standard = one `.md` file + one index row. Everything else picks it up automatically because consumers read the index at runtime.
-
-| Consumer | How it discovers your new standard | When |
-|----------|-----------------------------------|------|
-| `standards_lib` (query library) | Reads `standards-index.yaml` at runtime | Next function call |
-| `query_standards.py` / `onboarding.py` | Call the library | Next run |
-| `check_compliance.py` | Loads index → no automated check exists → reports "manual review required" | Next run |
-| VS Code extension | Reads `rules.json` at activation | Next VS Code restart (if you added a rule) |
-| GitHub Action (consuming repos) | Checks out this repo at runtime → gets latest | Next PR in the consuming repo |
-| README counts | `update_counts.py` regenerates from the index | You run it before PR; CI verifies |
-
-**You do NOT need to:**
-- Modify any Python code in `standards_lib/`
-- Update the compliance checker source
-- Rebuild the VS Code extension
-- Manually edit README counts (the script does it)
-
-The only things that require manual work beyond the standard file + index entry:
-- **VS Code line-level check** — add a `rules.json` entry (only if the standard is detectable by regex)
-- **New source framework** — add to `docs/sources.md` (only if citing a framework not already listed)
-
-## Two ways to contribute
-
-### Option A: CLI scaffold (for engineers)
-
-One command generates everything:
+## Add a standard (one command)
 
 ```bash
-python scripts/new_standard.py --id PY-009 --module python \
-  --title "Use virtual environments" --conformance SHOULD
+python scripts/new_standard.py --id PY-011 --module python \
+  --title "Your standard title" --conformance SHOULD
 ```
 
-This creates the `.md` template, adds the index entry, and updates README counts. You just fill in the TODOs and open a PR.
+This creates the `.md` file, adds the index entry, updates counts, and asks whether to add a VS Code rule. Fill in the TODOs and open a PR.
 
-Optional arguments: `--category`, `--enforcement`, `--platform`, `--tags`.
+**Non-technical?** Use the [GitHub Issue form](https://github.com/bv90dsit/Engineering_standards/issues/new?template=new-standard.yml) — a bot creates the PR for you.
 
-### Option B: GitHub Issue form (for anyone)
+## What happens automatically
 
-1. Go to **Issues → New Issue → "Propose a new standard"**
-2. Fill in the form (title, conformance, rationale, sources)
-3. Submit — a bot creates a PR with scaffolded files automatically
-4. A maintainer fills in the detail and merges
+| What | How | When |
+|------|-----|------|
+| All consumers discover the new standard | Read index at runtime | Immediately on merge |
+| README counts update | `update_counts.py` (you run it; CI verifies) | Before PR |
+| VS Code extension rebuilds | CI workflow on rules.json change | On merge |
+| Version references stay current | `update_counts.py` updates @vX.Y.Z | At release |
 
-Use this path if you're proposing a standard but not writing the implementation yourself (e.g. a security lead, delivery manager, or architect).
+## VS Code rule (the scaffold asks)
 
----
+The scaffold asks: "Can this be detected by regex on a single line?"
 
-## Manual steps (if not using the scaffold)
+- **Yes:** `http://` URLs, `print()`, secrets, `@ts-ignore` → it collects the pattern and adds to `rules.json`
+- **No:** architecture decisions, SLOs, team process → skip, enforcement is peer-review or audit
 
-### 1. Choose your module
+After merge, CI rebuilds the `.vsix` automatically.
 
-| If the standard is... | Add it to |
-|----------------------|-----------|
-| Cross-cutting (any language/platform) | `modules/core/` |
-| Python/Django/Flask specific | `modules/python/` |
-| Java/Spring Boot specific | `modules/java/` |
-| TypeScript/React/Node specific | `modules/typescript/` |
-| Your org's custom rule | Your own module (see [modules/README.md](modules/README.md)) |
+## Testing requirements
 
-### 2. Create the standard file
+| Change type | Tests required? | Where |
+|-------------|:---:|-------|
+| Standard + index entry | No | CI validates format |
+| `rules.json` entry | No | Reviewed; engine is tested |
+| New/changed Python function | **Yes** | `tests/test_*.py` |
+| New/changed TypeScript logic | **Yes** | `vscode-extension/src/test/suite/*.test.ts` |
+| CI workflow | No | PR itself tests it |
 
-Create `modules/{module}/standards/{ID}.md`:
+**Rule:** if you add or modify a function, add a test. CI warns (not blocks) if code changes without test changes.
 
-```markdown
----
-id: SEC-008
-title: Your standard title
-conformance: MUST
-category: SEC
-applies_to:
-  role: any
-  platform: any
-source: the-source-framework
-tags: [relevant, tags, here]
-last_reviewed: 2026-07-05
----
+## What CI checks
 
-# SEC-008: Your standard title
+**Standards changes** (`modules/**`):
+- Format validation (frontmatter, index match, enforcement section)
+- Trusted sources (URLs must be in [trusted_sources.yaml](scripts/trusted_sources.yaml))
+- No TODOs in source traceability
+- README counts current
 
-## Standard
+**Code changes** (`scripts/`, `standards_lib/`, `vscode-extension/`):
+- Lint (ruff) + security (bandit)
+- Unit tests (pytest + mocha)
+- TypeScript compiles
+- npm audit
 
-What MUST/SHOULD/COULD be done. One clear statement.
+Both must pass. 1 maintainer approval required.
 
-## Rationale
-
-Why this matters (2-4 bullet points).
-
-## What good looks like
-
-Concrete examples of compliance.
-
-## Enforcement
-
-| Mechanism | What is checked | When |
-|-----------|----------------|------|
-| **Automated (CI/CD)** | ... | Every PR |
-
-**Primary enforcement: ...**
-
-## Source traceability
-
-| Framework | Reference | URL | What it says |
-|-----------|-----------|-----|--------------|
-| Source 1 | Clause X | https://... | "Quote or paraphrase" |
-```
-
-### 3. Add the index entry
-
-Add to `modules/{module}/standards-index.yaml`:
-
-```yaml
-  - id: SEC-008
-    title: Your standard title
-    conformance: MUST
-    enforcement: [automated]
-    applies_to:
-      role: any
-      platform: any
-    category: SEC
-    source: the-source-framework
-    tags: [relevant, tags, here]
-```
-
-### 4. VS Code rule (the scaffold asks you)
-
-The scaffold command asks: **"Can this be detected by a regex on a single line?"**
-
-- **Examples that CAN:** `http://` URLs, `print()`, hardcoded secrets, `@ts-ignore`, `System.out.println`
-- **Examples that CAN'T:** architecture decisions, SLOs, team process, monitoring config
-
-If you answer yes, it prompts for:
-- File pattern (e.g. `**/*.py`, `**/*.{ts,tsx}`)
-- Regex pattern to match violations
-- Severity (`error` / `warning` / `information`)
-- Message shown to the engineer
-
-The rule is added to `modules/{module}/rules.json` automatically — no JSON editing needed.
-
-**What happens after merge:**
-
-```
-PR merges → Build VS Code Extension workflow triggers
-    → compiles, tests, packages .vsix
-    → uploads to latest GitHub Release
-    → engineers get the new rule on next download
-```
-
-No manual packaging, no version bumping, no stale extension.
-
-**If you skipped the prompt** (or are editing rules.json manually), the format is:
-
-```json
-{
-  "id": "SEC-008",
-  "pattern": "regex to match violations",
-  "excludePattern": "^\\s*(#|//|\\*)",
-  "filePattern": "**/*.py",
-  "excludeFilePattern": "**/test_*",
-  "severity": "error",
-  "message": "SEC-008: Explanation of what's wrong and what to do instead."
-}
-```
-
-### 5. Update counts
+## Local setup
 
 ```bash
-python scripts/update_counts.py
-```
-
-This updates the hardcoded counts in README.md and modules/README.md.
-
-### 6. Validate
-
-```bash
-python scripts/validate_standards.py
-```
-
-This checks your standard has:
-- Valid YAML frontmatter with all required fields
-- A matching index entry (no orphans either way)
-- Source traceability in the 4-column format
-- An Enforcement section
-
-### 7. Open a PR
-
-All changes go through PRs — direct pushes to `main` are blocked.
-
-## What CI checks on your PR
-
-Two pipelines run based on what your PR touches:
-
-### Standards changes (`modules/**`)
-
-| Check | What it does | Common failure |
-|-------|-------------|----------------|
-| Format validation | Frontmatter has all required fields, index matches files | Missing `last_reviewed` or `enforcement` field |
-| Trusted sources | Every URL in source traceability matches [trusted_sources.yaml](scripts/trusted_sources.yaml) | Citing a domain not in the allowlist |
-| Traceability completeness | No TODOs or blanks in the 4-column table | Left a placeholder unfilled |
-| Counts up to date | README numbers match actual standard count | Forgot to run `update_counts.py` |
-
-### Code changes (`scripts/`, `standards_lib/`, `vscode-extension/`)
-
-| Check | What it does | Common failure |
-|-------|-------------|----------------|
-| Lint (ruff) | Python code style and errors | Unused import, line too long |
-| Security (bandit) | Python SAST scan | Hardcoded password, insecure function |
-| Unit tests (pytest) | 29 Python tests must pass | New code broke existing behaviour |
-| Unit tests (mocha) | 20 TypeScript tests must pass | Glob matching or rule pattern broken |
-| Type check (tsc) | TypeScript compiles cleanly | Type error in extension code |
-| npm audit | Known vulnerabilities in JS dependencies | Outdated dependency with CVE |
-| **Test coverage check** | Code changes must include tests | See below |
-
-**Both must pass and 1 maintainer must approve before merge.**
-
-### Testing requirements
-
-| What you changed | Tests required? | Where to add them |
-|-----------------|:---:|-------------------|
-| Standard `.md` file + index entry | No | CI validates format automatically |
-| `rules.json` entry | No | Regex patterns are reviewed; glob engine is already tested |
-| New function in `scripts/` or `standards_lib/` | **Yes** | `tests/test_*.py` — add a test proving it works |
-| Changed existing Python logic | **Yes** | Update or add test covering the change |
-| VS Code extension pure logic (`glob.ts`, new pattern) | **Yes** | `vscode-extension/src/test/suite/*.test.ts` |
-| VS Code extension VS Code API code | Best effort | Hard to unit test; compile check + manual verification |
-| CI workflow changes | No | The PR itself tests the workflow |
-
-**Rule of thumb:** if your change adds or modifies a function, add a test that calls that function and asserts the result. If you're only adding a standard or a regex rule, CI handles validation.
-
-**What a test should prove:**
-- The happy path works (correct input → correct output)
-- Edge cases don't crash (empty input, missing file, bad data)
-- The fix actually fixes the bug (regression test)
-
-### Adding a new trusted source
-
-If your standard cites a source from a domain not in `scripts/trusted_sources.yaml`, add the domain to that file in the same PR. The domain addition itself gets reviewed — this is intentional; it prevents arbitrary websites being cited as authority.
-
-## Local development setup
-
-```bash
-# Install with dev dependencies
 pip install -e ".[dev]"
-
-# Run tests (29 tests covering query, validation, compliance, scaffold)
-pytest
-
-# Lint
-ruff check scripts/ standards_lib/
-
-# Pre-commit hooks (validates standards on every commit to modules/)
-pip install pre-commit && pre-commit install
+pytest                              # 29 Python tests
+cd vscode-extension && npm test     # 20 TypeScript tests
+ruff check scripts/ standards_lib/  # lint
+python scripts/validate_standards.py  # validate standards
 ```
 
 ## Checklist
 
-- [ ] Standard file created with all sections
-- [ ] Index entry added with all required fields
-- [ ] Source traceability uses 4-column format with URLs from [trusted sources](scripts/trusted_sources.yaml)
-- [ ] `python scripts/validate_standards.py` passes locally
-- [ ] `python scripts/update_counts.py` run and changes committed
-- [ ] `pytest` passes (if you changed code in `scripts/` or `standards_lib/`)
-- [ ] (Optional) `rules.json` entry for VS Code extension
-- [ ] PR opened — CI runs automatically
+- [ ] `.md` file + index entry created (or use the scaffold command)
+- [ ] Source traceability: 4-column format, URLs from [trusted sources](scripts/trusted_sources.yaml)
+- [ ] `python scripts/validate_standards.py` passes
+- [ ] `python scripts/update_counts.py` run and committed
+- [ ] Tests added (if code changed)
+- [ ] PR opened
