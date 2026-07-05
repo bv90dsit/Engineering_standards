@@ -57,6 +57,14 @@ trusted_domains:
   - docs.aws.amazon.com     # AWS documentation (Well-Architected Framework)
   - slf4j.org               # SLF4J official documentation (logging facade standard)
   - docs.sqlalchemy.org     # SQLAlchemy official documentation
+  - developer.mozilla.org   # MDN Web Docs (authoritative web standards reference)
+  - datatracker.ietf.org    # IETF RFCs (internet standards — HTTP, TLS, etc.)
+  - openjdk.org             # OpenJDK (official Java platform development)
+  - docs.oracle.com         # Oracle Java documentation
+  - typescript-eslint.io    # typescript-eslint (official ESLint for TypeScript)
+  - google.github.io        # Google engineering practices (code review guide)
+  - www.plainenglish.co.uk  # Plain English Campaign (UK readability standards)
+  - www.axelos.com          # AXELOS (ITIL framework owner)
 
   # ─── Internal references ────────────────────────────────────────────────
   - github.com              # Cross-references to other standards in this repo

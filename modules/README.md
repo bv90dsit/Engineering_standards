@@ -6,13 +6,13 @@ Standards are organised into **modules** — pluggable rule packs that can be mi
 
 | Module | Description | Standards | Also checked in IDE |
 |--------|-------------|-----------|---------------------|
-| [core](core/) | Cross-cutting UK Gov engineering standards | 33 | SEC-001, SEC-003 |
-| [python](python/) | Python + Django + Flask | 8 | PY-001, PY-003, PY-004, PY-005, PY-006, PY-008 |
-| [java](java/) | Java + Spring Boot | 6 | JV-002, JV-003, JV-006 |
-| [typescript](typescript/) | TypeScript + React + Node | 6 | TS-001, TS-002, TS-004 |
+| [core](core/) | Cross-cutting UK Gov engineering standards | 41 | SEC-001, SEC-003 |
+| [python](python/) | Python + Django + Flask | 10 | PY-001, PY-003, PY-004, PY-005, PY-006, PY-008 |
+| [java](java/) | Java + Spring Boot | 8 | JV-002, JV-003, JV-006 |
+| [typescript](typescript/) | TypeScript + React + Node | 8 | TS-001, TS-002, TS-004 |
 | [org-example](org-example/) | Example showing how an org adds custom rules | 2 | ORG-001, ORG-002 |
 
-**Total: 55 standards** across 5 modules.
+**Total: 69 standards** across 5 modules.
 
 ## Using modules
 

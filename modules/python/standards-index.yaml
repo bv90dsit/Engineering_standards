@@ -86,3 +86,25 @@ standards:
     category: SEC
     source: django-deployment-checklist
     tags: [python, django, config, security]
+
+  - id: PY-009
+    title: Pin dependencies with a lock file
+    conformance: MUST
+    enforcement: [automated]
+    applies_to:
+      role: any
+      platform: python
+    category: SEC
+    source: ncsc-supply-chain-security
+    tags: [python, dependencies, reproducibility, supply-chain]
+
+  - id: PY-010
+    title: Use pathlib for file operations
+    conformance: SHOULD
+    enforcement: [peer-review]
+    applies_to:
+      role: any
+      platform: python
+    category: ENG
+    source: python-best-practices
+    tags: [python, pathlib, file-operations, modern]

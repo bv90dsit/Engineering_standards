@@ -371,3 +371,91 @@ standards:
     category: EMG
     source: cddo-ai-guidance
     tags: [ai, bias, fairness, training-data, intellectual-property]
+
+  - id: SEC-008
+    title: API rate limiting
+    conformance: MUST
+    enforcement: [automated, periodic-audit]
+    applies_to:
+      role: any
+      platform: any
+    category: SEC
+    source: ncsc-secure-by-design
+    tags: [api, rate-limiting, dos, resilience]
+
+  - id: SEC-009
+    title: CORS explicitly configured
+    conformance: MUST
+    enforcement: [peer-review, automated]
+    applies_to:
+      role: any
+      platform: any
+    category: SEC
+    source: owasp-top-10
+    tags: [cors, api, security, headers]
+
+  - id: OPS-006
+    title: Structured logging with correlation IDs
+    conformance: MUST
+    enforcement: [peer-review, automated]
+    applies_to:
+      role: any
+      platform: any
+    category: OPS
+    source: gds-service-standard
+    tags: [logging, observability, correlation-id, structured]
+
+  - id: OPS-007
+    title: Support model and on-call defined
+    conformance: MUST
+    enforcement: [periodic-audit, ways-of-working]
+    applies_to:
+      role: any
+      platform: any
+    category: OPS
+    source: gds-service-standard
+    tags: [support, on-call, responsibility, operations]
+
+  - id: ARC-006
+    title: No single points of failure for critical services
+    conformance: SHOULD
+    enforcement: [periodic-audit]
+    applies_to:
+      role: any
+      platform: any
+    category: ARC
+    source: gds-service-standard
+    tags: [resilience, availability, redundancy, architecture]
+
+  - id: ACC-003
+    title: Content written in plain English
+    conformance: SHOULD
+    enforcement: [peer-review]
+    applies_to:
+      role: any
+      platform: any
+    category: ACC
+    source: gds-service-standard
+    tags: [accessibility, content, plain-english, readability]
+
+  - id: DAT-005
+    title: Audit trail for data changes
+    conformance: MUST
+    enforcement: [peer-review, periodic-audit]
+    applies_to:
+      role: any
+      platform: any
+    category: DAT
+    source: uk-gdpr
+    tags: [audit-trail, accountability, gdpr, data-governance]
+
+  - id: ENG-007
+    title: Code review turnaround within 24 hours
+    conformance: SHOULD
+    enforcement: [ways-of-working]
+    applies_to:
+      role: any
+      platform: any
+    category: ENG
+    source: dora-metrics
+    tags: [code-review, collaboration, flow, delivery]

@@ -25,6 +25,14 @@
       "filePattern": "**/tsconfig*.json",
       "severity": "error",
       "message": "TS-001: TypeScript strict mode must be enabled. Set \"strict\": true in tsconfig.json."
+    },
+    {
+      "id": "TS-008",
+      "pattern": "@ts-ignore(?!\\s+\\S)",
+      "filePattern": "**/*.{ts,tsx}",
+      "excludeFilePattern": "**/{*.test.*,*.spec.*,__tests__/**}",
+      "severity": "error",
+      "message": "TS-008: @ts-ignore must have a justification comment. Add a description explaining why the type suppression is necessary."
     }
   ]
 }

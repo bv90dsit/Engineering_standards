@@ -51,6 +51,15 @@
       "excludeFilePattern": "**/{test_*,local_settings*,settings/local*,settings/dev*}",
       "severity": "error",
       "message": "PY-008: DEBUG must be False in production. Use environment variables to control per-environment."
+    },
+    {
+      "id": "PY-010",
+      "pattern": "\\bos\\.path\\.(join|exists|isfile|isdir|basename|dirname)\\b",
+      "excludePattern": "^\\s*#",
+      "filePattern": "**/*.py",
+      "excludeFilePattern": "**/{test_*,*_test.py,conftest.py,setup.py}",
+      "severity": "warning",
+      "message": "PY-010: Use pathlib.Path instead of os.path for file operations. See PY-010 for equivalents."
     }
   ]
 }

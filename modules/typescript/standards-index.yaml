@@ -64,3 +64,25 @@ standards:
     category: ARC
     source: 12-factor-app
     tags: [node, config, fail-fast]
+
+  - id: TS-007
+    title: ESLint with strict ruleset configured
+    conformance: SHOULD
+    enforcement: [automated]
+    applies_to:
+      role: any
+      platform: typescript
+    category: ENG
+    source: typescript-eslint-docs
+    tags: [typescript, eslint, linting, quality]
+
+  - id: TS-008
+    title: No @ts-ignore without justification
+    conformance: MUST
+    enforcement: [automated, peer-review]
+    applies_to:
+      role: any
+      platform: typescript
+    category: ENG
+    source: typescript-eslint-docs
+    tags: [typescript, type-safety, ts-ignore]

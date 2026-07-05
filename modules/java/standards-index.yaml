@@ -64,3 +64,25 @@ standards:
     category: ENG
     source: java-best-practices
     tags: [java, logging, observability]
+
+  - id: JV-007
+    title: Use records for DTOs (Java 17+)
+    conformance: SHOULD
+    enforcement: [peer-review]
+    applies_to:
+      role: any
+      platform: java
+    category: ENG
+    source: java-best-practices
+    tags: [java, records, dto, immutability]
+
+  - id: JV-008
+    title: Structured logging in JSON format
+    conformance: SHOULD
+    enforcement: [peer-review, automated]
+    applies_to:
+      role: any
+      platform: java
+    category: OPS
+    source: 12-factor-app
+    tags: [java, logging, structured, json, observability]

@@ -1,6 +1,6 @@
 # UK Government Engineering Standards
 
-Machine-readable, context-aware engineering standards for UK Government digital services. 55 standards across 5 modules, queryable by role, platform, and enforcement type.
+Machine-readable, context-aware engineering standards for UK Government digital services. 69 standards across 5 modules, queryable by role, platform, and enforcement type.
 
 > **Status: MVP / Draft** — not yet adopted by teams. Being developed in the open for feedback.
 
@@ -90,7 +90,7 @@ AI coding agents can then query standards and check code in real time. See [mcp-
 | Layer | What | Status |
 |-------|------|--------|
 | Source frameworks | GDS, NCSC, DORA, OWASP, WCAG, etc. ([full list](docs/sources.md)) | ✅ Referenced |
-| 55 standards | Across 5 modules ([browse modules](modules/README.md)) | ✅ Complete |
+| 69 standards | Across 5 modules ([browse modules](modules/README.md)) | ✅ Complete |
 | Index | `standards-index.yaml` per module — lightweight, always loaded | ✅ Complete |
 | Query library | `standards_lib/` — importable Python package + CLI | ✅ Built |
 | CI/CD checker | `scripts/check_compliance.py` — automated + manual flags | ✅ Built |
@@ -109,10 +109,10 @@ Standards are organised into pluggable modules. See [modules/README.md](modules/
 
 | Module | Standards | Focus |
 |--------|-----------|-------|
-| [core](modules/core/) | 33 | Cross-cutting UK Gov (security, ops, architecture, data, accessibility, AI) |
-| [python](modules/python/) | 8 | Python + Django + Flask |
-| [java](modules/java/) | 6 | Java + Spring Boot |
-| [typescript](modules/typescript/) | 6 | TypeScript + React + Node |
+| [core](modules/core/) | 41 | Cross-cutting UK Gov (security, ops, architecture, data, accessibility, AI) |
+| [python](modules/python/) | 10 | Python + Django + Flask |
+| [java](modules/java/) | 8 | Java + Spring Boot |
+| [typescript](modules/typescript/) | 8 | TypeScript + React + Node |
 | [org-example](modules/org-example/) | 2 | Demonstrates how an org adds custom rules |
 
 ```bash
@@ -155,8 +155,8 @@ Each standard has a **conformance level** (how mandatory) and an **enforcement m
 
 | Conformance | Meaning |
 |-------------|---------|
-| **MUST** (28) | Non-negotiable. Exceptions require a documented ADR. |
-| **SHOULD** (26) | Expected unless there is a justified reason to deviate. |
+| **MUST** (35) | Non-negotiable. Exceptions require a documented ADR. |
+| **SHOULD** (33) | Expected unless there is a justified reason to deviate. |
 | **COULD** (1) | Recommended good practice. |
 
 | Enforcement | When | Example standards |
