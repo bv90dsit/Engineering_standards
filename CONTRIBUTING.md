@@ -193,6 +193,22 @@ Two pipelines run based on what your PR touches:
 
 If your standard cites a source from a domain not in `scripts/trusted_sources.yaml`, add the domain to that file in the same PR. The domain addition itself gets reviewed — this is intentional; it prevents arbitrary websites being cited as authority.
 
+## Local development setup
+
+```bash
+# Install with dev dependencies
+pip install -e ".[dev]"
+
+# Run tests (29 tests covering query, validation, compliance, scaffold)
+pytest
+
+# Lint
+ruff check scripts/ standards_lib/
+
+# Pre-commit hooks (validates standards on every commit to modules/)
+pip install pre-commit && pre-commit install
+```
+
 ## Checklist
 
 - [ ] Standard file created with all sections
@@ -200,5 +216,6 @@ If your standard cites a source from a domain not in `scripts/trusted_sources.ya
 - [ ] Source traceability uses 4-column format with URLs from [trusted sources](scripts/trusted_sources.yaml)
 - [ ] `python scripts/validate_standards.py` passes locally
 - [ ] `python scripts/update_counts.py` run and changes committed
+- [ ] `pytest` passes (if you changed code in `scripts/` or `standards_lib/`)
 - [ ] (Optional) `rules.json` entry for VS Code extension
 - [ ] PR opened — CI runs automatically

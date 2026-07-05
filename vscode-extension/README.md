@@ -84,7 +84,9 @@ npm install
 npm run compile
 ```
 
-Then press `F5` in VS Code to launch the Extension Development Host.
+Then press `F5` in VS Code to launch the Extension Development Host. A `.vscode/launch.json` and `tasks.json` are included — `F5` automatically compiles in watch mode and launches the extension.
+
+Warnings and errors from rule loading appear in the **Output** panel under "UK Gov Standards".
 
 ## Settings
 

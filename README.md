@@ -57,6 +57,7 @@ This tells you which standards apply, how each is enforced, and what to do to co
 | Reusable GitHub Action | `.github/workflows/compliance.yml` | ✅ Built |
 | Onboarding tool | `scripts/onboarding.py` | ✅ Built |
 | VS Code extension | [`vscode-extension/`](vscode-extension/README.md) — inline warnings as you type | ✅ Built |
+| Test suite | `tests/` — 29 pytest tests covering query, validation, compliance, scaffold | ✅ Built |
 | Compliance dashboard | Web view: services × standards matrix | 🔲 Planned |
 
 ## Modules
@@ -148,6 +149,25 @@ See [docs/sources.md](docs/sources.md) for the full list, synthesis methodology,
 | [docs/versioning.md](docs/versioning.md) | Version policy, pinning, migration windows |
 | [CHANGELOG.md](CHANGELOG.md) | Release history |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to add a standard (CLI scaffold, Issue form, CI checks) |
+
+## Development
+
+```bash
+# Install (with dev tools)
+pip install -e ".[dev]"    # or: pip install -r requirements-dev.txt
+
+# Run tests
+pytest
+
+# Lint
+ruff check scripts/ standards_lib/
+
+# Validate all standards
+python scripts/validate_standards.py
+
+# Pre-commit hooks (optional, runs on every commit)
+pip install pre-commit && pre-commit install
+```
 
 ## Governance
 
