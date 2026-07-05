@@ -1,13 +1,27 @@
 # Contributing a Standard
 
-## What happens automatically
+## How propagation works
 
-When you add a standard correctly, the following pick it up with **no code changes**:
+Adding a standard = one `.md` file + one index row. Everything else picks it up automatically because consumers read the index at runtime.
 
-- `standards_lib` (query library) — discovers it from the index at runtime
-- `query_standards.py`, `onboarding.py` — call the library
-- `check_compliance.py` — flags it for manual review (unless you also add an automated check)
-- VS Code extension — picks up `rules.json` entries at activation
+| Consumer | How it discovers your new standard | When |
+|----------|-----------------------------------|------|
+| `standards_lib` (query library) | Reads `standards-index.yaml` at runtime | Next function call |
+| `query_standards.py` / `onboarding.py` | Call the library | Next run |
+| `check_compliance.py` | Loads index → no automated check exists → reports "manual review required" | Next run |
+| VS Code extension | Reads `rules.json` at activation | Next VS Code restart (if you added a rule) |
+| GitHub Action (consuming repos) | Checks out this repo at runtime → gets latest | Next PR in the consuming repo |
+| README counts | `update_counts.py` regenerates from the index | You run it before PR; CI verifies |
+
+**You do NOT need to:**
+- Modify any Python code in `standards_lib/`
+- Update the compliance checker source
+- Rebuild the VS Code extension
+- Manually edit README counts (the script does it)
+
+The only things that require manual work beyond the standard file + index entry:
+- **VS Code line-level check** — add a `rules.json` entry (only if the standard is detectable by regex)
+- **New source framework** — add to `docs/sources.md` (only if citing a framework not already listed)
 
 ## Steps to add a new standard
 
