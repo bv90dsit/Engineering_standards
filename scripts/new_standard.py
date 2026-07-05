@@ -349,6 +349,22 @@ def main() -> int:
         tags=tags,
     )
 
+    # Add row to module README
+    module_readme = module_path / "README.md"
+    if module_readme.exists():
+        readme_content = module_readme.read_text()
+        # Find the table and append a row before the "How to use" section
+        enforcement_str = ", ".join(enforcement)
+        new_row = f"| {args.id} | {args.title} | {args.conformance} | {enforcement_str} | TODO |\n"
+        # Insert before the last row or "How to use" heading
+        if "## How to use" in readme_content:
+            readme_content = readme_content.replace(
+                "\n## How to use",
+                f"{new_row}\n## How to use"
+            )
+            module_readme.write_text(readme_content)
+            print(f"✓ Added row to {module_readme.relative_to(REPO_ROOT)}")
+
     # Run update_counts.py
     counts_updated = run_update_counts()
 

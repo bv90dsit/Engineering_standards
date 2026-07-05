@@ -7,18 +7,51 @@ python scripts/new_standard.py --id PY-011 --module python \
   --title "Your standard title" --conformance SHOULD
 ```
 
-This creates the `.md` file, adds the index entry, updates counts, and asks whether to add a VS Code rule. Fill in the TODOs and open a PR.
+The scaffold handles everything:
+- ✅ Creates the `.md` file with template
+- ✅ Adds the index entry
+- ✅ Adds row to module README
+- ✅ Updates counts in all READMEs
+- ✅ Asks about VS Code rule and adds it if yes
+
+All you do after: **fill in the TODOs and open a PR.**
 
 **Non-technical?** Use the [GitHub Issue form](https://github.com/bv90dsit/Engineering_standards/issues/new?template=new-standard.yml) — a bot creates the PR for you.
 
-## What happens automatically
+## Who does what
 
-| What | How | When |
-|------|-----|------|
-| All consumers discover the new standard | Read index at runtime | Immediately on merge |
-| README counts update | `update_counts.py` (you run it; CI verifies) | Before PR |
-| VS Code extension rebuilds | CI workflow on rules.json change | On merge |
-| Version references stay current | `update_counts.py` updates @vX.Y.Z | At release |
+### Contributor (before opening PR)
+
+| Task | Automated? | How |
+|------|:---:|------|
+| Create `.md` + index + module README row + counts | ✅ | Scaffold command does it |
+| VS Code rule (if applicable) | ✅ | Scaffold asks and adds it |
+| Fill in TODOs in the standard | ❌ | You write the content |
+| CHANGELOG entry | ❌ | Note what you added (for next release) |
+| Update sources graph (if new source framework) | ❌ | Edit `docs/sources-graph.md` JS arrays |
+| Write tests (if code change) | ❌ | Add test in `tests/` or `vscode-extension/src/test/` |
+
+### Reviewer (seeing the PR)
+
+The **Impact Analysis** bot comments on every PR with a checklist. Reviewer verifies:
+
+| Check | What to look for |
+|-------|-----------------|
+| ⚠ items done? | Counts updated, README rows added, index entry present |
+| TODOs filled? | No placeholders left in the standard |
+| Sources trusted? | URLs from domains in `trusted_sources.yaml` |
+| Contradictions? | Does this overlap or conflict with an existing standard? |
+| Enforcement realistic? | Can teams actually check this the way it claims? |
+| Tests included? (code changes) | New function → new test |
+
+### What's fully automatic (nobody does anything)
+
+| What | When |
+|------|------|
+| All consumers discover the new standard | Immediately on merge (runtime) |
+| VS Code extension rebuilds with new rules | On merge (CI workflow) |
+| Version references update | At release (release script) |
+| Impact analysis comment posted | On PR open (CI workflow) |
 
 ## VS Code rule (the scaffold asks)
 
