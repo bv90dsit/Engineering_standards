@@ -8,32 +8,27 @@ permalink: /about/
 
 This repository provides **machine-readable, context-aware engineering standards** for UK Government digital services. Standards are written in Markdown with structured YAML frontmatter, making them parseable by tooling (linters, IDE extensions, CI pipelines) while remaining human-readable.
 
-## Five-Layer Architecture
+## Architecture
+
+Five layers from raw source material to the engineer at their desk:
 
 ```
-+-------------------------------------------------------+
-|  Layer 5: ORGANISATION OVERRIDES                      |
-|  (org-specific customisations and additions)          |
-+-------------------------------------------------------+
-|  Layer 4: LANGUAGE / PLATFORM MODULES                 |
-|  (Python, Java, TypeScript, etc.)                     |
-+-------------------------------------------------------+
-|  Layer 3: CORE STANDARDS                              |
-|  (universal engineering standards)                    |
-+-------------------------------------------------------+
-|  Layer 2: STANDARDS LIBRARY (standards_lib)           |
-|  (Python tooling: validation, queries, compliance)    |
-+-------------------------------------------------------+
-|  Layer 1: SCHEMA & INDEX                              |
-|  (standards-index.yaml, frontmatter schema)           |
-+-------------------------------------------------------+
+Layer 0 — Source frameworks (GDS, NCSC, DORA, OWASP, WCAG, etc.)
+    ↓ synthesised into
+Layer 1 — Individual standard files (one .md per standard, with frontmatter)
+    ↓ catalogued in
+Layer 2 — standards-index.yaml (lightweight, always loaded)
+    ↓ filtered by
+Layer 3 — query_standards(context) → returns only what applies
+    ↓ served to
+Layer 4 — Consumers (CI/CD, VS Code extension, onboarding, MCP server)
 ```
 
-- **Layer 1 -- Schema & Index:** The `standards-index.yaml` file and frontmatter schema define the structure every standard must follow.
-- **Layer 2 -- Standards Library:** Python tooling (`standards_lib/`) for validating, querying, and checking compliance against standards.
-- **Layer 3 -- Core Standards:** Universal engineering standards (`modules/core/`) that apply regardless of language or platform.
-- **Layer 4 -- Language Modules:** Platform-specific standards (`modules/python/`, `modules/java/`, `modules/typescript/`) that extend the core.
-- **Layer 5 -- Organisation Overrides:** Customisations for specific organisations (`modules/org-example/`) that can tighten or extend any layer below.
+- **Layer 0 -- Source frameworks:** Published authoritative standards (GDS Service Standard, NCSC, OWASP, WCAG, etc.) that provide the authority behind each standard.
+- **Layer 1 -- Standard files:** One `.md` file per standard with YAML frontmatter. Organised into modules: core (cross-cutting), python, java, typescript, org-specific.
+- **Layer 2 -- Index:** `standards-index.yaml` per module — lightweight, always loaded. The single source of truth for filtering and discovery.
+- **Layer 3 -- Query interface:** `standards_lib/` Python library that filters by role, platform, conformance, enforcement, category, tag, and module.
+- **Layer 4 -- Consumers:** Every tool that needs standards calls the query interface. CI/CD pipeline, VS Code extension, onboarding tool, compliance checker, MCP server, this website.
 
 ## Adopting These Standards
 
