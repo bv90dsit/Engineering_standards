@@ -1,6 +1,6 @@
 # UK Government Engineering Standards
 
-Machine-readable, context-aware engineering standards for UK Government digital services. 33 standards across 7 categories, queryable by role, platform, and enforcement type.
+Machine-readable, context-aware engineering standards for UK Government digital services. 55 standards across 5 modules, queryable by role, platform, and enforcement type.
 
 > **Status: MVP / Draft** — not yet adopted by teams. Being developed in the open for feedback.
 
@@ -49,21 +49,41 @@ This tells you which standards apply, how each is enforced, and what to do to co
 
 | Layer | What | Status |
 |-------|------|--------|
-| Source frameworks | GDS Service Standard, NCSC, DORA, OWASP, WCAG, etc. | ✅ Referenced |
-| 33 standard files | `standards/*.md` — one per standard with frontmatter | ✅ Complete |
-| Index | `standards-index.yaml` — lightweight, always loaded | ✅ Complete |
+| Source frameworks | GDS, NCSC, DORA, OWASP, WCAG, etc. ([full list](docs/sources.md)) | ✅ Referenced |
+| 55 standards | Across 5 modules ([browse modules](modules/README.md)) | ✅ Complete |
+| Index | `standards-index.yaml` per module — lightweight, always loaded | ✅ Complete |
 | Query library | `standards_lib/` — importable Python package + CLI | ✅ Built |
 | CI/CD checker | `scripts/check_compliance.py` — automated + manual flags | ✅ Built |
 | Reusable GitHub Action | `.github/workflows/compliance.yml` | ✅ Built |
 | Onboarding tool | `scripts/onboarding.py` | ✅ Built |
-| VS Code extension | `vscode-extension/` — inline warnings as you type | ✅ Built |
+| VS Code extension | [`vscode-extension/`](vscode-extension/README.md) — inline warnings as you type | ✅ Built |
 | Compliance dashboard | Web view: services × standards matrix | 🔲 Planned |
+
+## Modules
+
+Standards are organised into pluggable modules. See [modules/README.md](modules/README.md) for how to create your own.
+
+| Module | Standards | Focus |
+|--------|-----------|-------|
+| [core](modules/core/) | 33 | Cross-cutting UK Gov (security, ops, architecture, data, accessibility, AI) |
+| [python](modules/python/) | 8 | Python + Django + Flask |
+| [java](modules/java/) | 6 | Java + Spring Boot |
+| [typescript](modules/typescript/) | 6 | TypeScript + React + Node |
+| [org-example](modules/org-example/) | 2 | Demonstrates how an org adds custom rules |
+
+```bash
+python scripts/query_standards.py --list-modules
+python scripts/query_standards.py --module python
+python scripts/query_standards.py --module all
+```
 
 ## Adding a new standard
 
-1. Create `standards/{ID}.md` with YAML frontmatter
-2. Add one row to `standards-index.yaml`
+1. Create `modules/{module}/standards/{ID}.md` with YAML frontmatter
+2. Add one row to `modules/{module}/standards-index.yaml`
 3. Done. No consumer changes needed.
+
+See [modules/README.md](modules/README.md) for the full module structure and [docs/sources.md](docs/sources.md) for the traceability format.
 
 ## Categories
 
@@ -76,6 +96,9 @@ This tells you which standards apply, how each is enforced, and what to do to co
 | DAT | Data | 4 |
 | ACC | Accessibility | 2 |
 | EMG | Emerging technology (AI) | 4 |
+| PY | Python / Django / Flask | 8 |
+| JV | Java / Spring Boot | 6 |
+| TS | TypeScript / React / Node | 6 |
 
 ## Conformance and enforcement
 
@@ -83,14 +106,14 @@ Each standard has a **conformance level** (how mandatory) and an **enforcement m
 
 | Conformance | Meaning |
 |-------------|---------|
-| **MUST** (18) | Non-negotiable. Exceptions require a documented ADR. |
-| **SHOULD** (14) | Expected unless there is a justified reason to deviate. |
-| **COULD** (1) | Recommended good practice. |
+| **MUST** (24) | Non-negotiable. Exceptions require a documented ADR. |
+| **SHOULD** (29) | Expected unless there is a justified reason to deviate. |
+| **COULD** (2) | Recommended good practice. |
 
 | Enforcement | When | Example standards |
 |-------------|------|-------------------|
-| **automated** | Every PR via CI/CD | ENG-001, ENG-003, SEC-002, SEC-003 |
-| **peer-review** | During code review | SEC-004, ARC-004, EMG-001 |
+| **automated** | Every PR via CI/CD | ENG-001, SEC-002, SEC-003, PY-001, JV-002, TS-001 |
+| **peer-review** | During code review | SEC-004, ARC-004, EMG-001, PY-002, JV-004 |
 | **periodic-audit** | Service assessment / quarterly | SEC-005, SEC-007, OPS-001, DAT-001 |
 | **ways-of-working** | Team charter / runbooks | OPS-003, ENG-005, ENG-006 |
 
@@ -107,7 +130,16 @@ Every standard traces back to at least one published framework. Key sources incl
 - [OWASP Top 10 / ASVS](https://owasp.org/www-project-application-security-verification-standard/) — Industry
 - [WCAG 2.2](https://www.w3.org/TR/WCAG22/) — W3C
 
-See [docs/sources.md](docs/sources.md) for the full list of all sources, grouped by authority, with which standards each one informs.
+See [docs/sources.md](docs/sources.md) for the full list, synthesis methodology, and worked example.
+
+## Documentation
+
+| Document | What it covers |
+|----------|---------------|
+| [docs/usage-by-role.md](docs/usage-by-role.md) | Workflows for engineers, tech leads, delivery managers, security leads |
+| [docs/sources.md](docs/sources.md) | All source frameworks, how standards are synthesised, traceability template |
+| [modules/README.md](modules/README.md) | How to create and use modules |
+| [vscode-extension/README.md](vscode-extension/README.md) | VS Code extension install and configuration |
 
 ## Governance
 

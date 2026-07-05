@@ -82,3 +82,10 @@ VS Code extension →  catches problems as you type (instant feedback)
 ```
 
 All three enforce the same standards. The extension covers only the subset that makes sense at the line level.
+
+## Related docs
+
+- [Main README](../README.md) — overview of the full standards architecture
+- [Modules](../modules/README.md) — how standards are organised into pluggable modules (extension loads `rules.json` from each)
+- [Sources](../docs/sources.md) — where the standards come from
+- [Usage by role](../docs/usage-by-role.md) — how different roles interact with the standards

@@ -1,5 +1,11 @@
 # Usage by Role
 
+How different roles interact with the engineering standards. See also:
+- [Main README](../README.md) — quick start and architecture overview
+- [Modules](../modules/README.md) — how to add language or org-specific standards
+- [Sources](sources.md) — where standards come from and how they're synthesised
+- [VS Code extension](../vscode-extension/README.md) — instant feedback in your editor
+
 ## Engineer
 
 ### Adopt the standards
