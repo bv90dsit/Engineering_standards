@@ -7,8 +7,9 @@ See also: [Main README](../README.md) | [CONTRIBUTING.md](../CONTRIBUTING.md)
 | Suite | Framework | Files | Tests | What it covers |
 |-------|-----------|-------|-------|----------------|
 | Python unit tests | pytest | `tests/` | 29 | Query library, validation, compliance checker, scaffold |
-| VS Code extension tests | @vscode/test-electron | `vscode-extension/src/test/` | TBD | Rule engine, glob matching, diagnostics |
+| VS Code extension tests | mocha | `vscode-extension/src/test/suite/` | 20 | Glob matching, rule pattern matching |
 | Standards validation | Custom (`validate_standards.py`) | — | — | Format, traceability, trusted sources, orphans |
+| **Total** | | | **49** | |
 
 ## Python tests (`tests/`)
 
@@ -54,15 +55,41 @@ These test the tool that runs in consuming repos' CI:
 | Creates file + index | The "one command" promise works end-to-end |
 | Duplicate ID fails | Prevents accidental overwrite |
 
-## VS Code extension tests (`vscode-extension/src/test/`)
+## VS Code extension tests (`vscode-extension/src/test/suite/`)
 
-Tests the rule engine and glob matching logic that runs in the editor:
+### glob.test.ts (12 tests) — Glob matching
 
-| Area | What's tested | Why |
-|------|--------------|-----|
-| Glob matching | `*`, `**`, `?`, `{a,b}`, character classes | A broken glob means rules fire on wrong files or miss violations |
-| Rule loading | Valid rules.json parsed, invalid skipped with warning | Silent load failures mean no checks run |
-| Rule execution | Patterns match expected lines, excludes work | False positives annoy engineers; false negatives miss violations |
+The glob logic is extracted into `src/glob.ts` (pure function, no VS Code dependency) so it can be tested directly with mocha — no electron runner needed.
+
+| Test | What it proves | Why it matters |
+|------|---------------|----------------|
+| `* matches filename` | `*.py` matches `file.py` | Basic pattern matching works |
+| `* does not match path separators` | `*.py` doesn't match `src/file.py` | Prevents overly broad matches |
+| `** matches any depth` | `**/*.tsx` matches at any nesting | Deep paths get checked |
+| `** with directory prefix` | `src/**/*.ts` only matches under src/ | Module-scoped rules don't leak |
+| `brace expansion {a,b}` | `*.{ts,tsx}` matches both extensions | Multi-extension patterns from rules.json work |
+| `brace expansion in path` | Works with `**` together | Real-world patterns like `**/*.{py,js,ts}` |
+| `? matches single character` | `file?.py` matches `file1.py` not `file12.py` | Single-char wildcards work |
+| `dots are escaped` | `*.py` doesn't match `filexpy` | Dot is literal, not regex `.` |
+| `exclude patterns` | `**/*.test.*` matches test files | Exclusion patterns correctly identify test files |
+| `real-world patterns` | Patterns from actual rules.json files | Integration check against the rules we ship |
+| `test file exclusion` | `**/test_*` matches pytest files | Python test exclusions work |
+| `tsconfig pattern` | `**/tsconfig*.json` matches variants | TS-001 check fires on the right files |
+
+### rulePatterns.test.ts (8 tests) — Rule regex patterns
+
+Tests the actual regex patterns from `modules/*/rules.json` to verify they match what they should and don't false-positive:
+
+| Test | What it proves | Why it matters |
+|------|---------------|----------------|
+| `SEC-001: http:// URLs` | Matches `http://example.com`, skips `http://localhost` | Core check — no false positives on dev URLs |
+| `SEC-003: passwords` | Matches `password = "long_secret"`, skips short/env-based | Doesn't flag every use of the word "password" |
+| `SEC-003: AWS keys` | Matches `AKIA` + 16 chars pattern | Catches real AWS key format |
+| `PY-001: print()` | Matches `print(`, skips `fingerprint` | Word boundary prevents false match on "print" substring |
+| `PY-004: wildcard imports` | Matches `from x import *` | Catches the anti-pattern |
+| `JV-002: System.out` | Matches println/print on out/err | Java logging check works |
+| `TS-002: any type` | Matches `: any` annotation | TypeScript type safety check works |
+| `exclude patterns` | Comment lines skipped | Rules don't fire inside comments |
 
 ## What's NOT unit tested (and why)
 
@@ -76,14 +103,17 @@ Tests the rule engine and glob matching logic that runs in the editor:
 ## Running tests
 
 ```bash
-# Python tests
-pytest                           # all 29 tests
+# Python tests (29 tests, ~3s)
+pytest                           # all tests
 pytest tests/test_query.py       # just the query library
 pytest -k "test_check_eng_001"   # one specific test
 
-# VS Code extension tests
+# VS Code extension tests (20 tests, <1s)
 cd vscode-extension
-npm test
+npm test                         # runs mocha on compiled output
+
+# Both from repo root
+pytest && (cd vscode-extension && npm test)
 ```
 
 ## Adding tests
