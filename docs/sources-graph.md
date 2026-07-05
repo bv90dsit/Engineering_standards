@@ -40,7 +40,29 @@ svg { display: block; margin: 0 auto; }
 <div class="legend">
   <div class="legend-item"><div class="legend-dot tier1"></div> Tier 1 — Authoritative</div>
   <div class="legend-item"><div class="legend-dot tier2"></div> Tier 2 — Established</div>
-  <div class="legend-item"><div class="legend-dot standard-node"></div> Standard</div>
+  <div class="legend-item"><div class="legend-dot standard-node"></div> Standard (click to view)</div>
+</div>
+
+<div style="margin: 16px 0;">
+  <strong style="font-size: 13px; color: #505a5f;">Filter by source:</strong>
+  <div id="source-filters" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;"></div>
+</div>
+
+<div style="margin: 12px 0;">
+  <strong style="font-size: 13px; color: #505a5f;">Filter by category:</strong>
+  <div id="category-filters" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;">
+    <button onclick="filterCategory('all')" class="filter-btn filter-btn--active" style="padding:4px 10px; border:1px solid #ccc; border-radius:12px; background:#1d70b8; color:white; cursor:pointer; font-size:12px;">All</button>
+    <button onclick="filterCategory('ENG')" class="filter-btn" style="padding:4px 10px; border:1px solid #ccc; border-radius:12px; background:white; cursor:pointer; font-size:12px;">ENG</button>
+    <button onclick="filterCategory('SEC')" class="filter-btn" style="padding:4px 10px; border:1px solid #ccc; border-radius:12px; background:white; cursor:pointer; font-size:12px;">SEC</button>
+    <button onclick="filterCategory('ARC')" class="filter-btn" style="padding:4px 10px; border:1px solid #ccc; border-radius:12px; background:white; cursor:pointer; font-size:12px;">ARC</button>
+    <button onclick="filterCategory('OPS')" class="filter-btn" style="padding:4px 10px; border:1px solid #ccc; border-radius:12px; background:white; cursor:pointer; font-size:12px;">OPS</button>
+    <button onclick="filterCategory('DAT')" class="filter-btn" style="padding:4px 10px; border:1px solid #ccc; border-radius:12px; background:white; cursor:pointer; font-size:12px;">DAT</button>
+    <button onclick="filterCategory('ACC')" class="filter-btn" style="padding:4px 10px; border:1px solid #ccc; border-radius:12px; background:white; cursor:pointer; font-size:12px;">ACC</button>
+    <button onclick="filterCategory('EMG')" class="filter-btn" style="padding:4px 10px; border:1px solid #ccc; border-radius:12px; background:white; cursor:pointer; font-size:12px;">EMG</button>
+    <button onclick="filterCategory('PY')" class="filter-btn" style="padding:4px 10px; border:1px solid #ccc; border-radius:12px; background:white; cursor:pointer; font-size:12px;">PY</button>
+    <button onclick="filterCategory('JV')" class="filter-btn" style="padding:4px 10px; border:1px solid #ccc; border-radius:12px; background:white; cursor:pointer; font-size:12px;">JV</button>
+    <button onclick="filterCategory('TS')" class="filter-btn" style="padding:4px 10px; border:1px solid #ccc; border-radius:12px; background:white; cursor:pointer; font-size:12px;">TS</button>
+  </div>
 </div>
 
 <div class="category-key">
@@ -199,4 +221,67 @@ simulation.on("tick", () => {
       .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
   node.attr("transform", d => `translate(${d.x},${d.y})`);
 });
+
+// Build source filter buttons
+const sourceFiltersEl = document.getElementById("source-filters");
+const allSources = [...data.tier1, ...data.tier2];
+const allBtn = document.createElement("button");
+allBtn.textContent = "All";
+allBtn.style.cssText = "padding:4px 10px; border:1px solid #ccc; border-radius:12px; background:#1d70b8; color:white; cursor:pointer; font-size:12px;";
+allBtn.onclick = () => filterSource("all");
+sourceFiltersEl.appendChild(allBtn);
+allSources.forEach(s => {
+  const btn = document.createElement("button");
+  btn.textContent = s.label.replace(/\n/g, " ");
+  btn.style.cssText = "padding:4px 10px; border:1px solid #ccc; border-radius:12px; background:white; cursor:pointer; font-size:12px;";
+  btn.onclick = () => filterSource(s.id);
+  sourceFiltersEl.appendChild(btn);
+});
+
+// Filter by source
+function filterSource(sourceId) {
+  if (sourceId === "all") {
+    node.style("opacity", 1);
+    link.style("opacity", 1);
+  } else {
+    const src = allSources.find(s => s.id === sourceId);
+    const visibleStds = new Set(src.standards);
+    node.style("opacity", d => {
+      if (d.id === sourceId) return 1;
+      if (d.group === "standard" && visibleStds.has(d.id)) return 1;
+      return 0.08;
+    });
+    link.style("opacity", d => {
+      if (d.source.id === sourceId || d.target.id === sourceId) return 1;
+      return 0.05;
+    });
+  }
+}
+
+// Filter by category
+function filterCategory(cat) {
+  if (cat === "all") {
+    node.style("opacity", 1);
+    link.style("opacity", 1);
+  } else {
+    const matchingStds = new Set();
+    stdSet.forEach(std => { if (std.startsWith(cat + "-")) matchingStds.add(std); });
+    const connectedSources = new Set();
+    links.forEach(l => {
+      const tid = typeof l.target === "string" ? l.target : l.target.id;
+      const sid = typeof l.source === "string" ? l.source : l.source.id;
+      if (matchingStds.has(tid)) connectedSources.add(sid);
+    });
+    node.style("opacity", d => {
+      if (d.group === "standard" && matchingStds.has(d.id)) return 1;
+      if (d.group !== "standard" && connectedSources.has(d.id)) return 1;
+      return 0.08;
+    });
+    link.style("opacity", d => {
+      const tid = typeof d.target === "string" ? d.target : d.target.id;
+      if (matchingStds.has(tid)) return 1;
+      return 0.05;
+    });
+  }
+}
 </script>

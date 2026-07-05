@@ -140,16 +140,16 @@ permalink: /about/
     <div class="stat-card__label">Standards</div>
   </div>
   <div class="stat-card">
+    <div class="stat-card__number">23</div>
+    <div class="stat-card__label">Source Frameworks</div>
+  </div>
+  <div class="stat-card">
     <div class="stat-card__number">5</div>
     <div class="stat-card__label">Modules</div>
   </div>
   <div class="stat-card">
     <div class="stat-card__number">22</div>
     <div class="stat-card__label">IDE Rules</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-card__number">49</div>
-    <div class="stat-card__label">Tests</div>
   </div>
 </div>
 
