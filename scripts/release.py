@@ -134,6 +134,28 @@ def create_release(version: str, dry_run: bool) -> None:
     print(f"✓ Created GitHub release: {version}")
 
 
+def update_references(version: str, dry_run: bool) -> None:
+    """Run update_counts.py to update version references and counts, then commit."""
+    if dry_run:
+        print(f"[DRY RUN] Would update all @vX.Y.Z references to @{version}")
+        print(f"[DRY RUN] Would commit and push the reference update")
+        return
+
+    print(f"\nUpdating version references to @{version}...")
+    result = run(["python3", "scripts/update_counts.py"], check=False, capture=True)
+    print(result.stdout.strip())
+
+    # Check if anything changed
+    status = run(["git", "status", "--porcelain"], capture=True)
+    if status.stdout.strip():
+        run(["git", "add", "-A"])
+        run(["git", "commit", "-m", f"Update references to {version}"])
+        run(["git", "push", "origin", "main"])
+        print(f"✓ Version references updated and pushed")
+    else:
+        print("  (no changes needed)")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Create a new standards release")
     parser.add_argument("--version", required=True, help="Version tag (e.g. v1.0.0)")
@@ -155,6 +177,7 @@ def main() -> None:
     create_tag(args.version, args.dry_run)
     push_tag(args.version, args.dry_run)
     create_release(args.version, args.dry_run)
+    update_references(args.version, args.dry_run)
 
     if not args.dry_run:
         print(f"\n{'='*50}")

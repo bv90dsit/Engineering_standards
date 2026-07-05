@@ -56,10 +56,63 @@ Assessors verify against the version stated, not `main`.
 
 ## Release process
 
-1. Changes accumulate on `main` via PRs
-2. When ready to release, a maintainer runs `python scripts/release.py --version v1.1.0`
-3. Script validates all standards, generates release notes, creates a git tag
-4. GitHub Release is created with the changelog and `.vsix` attached
-5. Teams are notified (major versions only — via changelog and any configured webhooks)
+One command does everything:
+
+```bash
+python scripts/release.py --version v1.1.0
+```
+
+### What the script does (in order)
+
+| Step | Action | What happens |
+|------|--------|--------------|
+| 1 | Validate | Runs `validate_standards.py` — fails if any standard is broken |
+| 2 | Tag | Creates annotated git tag `v1.1.0` |
+| 3 | Push tag | Pushes tag to origin |
+| 4 | GitHub Release | Creates release with changelog + `.vsix` attached |
+| 5 | Update references | Runs `update_counts.py` which changes all `@v1.0.0` → `@v1.1.0` in docs/scripts |
+| 6 | Commit + push | Commits the reference updates and pushes to main |
+| 7 | Reminder | Prints list of docs to manually review for semantic staleness |
+
+After the script completes, the release is fully self-contained:
+- Tag exists
+- GitHub Release exists with artefacts
+- All docs/scripts reference the new version
+- No manual follow-up needed (except the doc review reminder)
+
+### Dry run
+
+Preview what would happen without making any changes:
+
+```bash
+python scripts/release.py --version v1.1.0 --dry-run
+```
+
+### How version references stay in sync
+
+`scripts/update_counts.py` (called by the release script and by CI) finds every `@vX.Y.Z` reference in these files and updates them to the latest git tag:
+
+- `README.md`
+- `docs/usage-by-role.md`
+- `.github/workflows/compliance.yml`
+- `scripts/onboarding.py`
+
+If a contributor opens a PR after a release without running this script, CI fails with: "version references are stale."
+
+### Workflow
+
+```
+PRs merged to main (standards or code changes)
+    ↓
+Maintainer decides it's time to release
+    ↓
+python scripts/release.py --version v1.1.0
+    ↓
+├── validates → tags → pushes → creates GitHub Release
+├── updates all @vX.Y.Z refs → commits → pushes
+└── prints doc review reminder
+    ↓
+Done. Teams can pin to @v1.1.0.
+```
 
 See also: [CHANGELOG.md](../CHANGELOG.md)
