@@ -38,6 +38,20 @@ python scripts/query_standards.py --tag ai
 | Compliance dashboard | Web view: services × standards matrix | 🔲 Planned |
 | IDE plugin | Inline warnings | 🔲 Planned |
 
+## Who uses this and how
+
+| Role | Primary tool | What they get |
+|------|-------------|---------------|
+| Engineer | `onboarding.py`, `check_compliance.py` | Know what applies, fix before PR |
+| Tech Lead | GitHub Action, `--json` output | Automated enforcement on every PR |
+| Delivery Manager | `--conformance MUST --enforcement periodic-audit` | Assessment evidence checklist |
+| Security Lead | `--category SEC` | Security baseline with clear enforcement split |
+| Head of Engineering | `--enforcement automated` vs `ways-of-working` | Where to invest in tooling vs coaching |
+| Contractor | README + onboarding | Up to speed in 10 minutes |
+| Pipeline (machine) | `from standards_lib import query_standards` | Structured data, no parsing |
+
+See [docs/usage-by-role.md](docs/usage-by-role.md) for full examples per role.
+
 ## Adding a new standard
 
 1. Create `standards/{ID}.md` with YAML frontmatter
