@@ -24,6 +24,7 @@ VERSION_FILES = [
     REPO_ROOT / "docs" / "usage-by-role.md",
     REPO_ROOT / ".github" / "workflows" / "compliance.yml",
     REPO_ROOT / "scripts" / "onboarding.py",
+    REPO_ROOT / "vscode-extension" / "README.md",
 ]
 
 
@@ -146,15 +147,18 @@ def get_latest_version() -> str | None:
 
 
 def update_version_references(version: str) -> list[str]:
-    """Update all @vX.Y.Z references to the latest version."""
-    pattern = re.compile(r"@v\d+\.\d+\.\d+")
+    """Update all @vX.Y.Z and vsix filename version references."""
+    at_pattern = re.compile(r"@v\d+\.\d+\.\d+")
+    vsix_pattern = re.compile(r"uk-gov-engineering-standards-\d+\.\d+\.\d+\.vsix")
+    bare_version = version.lstrip("v")
     changed_files = []
 
     for file_path in VERSION_FILES:
         if not file_path.exists():
             continue
         content = file_path.read_text()
-        updated = pattern.sub(f"@{version}", content)
+        updated = at_pattern.sub(f"@{version}", content)
+        updated = vsix_pattern.sub(f"uk-gov-engineering-standards-{bare_version}.vsix", updated)
         if updated != content:
             file_path.write_text(updated)
             changed_files.append(str(file_path.relative_to(REPO_ROOT)))

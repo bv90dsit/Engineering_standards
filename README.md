@@ -54,7 +54,7 @@ See [usage by role](docs/usage-by-role.md) for detailed workflows per role.
 Download the `.vsix` from the [latest release](https://github.com/bv90dsit/Engineering_standards/releases/latest), then:
 
 ```bash
-code --install-extension uk-gov-engineering-standards-1.0.0.vsix
+code --install-extension uk-gov-engineering-standards-1.1.0.vsix
 ```
 
 See the [extension docs](vscode-extension/README.md) for full details.
