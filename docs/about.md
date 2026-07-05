@@ -32,10 +32,13 @@ Layer 4 — Consumers (CI/CD, VS Code extension, onboarding, MCP server)
 
 ## Adopting These Standards
 
-1. **Fork or clone** the [GitHub repository](https://github.com/bv90dsit/Engineering_standards)
+1. **Scan your repo** -- `python scripts/suggest_standards.py --repo-path .` detects your stack and recommends what applies
 2. **Choose your modules** -- start with `core`, add language modules as needed
-3. **Customise at Layer 5** -- add your organisation's overrides
-4. **Integrate tooling** -- use the VS Code extension, CI workflows, and Python library
+3. **Integrate tooling:**
+   - **VS Code extension** -- inline warnings as you type
+   - **CI/CD pipeline** -- compliance check on every PR
+   - **MCP server** -- AI coding agents query standards and check code in real time
+4. **Customise** -- add your organisation's own module with custom rules
 5. **Contribute back** -- open PRs for improvements that benefit everyone
 
 ## Quick Start
