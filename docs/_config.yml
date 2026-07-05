@@ -1,0 +1,19 @@
+title: UK Government Engineering Standards
+description: Machine-readable, context-aware engineering standards
+baseurl: "/Engineering_standards"
+url: "https://bv90dsit.github.io"
+theme: minima
+plugins:
+  - jekyll-seo-tag
+
+collections:
+  standards:
+    output: true
+    permalink: /standards/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: "standards"
+    values:
+      layout: "standard"

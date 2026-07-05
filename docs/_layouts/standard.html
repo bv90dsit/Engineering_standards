@@ -1,0 +1,44 @@
+---
+layout: default
+---
+
+<a href="{{ '/' | relative_url }}" class="back-link">Back to all standards</a>
+
+<article>
+  <div class="standard-header">
+    <h1>{{ page.standard_id }}: {{ page.title }}</h1>
+    <div class="standard-meta">
+      <span class="standard-meta__item">
+        {% if page.conformance == "MUST" %}
+          <span class="badge badge--must">MUST</span>
+        {% elsif page.conformance == "SHOULD" %}
+          <span class="badge badge--should">SHOULD</span>
+        {% else %}
+          <span class="badge badge--could">COULD</span>
+        {% endif %}
+      </span>
+      <span class="standard-meta__item">
+        <strong>Category:</strong> {{ page.category }}
+      </span>
+      {% if page.enforcement %}
+      <span class="standard-meta__item">
+        <strong>Enforcement:</strong> {{ page.enforcement }}
+      </span>
+      {% endif %}
+      {% if page.module %}
+      <span class="standard-meta__item">
+        <strong>Module:</strong> {{ page.module }}
+      </span>
+      {% endif %}
+      {% if page.applies_to.platform %}
+      <span class="standard-meta__item">
+        <strong>Platform:</strong> {{ page.applies_to.platform }}
+      </span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="standard-body">
+    {{ content }}
+  </div>
+</article>

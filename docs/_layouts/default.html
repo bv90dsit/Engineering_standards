@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ site.description }}">
+  <link rel="stylesheet" href="{{ '/assets/style.css' | relative_url }}">
+  {% seo %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="{{ '/' | relative_url }}" class="site-header__title">{{ site.title }}</a>
+      <nav class="site-header__nav">
+        <a href="{{ '/' | relative_url }}">Standards</a>
+        <a href="{{ '/about' | relative_url }}">About</a>
+        <a href="https://github.com/bv90dsit/Engineering_standards" target="_blank">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    {{ content }}
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p>UK Government Engineering Standards &mdash; Open source under the <a href="https://github.com/bv90dsit/Engineering_standards/blob/main/LICENCE">MIT Licence</a>.</p>
+      <p>Built with Jekyll and GitHub Pages.</p>
+    </div>
+  </footer>
+</body>
+</html>

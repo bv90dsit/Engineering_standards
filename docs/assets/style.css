@@ -1,0 +1,372 @@
+/* UK Government Engineering Standards - GOV.UK-inspired styles */
+
+:root {
+  --govuk-blue: #1d70b8;
+  --govuk-dark-blue: #003078;
+  --govuk-black: #0b0c0c;
+  --govuk-grey-1: #505a5f;
+  --govuk-grey-2: #b1b4b6;
+  --govuk-grey-3: #f3f2f1;
+  --govuk-white: #ffffff;
+  --govuk-red: #d4351c;
+  --govuk-amber: #f47738;
+  --govuk-green: #00703c;
+  --govuk-light-blue: #5694ca;
+  --govuk-focus: #ffdd00;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: "GDS Transport", Arial, sans-serif;
+  color: var(--govuk-black);
+  background: var(--govuk-white);
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+/* Header */
+.site-header {
+  background: var(--govuk-black);
+  padding: 10px 0;
+  border-bottom: 10px solid var(--govuk-blue);
+}
+
+.site-header__inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-header__title {
+  color: var(--govuk-white);
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.site-header__title:hover {
+  text-decoration: underline;
+}
+
+.site-header__nav a {
+  color: var(--govuk-white);
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 0.875rem;
+}
+
+.site-header__nav a:hover {
+  text-decoration: underline;
+}
+
+/* Main content */
+.main-content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 30px 20px 60px;
+}
+
+/* Footer */
+.site-footer {
+  background: var(--govuk-grey-3);
+  border-top: 1px solid var(--govuk-grey-2);
+  padding: 30px 0;
+  margin-top: 60px;
+}
+
+.site-footer__inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+  color: var(--govuk-grey-1);
+  font-size: 0.875rem;
+}
+
+.site-footer__inner a {
+  color: var(--govuk-grey-1);
+}
+
+/* Typography */
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 20px;
+  color: var(--govuk-black);
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 30px 0 15px;
+  color: var(--govuk-black);
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 25px 0 10px;
+}
+
+p {
+  margin: 0 0 15px;
+}
+
+a {
+  color: var(--govuk-blue);
+}
+
+a:focus {
+  outline: 3px solid var(--govuk-focus);
+  outline-offset: 0;
+  background: var(--govuk-focus);
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--govuk-white);
+  vertical-align: middle;
+}
+
+.badge--must {
+  background: var(--govuk-red);
+}
+
+.badge--should {
+  background: var(--govuk-amber);
+}
+
+.badge--could {
+  background: var(--govuk-green);
+}
+
+/* Standards list */
+.standards-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.standards-list__item {
+  border-bottom: 1px solid var(--govuk-grey-2);
+  padding: 15px 0;
+}
+
+.standards-list__item:first-child {
+  border-top: 1px solid var(--govuk-grey-2);
+}
+
+.standards-list__link {
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--govuk-blue);
+}
+
+.standards-list__link:hover {
+  text-decoration: underline;
+}
+
+.standards-list__meta {
+  margin-top: 5px;
+  font-size: 0.875rem;
+  color: var(--govuk-grey-1);
+}
+
+.standards-list__meta span {
+  margin-right: 15px;
+}
+
+/* Filter buttons */
+.filters {
+  margin: 20px 0 30px;
+}
+
+.filters__group {
+  margin-bottom: 15px;
+}
+
+.filters__label {
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: block;
+  margin-bottom: 5px;
+  color: var(--govuk-grey-1);
+}
+
+.filters__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-btn {
+  display: inline-block;
+  padding: 5px 12px;
+  border: 2px solid var(--govuk-grey-2);
+  border-radius: 3px;
+  background: var(--govuk-white);
+  color: var(--govuk-black);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.filter-btn:hover,
+.filter-btn--active {
+  border-color: var(--govuk-blue);
+  background: var(--govuk-blue);
+  color: var(--govuk-white);
+}
+
+/* Standard detail page */
+.standard-header {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--govuk-grey-2);
+}
+
+.standard-header h1 {
+  margin-bottom: 10px;
+}
+
+.standard-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  font-size: 0.875rem;
+  color: var(--govuk-grey-1);
+}
+
+.standard-meta__item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.standard-body h2 {
+  border-bottom: 1px solid var(--govuk-grey-3);
+  padding-bottom: 8px;
+}
+
+.standard-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+  font-size: 0.875rem;
+}
+
+.standard-body th,
+.standard-body td {
+  padding: 10px 15px;
+  border: 1px solid var(--govuk-grey-2);
+  text-align: left;
+}
+
+.standard-body th {
+  background: var(--govuk-grey-3);
+  font-weight: 700;
+}
+
+.standard-body code {
+  background: var(--govuk-grey-3);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.875em;
+}
+
+.standard-body pre {
+  background: var(--govuk-grey-3);
+  padding: 15px 20px;
+  border-radius: 3px;
+  overflow-x: auto;
+  border-left: 4px solid var(--govuk-blue);
+}
+
+.standard-body pre code {
+  background: none;
+  padding: 0;
+}
+
+/* Back link */
+.back-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 0.875rem;
+  color: var(--govuk-black);
+  text-decoration: none;
+}
+
+.back-link::before {
+  content: "\2190 ";
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* Category sections */
+.category-section {
+  margin-bottom: 40px;
+}
+
+/* About page */
+.architecture-diagram {
+  background: var(--govuk-grey-3);
+  padding: 20px;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  .site-header__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .site-header__nav a {
+    margin-left: 0;
+    margin-right: 15px;
+  }
+
+  .standard-meta {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .standards-list__link {
+    font-size: 1rem;
+  }
+}
