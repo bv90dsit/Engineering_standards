@@ -44,6 +44,15 @@
       "excludeFilePattern": "**/{*.example,*.sample,test_*,*.test.*}",
       "severity": "error",
       "message": "SEC-003: AWS access key detected. Remove immediately and rotate the key."
+    },
+    {
+      "id": "SEC-009",
+      "pattern": "(Access-Control-Allow-Origin|cors.*origin)\\s*[=:]\\s*[\"']\\*[\"']",
+      "excludePattern": "^\\s*(#|//|\\*)",
+      "filePattern": "**/*.{py,js,ts,java,rb,yaml,yml,conf}",
+      "excludeFilePattern": "**/{test_*,*.test.*,*.spec.*}",
+      "severity": "error",
+      "message": "SEC-009: CORS wildcard origin (*) detected. Explicitly list allowed origins in production."
     }
   ]
 }
