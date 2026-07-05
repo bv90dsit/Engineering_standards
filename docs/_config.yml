@@ -17,3 +17,4 @@ defaults:
       type: "standards"
     values:
       layout: "standard"
+      render_with_liquid: false
