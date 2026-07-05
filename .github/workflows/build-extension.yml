@@ -1,0 +1,63 @@
+name: Build VS Code Extension
+
+# Triggers when any rules.json or extension source changes on main
+on:
+  push:
+    branches: [main]
+    paths:
+      - "modules/*/rules.json"
+      - "vscode-extension/src/**"
+      - "vscode-extension/package.json"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "vscode-extension/package-lock.json"
+
+      - name: Install dependencies
+        working-directory: vscode-extension
+        run: npm ci
+
+      - name: Compile
+        working-directory: vscode-extension
+        run: npm run compile
+
+      - name: Run tests
+        working-directory: vscode-extension
+        run: npx mocha ./out/test/suite/**/*.test.js --ui tdd
+
+      - name: Get version from package.json
+        id: version
+        working-directory: vscode-extension
+        run: echo "version=$(node -p 'require("./package.json").version')" >> "$GITHUB_OUTPUT"
+
+      - name: Package extension
+        working-directory: vscode-extension
+        run: |
+          npx vsce package --out uk-gov-engineering-standards-${{ steps.version.outputs.version }}.vsix \
+            --baseContentUrl https://github.com/${{ github.repository }}/blob/main/vscode-extension/ \
+            --baseImagesUrl https://github.com/${{ github.repository }}/raw/main/vscode-extension/
+
+      - name: Upload to latest release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VSIX="vscode-extension/uk-gov-engineering-standards-${{ steps.version.outputs.version }}.vsix"
+          LATEST_TAG=$(gh release list --limit 1 --json tagName -q '.[0].tagName')
+          if [ -n "$LATEST_TAG" ]; then
+            gh release upload "$LATEST_TAG" "$VSIX" --clobber
+            echo "✓ Uploaded $VSIX to release $LATEST_TAG"
+          else
+            echo "⚠ No release found — skipping upload"
+          fi

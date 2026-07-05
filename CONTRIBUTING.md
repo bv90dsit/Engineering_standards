@@ -141,6 +141,8 @@ If the standard can be detected by a regex pattern on a single line, add to `mod
 }
 ```
 
+When your PR merges, the **Build VS Code Extension** workflow automatically rebuilds the `.vsix` and uploads it to the latest release. No manual packaging needed.
+
 ### 5. Update counts
 
 ```bash
