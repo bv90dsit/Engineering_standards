@@ -88,14 +88,42 @@ All scripts:
 - Dependabot alerts are enabled for both Python and npm
 - `.vsix` releases are built from tagged commits — verify by checking the release's commit SHA
 - Pre-commit hooks scan for secrets before they reach the repo
+- **SBOM (Software Bill of Materials)** attached to every release in CycloneDX format
+
+## SBOM (Software Bill of Materials)
+
+Each release includes a machine-readable inventory of all dependencies:
+
+- **Where to find it:** [GitHub Releases](https://github.com/bv90dsit/Engineering_standards/releases) → download `sbom-python-{version}.json`
+- **Format:** CycloneDX 1.5 (JSON)
+- **What it lists:** every Python package name and version used at release time
+- **Use case:** search for a CVE to check if this repo is affected
+
+```bash
+# Download the SBOM for the latest release
+gh release download --pattern "sbom-*.json"
+
+# Search for a specific package
+cat sbom-python-1.1.0.json | python3 -c "
+import json, sys
+sbom = json.load(sys.stdin)
+for c in sbom['components']:
+    if 'pyyaml' in c['name'].lower():
+        print(f\"{c['name']} {c['version']}\")
+"
+```
 
 ## Verifying a release
 
 ```bash
 # Check the .vsix was built from the tagged commit
-gh release view v1.0.0 --json tagName,targetCommitish
-git log --oneline v1.0.0 -1
+gh release view v1.1.0 --json tagName,targetCommitish
+git log --oneline v1.1.0 -1
 
 # Verify the .vsix contents (it's a zip file)
-unzip -l uk-gov-engineering-standards-1.0.0.vsix
+unzip -l uk-gov-engineering-standards-1.1.0.vsix
+
+# Download and inspect the SBOM
+gh release download v1.1.0 --pattern "sbom-*.json"
+cat sbom-python-1.1.0.json | python3 -m json.tool | head -20
 ```
