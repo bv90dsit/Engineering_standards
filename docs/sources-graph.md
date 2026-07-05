@@ -63,8 +63,24 @@ svg { display: block; margin: 0 auto; }
 <svg id="graph" width="900" height="900"></svg>
 
 <p style="color:#666; font-size:12px; margin-top:8px;">
-  Drag nodes to rearrange. Hover for full name. Blue = government/legislation/standards bodies. Orange = industry research/framework docs.
+  Click any grey standard node to view it. Drag nodes to rearrange. Blue = government/legislation/standards bodies. Orange = industry research/framework docs.
 </p>
+
+## Source → Standards reference
+
+| Source | Tier | Standards it informs |
+|--------|:----:|---------------------|
+| Technology Code of Practice | 1 | [ENG-001](/Engineering_standards/standards/ENG-001/), [ENG-002](/Engineering_standards/standards/ENG-002/), [ARC-001](/Engineering_standards/standards/ARC-001/), [DAT-004](/Engineering_standards/standards/DAT-004/), [ENG-005](/Engineering_standards/standards/ENG-005/), [EMG-001](/Engineering_standards/standards/EMG-001/) |
+| GDS Service Standard | 1 | [ENG-003](/Engineering_standards/standards/ENG-003/), [OPS-001](/Engineering_standards/standards/OPS-001/), [OPS-002](/Engineering_standards/standards/OPS-002/), [ARC-004](/Engineering_standards/standards/ARC-004/), [ARC-005](/Engineering_standards/standards/ARC-005/), [OPS-003](/Engineering_standards/standards/OPS-003/), [OPS-006](/Engineering_standards/standards/OPS-006/), [OPS-007](/Engineering_standards/standards/OPS-007/) |
+| NCSC Secure by Design | 1 | [SEC-001](/Engineering_standards/standards/SEC-001/), [SEC-003](/Engineering_standards/standards/SEC-003/), [SEC-005](/Engineering_standards/standards/SEC-005/), [SEC-006](/Engineering_standards/standards/SEC-006/), [SEC-007](/Engineering_standards/standards/SEC-007/), [SEC-008](/Engineering_standards/standards/SEC-008/) |
+| OWASP Top 10 / ASVS | 1 | [SEC-001](/Engineering_standards/standards/SEC-001/), [SEC-002](/Engineering_standards/standards/SEC-002/), [SEC-004](/Engineering_standards/standards/SEC-004/), [SEC-009](/Engineering_standards/standards/SEC-009/), [PY-003](/Engineering_standards/standards/PY-003/), [JV-003](/Engineering_standards/standards/JV-003/) |
+| WCAG 2.2 | 1 | [ACC-001](/Engineering_standards/standards/ACC-001/) |
+| UK GDPR | 1 | [DAT-002](/Engineering_standards/standards/DAT-002/), [DAT-005](/Engineering_standards/standards/DAT-005/) |
+| CDDO AI Framework | 1 | [EMG-002](/Engineering_standards/standards/EMG-002/), [EMG-003](/Engineering_standards/standards/EMG-003/), [EMG-004](/Engineering_standards/standards/EMG-004/) |
+| DORA Metrics | 2 | [OPS-002](/Engineering_standards/standards/OPS-002/), [OPS-005](/Engineering_standards/standards/OPS-005/), [ENG-007](/Engineering_standards/standards/ENG-007/) |
+| 12-Factor App | 2 | [ARC-002](/Engineering_standards/standards/ARC-002/), [TS-006](/Engineering_standards/standards/TS-006/), [OPS-006](/Engineering_standards/standards/OPS-006/) |
+| AWS Well-Architected | 2 | [ARC-005](/Engineering_standards/standards/ARC-005/), [ARC-006](/Engineering_standards/standards/ARC-006/) |
+| Google SRE Book | 2 | [OPS-001](/Engineering_standards/standards/OPS-001/), [OPS-003](/Engineering_standards/standards/OPS-003/) |
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script>
@@ -110,8 +126,9 @@ data.tier2.forEach(s => {
   nodes.push({ id: s.id, label: s.label, group: "tier2", radius: 14 });
   s.standards.forEach(std => { stdSet.add(std); links.push({ source: s.id, target: std }); });
 });
+const baseUrl = "/Engineering_standards/standards/";
 stdSet.forEach(std => {
-  nodes.push({ id: std, label: std, group: "standard", radius: 5 });
+  nodes.push({ id: std, label: std, group: "standard", radius: 5, url: baseUrl + std + "/" });
 });
 
 const width = 900, height = 900;
@@ -141,13 +158,18 @@ const node = svg.append("g")
     .on("end", (e, d) => { if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; })
   );
 
+// Make standard nodes clickable
+node.filter(d => d.group === "standard")
+  .style("cursor", "pointer")
+  .on("click", (e, d) => { if (d.url) window.location.href = d.url; });
+
 node.append("circle")
   .attr("r", d => d.radius)
   .attr("fill", d => d.group === "tier1" ? "#1d70b8" : d.group === "tier2" ? "#f47738" : "#505a5f")
   .attr("stroke", d => d.group === "standard" ? "none" : "#fff")
   .attr("stroke-width", d => d.group === "standard" ? 0 : 2);
 
-node.append("title").text(d => d.label.replace(/\n/g, " "));
+node.append("title").text(d => d.group === "standard" ? d.label + " (click to view)" : d.label.replace(/\n/g, " "));
 
 // Labels for sources only (standards are too small)
 node.filter(d => d.group !== "standard")
