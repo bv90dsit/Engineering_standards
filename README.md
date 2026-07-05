@@ -8,9 +8,19 @@ Machine-readable, context-aware engineering standards for UK Government digital 
 
 ## Quick start
 
-### Add standards checking to your service (2 minutes)
+### 1. Install the VS Code extension (instant feedback)
 
-Add this file to your service repo at `.github/workflows/standards.yml`:
+Download the `.vsix` from the [latest release](https://github.com/bv90dsit/Engineering_standards/releases/latest), then:
+
+```bash
+code --install-extension uk-gov-engineering-standards-0.1.0.vsix
+```
+
+You'll get inline warnings as you type — `http://` URLs, hardcoded secrets, missing LICENCE/CI/README.
+
+### 2. Add the CI check to your service (2 minutes)
+
+Add `.github/workflows/standards.yml` to your repo:
 
 ```yaml
 jobs:
@@ -21,28 +31,19 @@ jobs:
       platform: python   # or java, node, any
 ```
 
-Every PR now checks compliance automatically. That's the whole integration.
+Every PR now checks compliance automatically.
 
-### Explore the standards locally
+### 3. See what applies to you
 
 ```bash
 git clone https://github.com/bv90dsit/Engineering_standards.git
 cd Engineering_standards
 pip install pyyaml
 
-# See what applies to you and how to comply
 python scripts/onboarding.py --role engineer --platform python
-
-# Check a repo's compliance
-python scripts/check_compliance.py --repo-path /path/to/your-service
-
-# Query standards
-python scripts/query_standards.py --conformance MUST
-python scripts/query_standards.py --category SEC --json
-python scripts/query_standards.py --enforcement automated
 ```
 
-See [docs/usage-by-role.md](docs/usage-by-role.md) for detailed workflows per role.
+This tells you which standards apply, how each is enforced, and what to do to comply.
 
 ## What's in the box
 
@@ -55,22 +56,8 @@ See [docs/usage-by-role.md](docs/usage-by-role.md) for detailed workflows per ro
 | CI/CD checker | `scripts/check_compliance.py` — automated + manual flags | ✅ Built |
 | Reusable GitHub Action | `.github/workflows/compliance.yml` | ✅ Built |
 | Onboarding tool | `scripts/onboarding.py` | ✅ Built |
-| Compliance dashboard | Web view: services × standards matrix | 🔲 Planned |
 | VS Code extension | `vscode-extension/` — inline warnings as you type | ✅ Built |
-
-## Who uses this and how
-
-| Role | Primary tool | What they get |
-|------|-------------|---------------|
-| Engineer | `onboarding.py`, `check_compliance.py` | Know what applies, fix before PR |
-| Tech Lead | GitHub Action, `--json` output | Automated enforcement on every PR |
-| Delivery Manager | `--conformance MUST --enforcement periodic-audit` | Assessment evidence checklist |
-| Security Lead | `--category SEC` | Security baseline with clear enforcement split |
-| Head of Engineering | `--enforcement automated` vs `ways-of-working` | Where to invest in tooling vs coaching |
-| Contractor | README + onboarding | Up to speed in 10 minutes |
-| Pipeline (machine) | `from standards_lib import query_standards` | Structured data, no parsing |
-
-See [docs/usage-by-role.md](docs/usage-by-role.md) for full examples per role.
+| Compliance dashboard | Web view: services × standards matrix | 🔲 Planned |
 
 ## Adding a new standard
 
@@ -109,27 +96,6 @@ Each standard has a **conformance level** (how mandatory) and an **enforcement m
 
 Standards can have multiple enforcement types. The compliance checker automates what it can and flags the rest for manual review.
 
-## Using the compliance checker
-
-```bash
-# Terminal output
-python scripts/check_compliance.py --repo-path . --role engineer
-
-# Markdown (for GitHub Actions step summary)
-python scripts/check_compliance.py --repo-path . --output markdown
-```
-
-As a reusable GitHub Action in another repo:
-
-```yaml
-jobs:
-  compliance:
-    uses: bv90dsit/Engineering_standards/.github/workflows/compliance.yml@main
-    with:
-      role: engineer
-      platform: python
-```
-
 ## Source frameworks
 
 Every standard traces back to at least one published framework:
@@ -142,6 +108,11 @@ Every standard traces back to at least one published framework:
 - [WCAG 2.2](https://www.w3.org/TR/WCAG22/) — W3C
 - [UK GDPR](https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/) — ICO
 - ISO 27001, NIST, 12-Factor, and others as referenced per standard
+
+## Further reading
+
+- [Usage by role](docs/usage-by-role.md) — detailed workflows for engineers, tech leads, delivery managers, security leads, and contractors
+- [VS Code extension](vscode-extension/README.md) — install guide and what it checks
 
 ## Governance
 
