@@ -60,18 +60,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          BODY=$(cat <<'COMMENT'
-          ## 🔍 Impact Analysis
-
-          The following files in this PR have been analysed for downstream impact:
-
-          ```
-          COMMENT
-          )
-          BODY="${BODY}
-          $(cat /tmp/impact.txt)
-          \`\`\`
-
-          *This is an automated analysis. Items marked ⚠ need action before merge. Items marked ? need human review.*"
-
-          gh pr comment ${{ github.event.pull_request.number }} --body "$BODY"
+          {
+            echo "## 🔍 Impact Analysis"
+            echo ""
+            echo "The following files in this PR have been analysed for downstream impact:"
+            echo ""
+            echo '```'
+            cat /tmp/impact.txt
+            echo '```'
+            echo ""
+            echo "*Items marked ⚠ need action before merge. Items marked ? need human review.*"
+          } > /tmp/comment.md
+          gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/comment.md
