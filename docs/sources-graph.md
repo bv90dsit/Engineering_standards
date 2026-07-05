@@ -142,6 +142,22 @@ const data = {
   ]
 };
 
+// Category lookup — maps standard ID to its actual category from the index
+// (PY-001 is category ENG, not PY; the ID prefix doesn't always match)
+const stdCategories = {
+  "ENG-001":"ENG","ENG-002":"ENG","ENG-003":"ENG","ENG-004":"ENG","ENG-005":"ENG","ENG-006":"ENG","ENG-007":"ENG",
+  "SEC-001":"SEC","SEC-002":"SEC","SEC-003":"SEC","SEC-004":"SEC","SEC-005":"SEC","SEC-006":"SEC","SEC-007":"SEC","SEC-008":"SEC","SEC-009":"SEC",
+  "ARC-001":"ARC","ARC-002":"ARC","ARC-003":"ARC","ARC-004":"ARC","ARC-005":"ARC","ARC-006":"ARC",
+  "OPS-001":"OPS","OPS-002":"OPS","OPS-003":"OPS","OPS-004":"OPS","OPS-005":"OPS","OPS-006":"OPS","OPS-007":"OPS",
+  "DAT-001":"DAT","DAT-002":"DAT","DAT-003":"DAT","DAT-004":"DAT","DAT-005":"DAT",
+  "ACC-001":"ACC","ACC-002":"ACC","ACC-003":"ACC",
+  "EMG-001":"EMG","EMG-002":"EMG","EMG-003":"EMG","EMG-004":"EMG",
+  "PY-001":"ENG","PY-002":"ENG","PY-003":"SEC","PY-004":"ENG","PY-005":"SEC","PY-006":"SEC","PY-007":"SEC","PY-008":"SEC","PY-009":"SEC","PY-010":"ENG",
+  "JV-001":"ENG","JV-002":"ENG","JV-003":"SEC","JV-004":"ENG","JV-005":"SEC","JV-006":"ENG","JV-007":"ENG","JV-008":"OPS",
+  "TS-001":"ENG","TS-002":"ENG","TS-003":"ENG","TS-004":"ENG","TS-005":"ARC","TS-006":"ARC","TS-007":"ENG","TS-008":"ENG",
+  "ORG-001":"ENG","ORG-002":"SEC"
+};
+
 const nodes = [];
 const links = [];
 const stdSet = new Set();
@@ -298,11 +314,11 @@ function applyGraphFilters() {
     });
   }
 
-  // Filter by categories (union of selected categories)
+  // Filter by categories (using actual category from index, not ID prefix)
   if (activeCats.size > 0) {
     visibleStds = new Set([...visibleStds].filter(std => {
-      const prefix = std.split("-")[0];
-      return activeCats.has(prefix);
+      const cat = stdCategories[std] || std.split("-")[0];
+      return activeCats.has(cat);
     }));
   }
 
