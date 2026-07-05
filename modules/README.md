@@ -126,14 +126,27 @@ For the VS Code extension — defines regex-based line-level checks:
 
 Use a short prefix unique to your module:
 
+**Core:**
+
+| Prefix | Category |
+|--------|----------|
+| ENG | Engineering practice |
+| SEC | Security |
+| ARC | Architecture |
+| OPS | Operations |
+| DAT | Data |
+| ACC | Accessibility |
+| EMG | Emerging tech (AI) |
+
+**Extensions:**
+
 | Prefix | Module |
 |--------|--------|
-| ENG, SEC, ARC, OPS, DAT, ACC, EMG | core |
-| PY | python |
-| JV | java |
-| TS | typescript |
-| ORG | org-example |
-| MYMOD | your custom module |
+| PY | Python / Django / Flask |
+| JV | Java / Spring Boot |
+| TS | TypeScript / React / Node |
+| ORG | Org-specific |
+| MYMOD | Your custom module |
 
 ## Related docs
 
