@@ -114,31 +114,31 @@ svg { display: block; margin: 0 auto; }
 <script>
 const data = {
   tier1: [
-    { id: "tcop", label: "Technology\nCode of Practice", standards: ["ENG-001","ENG-002","ARC-001","DAT-004","ENG-005","EMG-001"] },
-    { id: "gds", label: "GDS Service\nStandard", standards: ["ENG-003","OPS-001","OPS-002","ACC-002","ARC-004","ARC-005","ENG-004","ENG-006","OPS-003","OPS-006","OPS-007"] },
-    { id: "ncsc", label: "NCSC Secure\nby Design", standards: ["SEC-001","SEC-003","SEC-005","SEC-006","SEC-007","SEC-008","DAT-003","OPS-004"] },
-    { id: "owasp", label: "OWASP", standards: ["SEC-001","SEC-002","SEC-004","SEC-009","PY-003","PY-005","JV-003"] },
-    { id: "wcag", label: "WCAG 2.2", standards: ["ACC-001"] },
-    { id: "nist", label: "NIST", standards: ["SEC-002","SEC-005"] },
-    { id: "ukgdpr", label: "UK GDPR", standards: ["DAT-002","DAT-005"] },
-    { id: "accessibility", label: "Accessibility\nRegs 2018", standards: ["ACC-001"] },
-    { id: "cddo-ai", label: "CDDO AI\nFramework", standards: ["EMG-002","EMG-003","EMG-004"] },
-    { id: "gsc", label: "Security\nClassifications", standards: ["DAT-001"] },
-    { id: "ietf", label: "IETF RFCs", standards: ["SEC-008"] },
+    { id: "tcop", label: "Technology\nCode of Practice", url: "https://www.gov.uk/guidance/the-technology-code-of-practice", standards: ["ENG-001","ENG-002","ARC-001","DAT-004","ENG-005","EMG-001"] },
+    { id: "gds", label: "GDS Service\nStandard", url: "https://www.gov.uk/service-manual/service-standard", standards: ["ENG-003","OPS-001","OPS-002","ACC-002","ARC-004","ARC-005","ENG-004","ENG-006","OPS-003","OPS-006","OPS-007"] },
+    { id: "ncsc", label: "NCSC Secure\nby Design", url: "https://www.ncsc.gov.uk/collection/developers-collection", standards: ["SEC-001","SEC-003","SEC-005","SEC-006","SEC-007","SEC-008","DAT-003","OPS-004"] },
+    { id: "owasp", label: "OWASP", url: "https://owasp.org/www-project-top-ten/", standards: ["SEC-001","SEC-002","SEC-004","SEC-009","PY-003","PY-005","JV-003"] },
+    { id: "wcag", label: "WCAG 2.2", url: "https://www.w3.org/TR/WCAG22/", standards: ["ACC-001"] },
+    { id: "nist", label: "NIST", url: "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final", standards: ["SEC-002","SEC-005"] },
+    { id: "ukgdpr", label: "UK GDPR", url: "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/", standards: ["DAT-002","DAT-005"] },
+    { id: "accessibility", label: "Accessibility\nRegs 2018", url: "https://www.legislation.gov.uk/uksi/2018/952", standards: ["ACC-001"] },
+    { id: "cddo-ai", label: "CDDO AI\nFramework", url: "https://www.gov.uk/government/publications/generative-ai-framework-for-hmg", standards: ["EMG-002","EMG-003","EMG-004"] },
+    { id: "gsc", label: "Security\nClassifications", url: "https://www.gov.uk/government/publications/government-security-classifications", standards: ["DAT-001"] },
+    { id: "ietf", label: "IETF RFCs", url: "https://datatracker.ietf.org/", standards: ["SEC-008"] },
   ],
   tier2: [
-    { id: "dora", label: "DORA", standards: ["OPS-002","OPS-005","ENG-007"] },
-    { id: "12factor", label: "12-Factor", standards: ["ARC-002","TS-006","OPS-006"] },
-    { id: "sre", label: "Google SRE", standards: ["OPS-001","OPS-003"] },
-    { id: "aws-wa", label: "AWS Well-\nArchitected", standards: ["ARC-005","ARC-006"] },
-    { id: "accelerate", label: "Accelerate", standards: ["OPS-002","OPS-005","ENG-007"] },
-    { id: "openapi", label: "OpenAPI", standards: ["ARC-003"] },
-    { id: "spring", label: "Spring", standards: ["JV-001","JV-005"] },
-    { id: "python-docs", label: "Python/PEP", standards: ["PY-002","PY-004","PY-010"] },
-    { id: "django", label: "Django", standards: ["PY-005","PY-007","PY-008"] },
-    { id: "typescript", label: "TypeScript", standards: ["TS-001","TS-002","TS-003"] },
-    { id: "react", label: "React", standards: ["TS-005"] },
-    { id: "mdn", label: "MDN", standards: ["SEC-009"] },
+    { id: "dora", label: "DORA", url: "https://dora.dev/", standards: ["OPS-002","OPS-005","ENG-007"] },
+    { id: "12factor", label: "12-Factor", url: "https://12factor.net/", standards: ["ARC-002","TS-006","OPS-006"] },
+    { id: "sre", label: "Google SRE", url: "https://sre.google/sre-book/table-of-contents/", standards: ["OPS-001","OPS-003"] },
+    { id: "aws-wa", label: "AWS Well-\nArchitected", url: "https://docs.aws.amazon.com/wellarchitected/latest/framework/", standards: ["ARC-005","ARC-006"] },
+    { id: "accelerate", label: "Accelerate", url: "https://itrevolution.com/product/accelerate/", standards: ["OPS-002","OPS-005","ENG-007"] },
+    { id: "openapi", label: "OpenAPI", url: "https://spec.openapis.org/oas/latest.html", standards: ["ARC-003"] },
+    { id: "spring", label: "Spring", url: "https://docs.spring.io/spring-framework/reference/", standards: ["JV-001","JV-005"] },
+    { id: "python-docs", label: "Python/PEP", url: "https://docs.python.org/3/", standards: ["PY-002","PY-004","PY-010"] },
+    { id: "django", label: "Django", url: "https://docs.djangoproject.com/en/stable/", standards: ["PY-005","PY-007","PY-008"] },
+    { id: "typescript", label: "TypeScript", url: "https://www.typescriptlang.org/docs/", standards: ["TS-001","TS-002","TS-003"] },
+    { id: "react", label: "React", url: "https://react.dev/", standards: ["TS-005"] },
+    { id: "mdn", label: "MDN", url: "https://developer.mozilla.org/", standards: ["SEC-009"] },
   ]
 };
 
@@ -163,11 +163,11 @@ const links = [];
 const stdSet = new Set();
 
 data.tier1.forEach(s => {
-  nodes.push({ id: s.id, label: s.label, group: "tier1", radius: 18 });
+  nodes.push({ id: s.id, label: s.label, group: "tier1", radius: 18, url: s.url });
   s.standards.forEach(std => { stdSet.add(std); links.push({ source: s.id, target: std }); });
 });
 data.tier2.forEach(s => {
-  nodes.push({ id: s.id, label: s.label, group: "tier2", radius: 14 });
+  nodes.push({ id: s.id, label: s.label, group: "tier2", radius: 14, url: s.url });
   s.standards.forEach(std => { stdSet.add(std); links.push({ source: s.id, target: std }); });
 });
 const baseUrl = "{{ site.baseurl }}/standards/";
@@ -202,10 +202,15 @@ const node = svg.append("g")
     .on("end", (e, d) => { if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; })
   );
 
-// Make standard nodes clickable
+// Make standard nodes clickable (navigate to standard page)
 node.filter(d => d.group === "standard")
   .style("cursor", "pointer")
   .on("click", (e, d) => { if (d.url) window.location.href = d.url; });
+
+// Make source nodes clickable (open external source in new tab)
+node.filter(d => d.group !== "standard")
+  .style("cursor", "pointer")
+  .on("dblclick", (e, d) => { if (d.url) window.open(d.url, "_blank"); });
 
 node.append("circle")
   .attr("r", d => d.radius)
@@ -213,7 +218,7 @@ node.append("circle")
   .attr("stroke", d => d.group === "standard" ? "none" : "#fff")
   .attr("stroke-width", d => d.group === "standard" ? 0 : 2);
 
-node.append("title").text(d => d.group === "standard" ? d.label + " (click to view)" : d.label.replace(/\n/g, " "));
+node.append("title").text(d => d.group === "standard" ? d.label + " (click to view)" : d.label.replace(/\n/g, " ") + " (double-click to visit source)");
 
 // Labels for sources only (standards are too small)
 node.filter(d => d.group !== "standard")
