@@ -57,7 +57,7 @@ Same format as the core index. Each entry needs: `id`, `title`, `conformance`, `
 
 ### standards/*.md
 
-Same format as core standards: YAML frontmatter + Standard + Rationale + What good looks like + Enforcement + Source traceability.
+Same format as core standards: YAML frontmatter + Standard + Rationale + What good looks like + Enforcement + Source traceability. See [docs/sources.md](../docs/sources.md) for the traceability format, synthesis methodology, and list of approved source frameworks.
 
 ### rules.json (optional)
 
