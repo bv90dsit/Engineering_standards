@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""Auto-update standard counts in README files.
+"""Auto-update standard counts and version references in README files.
 
-Run this after adding/removing standards. CI will fail if counts are stale.
+Run this after adding/removing standards or cutting a new release.
+CI will fail if counts or versions are stale.
 """
 
 from __future__ import annotations
 
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -16,6 +18,13 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 MODULES_DIR = REPO_ROOT / "modules"
 README = REPO_ROOT / "README.md"
 MODULES_README = MODULES_DIR / "README.md"
+
+VERSION_FILES = [
+    REPO_ROOT / "README.md",
+    REPO_ROOT / "docs" / "usage-by-role.md",
+    REPO_ROOT / ".github" / "workflows" / "compliance.yml",
+    REPO_ROOT / "scripts" / "onboarding.py",
+]
 
 
 def load_all_standards() -> dict[str, list[dict]]:
@@ -124,6 +133,35 @@ def update_modules_readme(modules: dict[str, list[dict]]) -> bool:
     return False
 
 
+def get_latest_version() -> str | None:
+    """Get the latest git tag (assumes semver tags like v1.0.0)."""
+    try:
+        result = subprocess.run(
+            ["git", "describe", "--tags", "--abbrev=0"],
+            cwd=REPO_ROOT, capture_output=True, text=True, check=True,
+        )
+        return result.stdout.strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+
+
+def update_version_references(version: str) -> list[str]:
+    """Update all @vX.Y.Z references to the latest version."""
+    pattern = re.compile(r"@v\d+\.\d+\.\d+")
+    changed_files = []
+
+    for file_path in VERSION_FILES:
+        if not file_path.exists():
+            continue
+        content = file_path.read_text()
+        updated = pattern.sub(f"@{version}", content)
+        if updated != content:
+            file_path.write_text(updated)
+            changed_files.append(str(file_path.relative_to(REPO_ROOT)))
+
+    return changed_files
+
+
 def main() -> int:
     modules = load_all_standards()
     total = sum(len(s) for s in modules.values())
@@ -135,18 +173,30 @@ def main() -> int:
     changed_main = update_main_readme(modules)
     changed_modules = update_modules_readme(modules)
 
-    if changed_main or changed_modules:
-        files = []
-        if changed_main:
-            files.append("README.md")
-        if changed_modules:
-            files.append("modules/README.md")
-        print(f"\nUpdated: {', '.join(files)}")
-        print("Commit these changes.")
-        return 0
+    # Update version references
+    latest_version = get_latest_version()
+    changed_version_files: list[str] = []
+    if latest_version:
+        changed_version_files = update_version_references(latest_version)
+        if changed_version_files:
+            print(f"\nVersion references updated to {latest_version} in: {', '.join(changed_version_files)}")
     else:
-        print("\nAll counts are up to date.")
-        return 0
+        print("\nNo git tags found — skipping version reference update.")
+
+    all_changed = []
+    if changed_main:
+        all_changed.append("README.md")
+    if changed_modules:
+        all_changed.append("modules/README.md")
+    all_changed.extend(changed_version_files)
+
+    if all_changed:
+        print(f"\nUpdated: {', '.join(set(all_changed))}")
+        print("Commit these changes.")
+    else:
+        print("\nAll counts and versions are up to date.")
+
+    return 0
 
 
 if __name__ == "__main__":
