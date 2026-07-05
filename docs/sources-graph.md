@@ -240,28 +240,70 @@ allSources.forEach(s => {
   const btn = document.createElement("button");
   btn.textContent = s.label.replace(/\n/g, " ");
   btn.style.cssText = "padding:4px 10px; border:1px solid #ccc; border-radius:12px; background:white; cursor:pointer; font-size:12px;";
+  btn._sourceId = s.id;
   btn.onclick = () => filterSource(s.id);
   sourceFiltersEl.appendChild(btn);
 });
 
-// Combined filter state
-let activeSource = "all";
-let activeCat = "all";
+// Multi-select filter state
+let activeSources = new Set();  // empty = all
+let activeCats = new Set();     // empty = all
 
-function filterSource(sourceId) { activeSource = sourceId; applyGraphFilters(); }
-function filterCategory(cat) { activeCat = cat; applyGraphFilters(); }
-function resetFilters() { activeSource = "all"; activeCat = "all"; applyGraphFilters(); }
+function filterSource(sourceId) {
+  if (sourceId === "all") { activeSources.clear(); }
+  else if (activeSources.has(sourceId)) { activeSources.delete(sourceId); }
+  else { activeSources.add(sourceId); }
+  updateSourceButtons();
+  applyGraphFilters();
+}
+
+function filterCategory(cat) {
+  if (cat === "all") { activeCats.clear(); }
+  else if (activeCats.has(cat)) { activeCats.delete(cat); }
+  else { activeCats.add(cat); }
+  updateCategoryButtons();
+  applyGraphFilters();
+}
+
+function resetFilters() { activeSources.clear(); activeCats.clear(); updateSourceButtons(); updateCategoryButtons(); applyGraphFilters(); }
+
+function updateSourceButtons() {
+  sourceFiltersEl.querySelectorAll("button").forEach(btn => {
+    const isAll = btn.textContent === "All";
+    const active = isAll ? activeSources.size === 0 : activeSources.has(btn._sourceId);
+    btn.style.background = active ? "#1d70b8" : "white";
+    btn.style.color = active ? "white" : "#333";
+  });
+}
+
+function updateCategoryButtons() {
+  document.getElementById("category-filters").querySelectorAll("button").forEach(btn => {
+    const val = btn.getAttribute("onclick").match(/'([^']+)'/)[1];
+    const active = val === "all" ? activeCats.size === 0 : activeCats.has(val);
+    btn.style.background = active ? "#1d70b8" : "white";
+    btn.style.color = active ? "white" : "#333";
+  });
+}
 
 function applyGraphFilters() {
-  let visibleStds = new Set(stdSet);
-
-  if (activeSource !== "all") {
-    const src = allSources.find(s => s.id === activeSource);
-    visibleStds = new Set(src.standards);
+  // Get standards from selected sources (union)
+  let visibleStds;
+  if (activeSources.size === 0) {
+    visibleStds = new Set(stdSet);
+  } else {
+    visibleStds = new Set();
+    activeSources.forEach(srcId => {
+      const src = allSources.find(s => s.id === srcId);
+      if (src) src.standards.forEach(std => visibleStds.add(std));
+    });
   }
 
-  if (activeCat !== "all") {
-    visibleStds = new Set([...visibleStds].filter(std => std.startsWith(activeCat + "-")));
+  // Filter by categories (union of selected categories)
+  if (activeCats.size > 0) {
+    visibleStds = new Set([...visibleStds].filter(std => {
+      const prefix = std.split("-")[0];
+      return activeCats.has(prefix);
+    }));
   }
 
   const connectedSources = new Set();
@@ -273,7 +315,7 @@ function applyGraphFilters() {
 
   node.style("opacity", d => {
     if (d.group === "standard") return visibleStds.has(d.id) ? 1 : 0.08;
-    if (activeSource !== "all" && d.id === activeSource) return 1;
+    if (activeSources.size > 0 && activeSources.has(d.id)) return 1;
     return connectedSources.has(d.id) ? 1 : 0.08;
   });
   link.style("opacity", d => {
