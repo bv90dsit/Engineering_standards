@@ -123,37 +123,47 @@ def create_release(version: str, dry_run: bool) -> None:
     # Generate SBOM (Software Bill of Materials)
     print("Generating SBOM...")
     sbom_files = []
-    # Python SBOM
-    python_sbom = REPO_ROOT / f"sbom-python-{version.lstrip('v')}.json"
-    pip_result = run(
-        ["pip", "list", "--format=json"],
+    bare = version.lstrip("v")
+
+    # Python SBOM via cyclonedx-bom (full dependency tree)
+    python_sbom = REPO_ROOT / f"sbom-python-{bare}.json"
+    cdx_result = run(
+        ["cyclonedx-py", "environment", "--output-format", "json",
+         "--outfile", str(python_sbom)],
         check=False, capture=True
     )
-    if pip_result.returncode == 0:
-        import json as json_mod
-        deps = json_mod.loads(pip_result.stdout)
-        sbom = {
-            "bomFormat": "CycloneDX",
-            "specVersion": "1.5",
-            "version": 1,
-            "metadata": {
-                "component": {
-                    "name": "uk-gov-engineering-standards",
-                    "version": version.lstrip("v"),
-                    "type": "application",
-                }
-            },
-            "components": [
-                {"type": "library", "name": d["name"], "version": d["version"]}
-                for d in deps
-            ],
-        }
-        python_sbom.write_text(json_mod.dumps(sbom, indent=2))
+    if cdx_result.returncode == 0 and python_sbom.exists():
         sbom_files.append(str(python_sbom))
-        print(f"  ✓ Python SBOM: {python_sbom.name} ({len(deps)} components)")
+        print(f"  ✓ Python SBOM (cyclonedx-bom): {python_sbom.name}")
+    else:
+        # Fallback to pip list if cyclonedx-bom not installed
+        print("  ⚠ cyclonedx-bom not found, falling back to pip list")
+        pip_result = run(["pip", "list", "--format=json"], check=False, capture=True)
+        if pip_result.returncode == 0:
+            import json as json_mod
+            deps = json_mod.loads(pip_result.stdout)
+            sbom = {
+                "bomFormat": "CycloneDX",
+                "specVersion": "1.5",
+                "version": 1,
+                "metadata": {
+                    "component": {
+                        "name": "uk-gov-engineering-standards",
+                        "version": bare,
+                        "type": "application",
+                    }
+                },
+                "components": [
+                    {"type": "library", "name": d["name"], "version": d["version"]}
+                    for d in deps
+                ],
+            }
+            python_sbom.write_text(json_mod.dumps(sbom, indent=2))
+            sbom_files.append(str(python_sbom))
+            print(f"  ✓ Python SBOM (pip list fallback): {python_sbom.name} ({len(deps)} packages)")
 
-    # npm SBOM
-    npm_sbom = REPO_ROOT / f"sbom-npm-{version.lstrip('v')}.json"
+    # npm SBOM (full dependency tree)
+    npm_sbom = REPO_ROOT / f"sbom-npm-{bare}.json"
     npm_result = run(
         ["npm", "sbom", "--sbom-format", "cyclonedx", "--omit", "dev"],
         check=False, capture=True
