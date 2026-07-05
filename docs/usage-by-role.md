@@ -1,6 +1,6 @@
 # Usage by Role
 
-## Engineer / Contractor
+## Engineer
 
 ### Adopt the standards
 
