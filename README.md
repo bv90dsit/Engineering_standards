@@ -79,11 +79,16 @@ python scripts/query_standards.py --module all
 
 ## Adding a new standard
 
-1. Create `modules/{module}/standards/{ID}.md` with YAML frontmatter
-2. Add one row to `modules/{module}/standards-index.yaml`
-3. Done. No consumer changes needed.
+**Quickest path** — one command scaffolds everything:
 
-See [modules/README.md](modules/README.md) for the full module structure and [docs/sources.md](docs/sources.md) for the traceability format.
+```bash
+python scripts/new_standard.py --id PY-009 --module python \
+  --title "Use virtual environments" --conformance SHOULD
+```
+
+**Non-technical contributors** — use the [GitHub Issue form](https://github.com/bv90dsit/Engineering_standards/issues/new?template=new-standard.yml) and a bot creates the PR.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide, and [modules/README.md](modules/README.md) for the module structure.
 
 ## Categories
 

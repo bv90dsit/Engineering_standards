@@ -23,7 +23,33 @@ The only things that require manual work beyond the standard file + index entry:
 - **VS Code line-level check** — add a `rules.json` entry (only if the standard is detectable by regex)
 - **New source framework** — add to `docs/sources.md` (only if citing a framework not already listed)
 
-## Steps to add a new standard
+## Two ways to contribute
+
+### Option A: CLI scaffold (for engineers)
+
+One command generates everything:
+
+```bash
+python scripts/new_standard.py --id PY-009 --module python \
+  --title "Use virtual environments" --conformance SHOULD
+```
+
+This creates the `.md` template, adds the index entry, and updates README counts. You just fill in the TODOs and open a PR.
+
+Optional arguments: `--category`, `--enforcement`, `--platform`, `--tags`.
+
+### Option B: GitHub Issue form (for anyone)
+
+1. Go to **Issues → New Issue → "Propose a new standard"**
+2. Fill in the form (title, conformance, rationale, sources)
+3. Submit — a bot creates a PR with scaffolded files automatically
+4. A maintainer fills in the detail and merges
+
+Use this path if you're proposing a standard but not writing the implementation yourself (e.g. a security lead, delivery manager, or architect).
+
+---
+
+## Manual steps (if not using the scaffold)
 
 ### 1. Choose your module
 
