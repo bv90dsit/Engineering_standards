@@ -1,0 +1,37 @@
+name: Validate Standards
+
+on:
+  pull_request:
+    paths:
+      - "modules/**"
+      - "scripts/validate_standards.py"
+  push:
+    branches: [main]
+    paths:
+      - "modules/**"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - run: pip install pyyaml
+
+      - name: Validate standard formats
+        run: python scripts/validate_standards.py
+
+      - name: Check counts are up to date
+        run: |
+          python scripts/update_counts.py
+          if [ -n "$(git diff --name-only)" ]; then
+            echo "::error::README counts are stale. Run 'python scripts/update_counts.py' and commit the result."
+            git diff
+            exit 1
+          fi

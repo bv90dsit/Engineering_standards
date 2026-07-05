@@ -106,9 +106,9 @@ Each standard has a **conformance level** (how mandatory) and an **enforcement m
 
 | Conformance | Meaning |
 |-------------|---------|
-| **MUST** (24) | Non-negotiable. Exceptions require a documented ADR. |
-| **SHOULD** (29) | Expected unless there is a justified reason to deviate. |
-| **COULD** (2) | Recommended good practice. |
+| **MUST** (28) | Non-negotiable. Exceptions require a documented ADR. |
+| **SHOULD** (26) | Expected unless there is a justified reason to deviate. |
+| **COULD** (1) | Recommended good practice. |
 
 | Enforcement | When | Example standards |
 |-------------|------|-------------------|
