@@ -370,3 +370,27 @@ a:focus {
     font-size: 1rem;
   }
 }
+
+/* Category key */
+.category-key {
+  margin: 24px 0;
+  padding: 16px;
+  background: var(--govuk-grey-3);
+  border-radius: 4px;
+}
+.category-key h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--govuk-grey-1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.category-key__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  font-size: 14px;
+}
+.category-key__items strong {
+  color: var(--govuk-dark-blue);
+}

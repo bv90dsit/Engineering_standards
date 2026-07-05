@@ -4,54 +4,49 @@ title: About
 permalink: /about/
 ---
 
-# About UK Government Engineering Standards
+# What are these standards?
 
-This repository provides **machine-readable, context-aware engineering standards** for UK Government digital services. Standards are written in Markdown with structured YAML frontmatter, making them parseable by tooling (linters, IDE extensions, CI pipelines) while remaining human-readable.
+A set of engineering rules that UK Government digital teams follow when building services. They cover security, accessibility, operations, architecture, and how to use AI responsibly.
 
-## Architecture
+## Why do they exist?
 
-Five layers from raw source material to the engineer at their desk:
+Government digital services affect millions of people. These standards exist to ensure services are:
 
-```
-Layer 0 — Source frameworks (GDS, NCSC, DORA, OWASP, WCAG, etc.)
-    ↓ synthesised into
-Layer 1 — Individual standard files (one .md per standard, with frontmatter)
-    ↓ catalogued in
-Layer 2 — standards-index.yaml (lightweight, always loaded)
-    ↓ filtered by
-Layer 3 — query_standards(context) → returns only what applies
-    ↓ served to
-Layer 4 — Consumers (CI/CD, VS Code extension, onboarding, MCP server)
-```
+- **Secure** — protecting citizen data from breaches
+- **Accessible** — usable by everyone, including people with disabilities (it's the law)
+- **Reliable** — available when people need them
+- **Maintainable** — sustainable beyond the team that built them
 
-- **Layer 0 -- Source frameworks:** Published authoritative standards (GDS Service Standard, NCSC, OWASP, WCAG, etc.) that provide the authority behind each standard.
-- **Layer 1 -- Standard files:** One `.md` file per standard with YAML frontmatter. Organised into modules: core (cross-cutting), python, java, typescript, org-specific.
-- **Layer 2 -- Index:** `standards-index.yaml` per module — lightweight, always loaded. The single source of truth for filtering and discovery.
-- **Layer 3 -- Query interface:** `standards_lib/` Python library that filters by role, platform, conformance, enforcement, category, tag, and module.
-- **Layer 4 -- Consumers:** Every tool that needs standards calls the query interface. CI/CD pipeline, VS Code extension, onboarding tool, compliance checker, MCP server, this website.
+## Who are they for?
 
-## Adopting These Standards
+| Role | How you use them |
+|------|-----------------|
+| **Engineers** | Follow the standards when writing code; tooling catches issues automatically |
+| **Tech leads** | Add the CI check to your repos; choose which modules apply to your stack |
+| **Delivery managers** | Use the conformance levels (MUST/SHOULD/COULD) to plan what's needed for assessment |
+| **Security leads** | Filter by the SEC category to see the security baseline |
+| **Service assessors** | Standards trace back to GDS Service Standard and NCSC — use them as evidence criteria |
 
-1. **Scan your repo** -- `python scripts/suggest_standards.py --repo-path .` detects your stack and recommends what applies
-2. **Choose your modules** -- start with `core`, add language modules as needed
-3. **Integrate tooling:**
-   - **VS Code extension** -- inline warnings as you type
-   - **CI/CD pipeline** -- compliance check on every PR
-   - **MCP server** -- AI coding agents query standards and check code in real time
-4. **Customise** -- add your organisation's own module with custom rules
-5. **Contribute back** -- open PRs for improvements that benefit everyone
+## How they work
 
-## Quick Start
+Every standard has:
 
-```bash
-git clone https://github.com/bv90dsit/Engineering_standards.git
-cd Engineering_standards
-pip install -r requirements.txt
-python scripts/query_standards.py --category SEC --conformance MUST
-```
+- **A conformance level** — MUST (required), SHOULD (expected), or COULD (recommended)
+- **An enforcement mechanism** — how compliance is checked (automated in CI, peer review, service assessment, or team practice)
+- **Source traceability** — links to the authoritative framework it derives from (GDS, NCSC, OWASP, etc.)
+- **Practical guidance** — copy-paste config and code examples so engineers can comply immediately
 
-## Links
+## How to adopt
 
-- [GitHub Repository](https://github.com/bv90dsit/Engineering_standards)
-- [Contributing Guide](https://github.com/bv90dsit/Engineering_standards/blob/main/CONTRIBUTING.md)
-- [Changelog](https://github.com/bv90dsit/Engineering_standards/blob/main/CHANGELOG.md)
+1. **Run the scanner** against your repo — it tells you which standards apply
+2. **Add the CI check** — one YAML file, every PR checks compliance automatically
+3. **Install the VS Code extension** — instant feedback as you type
+
+Full technical setup: [GitHub Repository](https://github.com/bv90dsit/Engineering_standards)
+
+## Key numbers
+
+- **69 standards** across 5 modules
+- **35 MUST** (non-negotiable) / **33 SHOULD** / **1 COULD**
+- **22 rules** checked automatically in your editor
+- Every standard traces to at least one published authoritative source
