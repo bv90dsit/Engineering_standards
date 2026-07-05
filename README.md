@@ -20,7 +20,7 @@ Layer 4 — Consumers (CI/CD, VS Code extension, onboarding, MCP server)
 
 ## Quick start
 
-### Auto mode (recommended)
+### Auto mode
 
 ```bash
 git clone https://github.com/bv90dsit/Engineering_standards.git
@@ -29,7 +29,15 @@ cd Engineering_standards && pip install pyyaml
 python scripts/suggest_standards.py --repo-path /path/to/your-service
 ```
 
-Detects your stack and lists applicable standards grouped by MUST/SHOULD/COULD. For manual mode (specify role/platform explicitly), see [usage by role](docs/usage-by-role.md).
+Detects your stack and lists applicable standards grouped by MUST/SHOULD/COULD.
+
+### Manual mode
+
+```bash
+python scripts/onboarding.py --role engineer --platform python
+```
+
+Specify your role and platform explicitly. See [usage by role](docs/usage-by-role.md) for detailed workflows.
 
 ### Adopt in your service
 
@@ -70,9 +78,9 @@ See [modules/README.md](modules/README.md) for how to create your own.
 
 | Conformance | Meaning |
 |-------------|---------|
-| **MUST** (35) | Non-negotiable. Exceptions require an [exemption](docs/exemptions.md). |
-| **SHOULD** (33) | Expected unless justified. |
-| **COULD** (1) | Recommended. |
+| **MUST** | Non-negotiable. Exceptions require an [exemption](docs/exemptions.md). |
+| **SHOULD** | Expected unless justified. |
+| **COULD** | Recommended. |
 
 | Enforcement | When |
 |-------------|------|
