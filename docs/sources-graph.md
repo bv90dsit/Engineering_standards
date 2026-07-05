@@ -43,6 +43,23 @@ svg { display: block; margin: 0 auto; }
   <div class="legend-item"><div class="legend-dot standard-node"></div> Standard</div>
 </div>
 
+<div class="category-key">
+  <h3>Categories</h3>
+  <div class="category-key__items">
+    <span><strong>ENG</strong> Engineering practice</span>
+    <span><strong>SEC</strong> Security</span>
+    <span><strong>ARC</strong> Architecture</span>
+    <span><strong>OPS</strong> Operations</span>
+    <span><strong>DAT</strong> Data</span>
+    <span><strong>ACC</strong> Accessibility</span>
+    <span><strong>EMG</strong> Emerging tech (AI)</span>
+    <span><strong>PY</strong> Python</span>
+    <span><strong>JV</strong> Java</span>
+    <span><strong>TS</strong> TypeScript</span>
+    <span><strong>ORG</strong> Org-specific</span>
+  </div>
+</div>
+
 <svg id="graph" width="900" height="900"></svg>
 
 <p style="color:#666; font-size:12px; margin-top:8px;">
