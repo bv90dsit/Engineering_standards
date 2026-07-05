@@ -26,6 +26,31 @@
       "excludeFilePattern": "**/{__init__.py,test_*,conftest.py}",
       "severity": "warning",
       "message": "PY-004: Avoid wildcard imports. Use explicit imports for clarity."
+    },
+    {
+      "id": "PY-005",
+      "pattern": "@csrf_exempt|CsrfViewMiddleware.*#|CSRF_COOKIE_SECURE\\s*=\\s*False",
+      "filePattern": "**/*.py",
+      "excludeFilePattern": "**/{test_*,*_test.py}",
+      "severity": "error",
+      "message": "PY-005: CSRF protection must not be disabled. Remove @csrf_exempt or re-enable CsrfViewMiddleware."
+    },
+    {
+      "id": "PY-006",
+      "pattern": "(secret_key|SECRET_KEY)\\s*=\\s*['\"][^'\"]{8,}['\"]",
+      "excludePattern": "^\\s*#",
+      "filePattern": "**/*.py",
+      "excludeFilePattern": "**/{test_*,*_test.py,*.example*}",
+      "severity": "error",
+      "message": "PY-006: Flask/Django secret key must not be hardcoded. Use os.environ or a secrets manager."
+    },
+    {
+      "id": "PY-008",
+      "pattern": "DEBUG\\s*=\\s*True",
+      "filePattern": "**/{settings.py,settings/*.py,config.py,*.cfg}",
+      "excludeFilePattern": "**/{test_*,local_settings*,settings/local*,settings/dev*}",
+      "severity": "error",
+      "message": "PY-008: DEBUG must be False in production. Use environment variables to control per-environment."
     }
   ]
 }

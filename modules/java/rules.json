@@ -1,0 +1,31 @@
+{
+  "module": "java",
+  "rules": [
+    {
+      "id": "JV-002",
+      "pattern": "System\\.(out|err)\\.(print|println)",
+      "excludePattern": "^\\s*(//|\\*)",
+      "filePattern": "**/*.java",
+      "excludeFilePattern": "**/{*Test.java,*Tests.java,*IT.java,test/**}",
+      "severity": "warning",
+      "message": "JV-002: Use SLF4J (log.info/debug/error) instead of System.out/err in production code."
+    },
+    {
+      "id": "JV-003",
+      "pattern": "\"\\s*(SELECT|INSERT|UPDATE|DELETE)[^\"]*\"\\s*\\+",
+      "excludePattern": "^\\s*(//|\\*)",
+      "filePattern": "**/*.java",
+      "excludeFilePattern": "**/{*Test.java,test/**}",
+      "severity": "error",
+      "message": "JV-003: SQL string concatenation detected. Use parameterised queries (@Query with :params or JdbcTemplate with ?)."
+    },
+    {
+      "id": "JV-006",
+      "pattern": "import\\s+java\\.util\\.logging|import\\s+org\\.apache\\.log4j",
+      "filePattern": "**/*.java",
+      "excludeFilePattern": "**/{*Test.java,test/**}",
+      "severity": "warning",
+      "message": "JV-006: Use SLF4J (org.slf4j.Logger) instead of java.util.logging or Log4j directly."
+    }
+  ]
+}

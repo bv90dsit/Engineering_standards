@@ -1,0 +1,30 @@
+{
+  "module": "typescript",
+  "rules": [
+    {
+      "id": "TS-002",
+      "pattern": ":\\s*any\\b",
+      "excludePattern": "^\\s*(//|\\*)",
+      "filePattern": "**/*.{ts,tsx}",
+      "excludeFilePattern": "**/{*.test.*,*.spec.*,__tests__/**,*.d.ts}",
+      "severity": "warning",
+      "message": "TS-002: Avoid 'any' type. Use 'unknown', a specific type, or define an interface."
+    },
+    {
+      "id": "TS-004",
+      "pattern": "\\bconsole\\.(log|warn|error|info|debug)\\(",
+      "excludePattern": "^\\s*(//|\\*)",
+      "filePattern": "**/*.{ts,tsx,js,jsx}",
+      "excludeFilePattern": "**/{*.test.*,*.spec.*,__tests__/**,scripts/**}",
+      "severity": "warning",
+      "message": "TS-004: Use a structured logger (pino, winston) instead of console.log in production code."
+    },
+    {
+      "id": "TS-001",
+      "pattern": "\"strict\"\\s*:\\s*false",
+      "filePattern": "**/tsconfig*.json",
+      "severity": "error",
+      "message": "TS-001: TypeScript strict mode must be enabled. Set \"strict\": true in tsconfig.json."
+    }
+  ]
+}

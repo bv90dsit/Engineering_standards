@@ -1,0 +1,6 @@
+name: typescript
+description: TypeScript, React, and Node.js engineering standards
+version: 0.1.0
+author: UK Gov Engineering
+applies_to:
+  platform: typescript

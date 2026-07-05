@@ -1,0 +1,66 @@
+standards:
+  - id: TS-001
+    title: Strict mode enabled in tsconfig.json
+    conformance: MUST
+    enforcement: [automated]
+    applies_to:
+      role: any
+      platform: typescript
+    category: ENG
+    source: typescript-best-practices
+    tags: [typescript, type-safety, config]
+
+  - id: TS-002
+    title: No use of 'any' type
+    conformance: SHOULD
+    enforcement: [automated, peer-review]
+    applies_to:
+      role: any
+      platform: typescript
+    category: ENG
+    source: typescript-best-practices
+    tags: [typescript, type-safety]
+
+  - id: TS-003
+    title: API responses must be typed
+    conformance: SHOULD
+    enforcement: [peer-review]
+    applies_to:
+      role: any
+      platform: typescript
+    category: ENG
+    source: typescript-best-practices
+    tags: [typescript, api, type-safety]
+
+  - id: TS-004
+    title: No console.log in production code
+    conformance: SHOULD
+    enforcement: [automated]
+    applies_to:
+      role: any
+      platform: typescript
+    category: ENG
+    source: typescript-best-practices
+    tags: [typescript, logging, observability]
+
+  - id: TS-005
+    title: React components must handle error boundaries
+    conformance: SHOULD
+    enforcement: [peer-review]
+    applies_to:
+      role: any
+      platform: typescript
+    category: ARC
+    source: react-best-practices
+    tags: [react, resilience, error-handling]
+
+  - id: TS-006
+    title: Environment variables validated at startup
+    conformance: MUST
+    enforcement: [peer-review, automated]
+    applies_to:
+      role: any
+      platform: typescript
+    category: ARC
+    source: 12-factor-app
+    tags: [node, config, fail-fast]

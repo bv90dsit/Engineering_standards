@@ -1,0 +1,66 @@
+standards:
+  - id: JV-001
+    title: Use constructor injection, not field injection
+    conformance: SHOULD
+    enforcement: [peer-review]
+    applies_to:
+      role: any
+      platform: java
+    category: ENG
+    source: spring-best-practices
+    tags: [java, spring, dependency-injection]
+
+  - id: JV-002
+    title: No System.out.println in production code
+    conformance: SHOULD
+    enforcement: [automated]
+    applies_to:
+      role: any
+      platform: java
+    category: ENG
+    source: java-best-practices
+    tags: [java, logging, observability]
+
+  - id: JV-003
+    title: Use parameterised queries with JPA/JDBC
+    conformance: MUST
+    enforcement: [automated, peer-review]
+    applies_to:
+      role: any
+      platform: java
+    category: SEC
+    source: owasp-top-10
+    tags: [java, sql-injection, security]
+
+  - id: JV-004
+    title: REST controllers must validate input with @Valid
+    conformance: SHOULD
+    enforcement: [peer-review]
+    applies_to:
+      role: any
+      platform: java
+    category: ENG
+    source: spring-best-practices
+    tags: [java, spring, validation]
+
+  - id: JV-005
+    title: Spring Security configuration required for all web services
+    conformance: MUST
+    enforcement: [periodic-audit]
+    applies_to:
+      role: any
+      platform: java
+    category: SEC
+    source: ncsc-secure-design
+    tags: [java, spring, security, authentication]
+
+  - id: JV-006
+    title: Use SLF4J for logging, not java.util.logging or Log4j directly
+    conformance: SHOULD
+    enforcement: [automated]
+    applies_to:
+      role: any
+      platform: java
+    category: ENG
+    source: java-best-practices
+    tags: [java, logging, observability]

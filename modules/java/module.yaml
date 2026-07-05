@@ -1,0 +1,6 @@
+name: java
+description: Java and Spring Boot engineering standards
+version: 0.1.0
+author: UK Gov Engineering
+applies_to:
+  platform: java

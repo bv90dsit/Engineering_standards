@@ -42,3 +42,47 @@ standards:
     category: ENG
     source: python-best-practices
     tags: [python, imports, maintainability]
+
+  - id: PY-005
+    title: Django CSRF protection must not be disabled
+    conformance: MUST
+    enforcement: [automated]
+    applies_to:
+      role: any
+      platform: python
+    category: SEC
+    source: owasp-top-10
+    tags: [python, django, csrf, security]
+
+  - id: PY-006
+    title: Flask secret key must not be hardcoded
+    conformance: MUST
+    enforcement: [automated]
+    applies_to:
+      role: any
+      platform: python
+    category: SEC
+    source: SEC-003
+    tags: [python, flask, secrets, security]
+
+  - id: PY-007
+    title: Use Django ORM or SQLAlchemy, not raw SQL
+    conformance: SHOULD
+    enforcement: [peer-review, automated]
+    applies_to:
+      role: any
+      platform: python
+    category: SEC
+    source: owasp-top-10
+    tags: [python, django, flask, sql, orm]
+
+  - id: PY-008
+    title: Django DEBUG must be False in production config
+    conformance: MUST
+    enforcement: [automated]
+    applies_to:
+      role: any
+      platform: python
+    category: SEC
+    source: django-deployment-checklist
+    tags: [python, django, config, security]
