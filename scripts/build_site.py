@@ -64,11 +64,13 @@ def main():
         id_match = re.search(r"^id:\s*(.+)$", frontmatter, re.MULTILINE)
         standard_id = id_match.group(1).strip() if id_match else filepath.stem
 
-        # Add layout, module, and standard_id fields
+        # Add layout, module, standard_id, and disable Liquid parsing
+        # (standards contain {{ }} in code examples which Jekyll misinterprets)
         frontmatter = add_frontmatter_fields(frontmatter, {
             "layout": "standard",
             "module": module_name,
             "standard_id": standard_id,
+            "render_with_liquid": "false",
         })
 
         # Write to output
