@@ -16,7 +16,7 @@ Download the `.vsix` from the [latest release](https://github.com/bv90dsit/Engin
 code --install-extension uk-gov-engineering-standards-0.1.0.vsix
 ```
 
-You'll get inline warnings as you type — `http://` URLs, hardcoded secrets, missing LICENCE/CI/README.
+You'll get inline warnings as you type — `http://` URLs, hardcoded secrets, missing LICENCE/CI/README. See the [extension docs](vscode-extension/README.md) for full details.
 
 ### 2. Add the CI check to your service (2 minutes)
 
@@ -43,7 +43,7 @@ pip install pyyaml
 python scripts/onboarding.py --role engineer --platform python
 ```
 
-This tells you which standards apply, how each is enforced, and what to do to comply.
+This tells you which standards apply, how each is enforced, and what to do to comply. See [usage by role](docs/usage-by-role.md) for detailed workflows per role.
 
 ## What's in the box
 
@@ -108,11 +108,6 @@ Every standard traces back to at least one published framework:
 - [WCAG 2.2](https://www.w3.org/TR/WCAG22/) — W3C
 - [UK GDPR](https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/) — ICO
 - ISO 27001, NIST, 12-Factor, and others as referenced per standard
-
-## Further reading
-
-- [Usage by role](docs/usage-by-role.md) — detailed workflows for engineers, tech leads, delivery managers, security leads, and contractors
-- [VS Code extension](vscode-extension/README.md) — install guide and what it checks
 
 ## Governance
 
