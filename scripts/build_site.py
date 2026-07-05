@@ -73,6 +73,10 @@ def main():
             "render_with_liquid": "false",
         })
 
+        # Wrap body in {% raw %} to prevent Jekyll Liquid parsing
+        # (standards contain {{ }} in code examples)
+        body = "{% raw %}\n" + body + "\n{% endraw %}"
+
         # Write to output
         output_file = standards_output / filepath.name
         output_content = f"---\n{frontmatter}\n---\n{body}"
