@@ -105,6 +105,8 @@ See [modules/README.md](modules/README.md) for how to create your own.
 | [docs/testing.md](docs/testing.md) | Test strategy (49 tests) |
 | [docs/exemptions.md](docs/exemptions.md) | Waiver process for MUST standards |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to add a standard |
+| [skills/uk-gov-standards/SKILL.md](skills/uk-gov-standards/SKILL.md) | Claude Code skill — AI writes compliant code proactively |
+| [mcp-server/README.md](mcp-server/README.md) | MCP server for AI agents — tools, resources, setup |
 | [SECURITY.md](SECURITY.md) | Trust model, permissions, vulnerability reporting |
 | [CHANGELOG.md](CHANGELOG.md) | Release history |
 
