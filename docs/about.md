@@ -182,7 +182,7 @@ Government digital services affect millions. These standards ensure services are
   </div>
   <div class="role-card">
     <h4>AI Agents</h4>
-    <p>Query standards via MCP server; check code in real time</p>
+    <p>Skill makes Claude write compliant code; MCP server for queries and checks</p>
   </div>
 </div>
 
@@ -206,8 +206,13 @@ Government digital services affect millions. These standards ensure services are
   </div>
   <div class="adopt-step">
     <span class="adopt-step__number">4</span>
-    <h4>Connect AI agents</h4>
-    <p>MCP server lets coding agents query standards and check code in real time</p>
+    <h4>Add Claude Code skill</h4>
+    <p>AI writes compliant code from the start — no violations to fix after</p>
+  </div>
+  <div class="adopt-step">
+    <span class="adopt-step__number">5</span>
+    <h4>Connect MCP server</h4>
+    <p>AI agents query standards and check code in real time</p>
   </div>
 </div>
 
