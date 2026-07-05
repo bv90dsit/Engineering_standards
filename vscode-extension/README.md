@@ -55,7 +55,7 @@ Hovering any diagnostic shows the standard ID — click it to read the full stan
 Download the `.vsix` from the [latest release](https://github.com/bv90dsit/Engineering_standards/releases/latest), then:
 
 ```bash
-code --install-extension uk-gov-engineering-standards-0.1.0.vsix
+code --install-extension uk-gov-engineering-standards-1.0.0.vsix
 ```
 
 Or in VS Code: `Ctrl+Shift+P` → "Extensions: Install from VSIX" → select the downloaded file.
