@@ -98,7 +98,7 @@ Standards can have multiple enforcement types. The compliance checker automates 
 
 ## Source frameworks
 
-Every standard traces back to at least one published framework:
+Every standard traces back to at least one published framework. Key sources include:
 
 - [Technology Code of Practice](https://www.gov.uk/guidance/the-technology-code-of-practice) — UK Gov
 - [GOV.UK Service Standard](https://www.gov.uk/service-manual/service-standard) — UK Gov
@@ -106,8 +106,8 @@ Every standard traces back to at least one published framework:
 - [DORA Metrics](https://dora.dev/) — Google
 - [OWASP Top 10 / ASVS](https://owasp.org/www-project-application-security-verification-standard/) — Industry
 - [WCAG 2.2](https://www.w3.org/TR/WCAG22/) — W3C
-- [UK GDPR](https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/) — ICO
-- ISO 27001, NIST, 12-Factor, and others as referenced per standard
+
+See [docs/sources.md](docs/sources.md) for the full list of all sources, grouped by authority, with which standards each one informs.
 
 ## Governance
 
