@@ -1,0 +1,70 @@
+{
+  "name": "uk-gov-engineering-standards",
+  "displayName": "UK Gov Engineering Standards",
+  "description": "Real-time compliance checking against UK Government engineering standards",
+  "version": "0.1.0",
+  "publisher": "uk-gov-engineering",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.22.0",
+    "typescript": "^5.3.0"
+  },
+  "contributes": {
+    "configuration": {
+      "title": "UK Gov Engineering Standards",
+      "properties": {
+        "ukGovStandards.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable all standards checks"
+        },
+        "ukGovStandards.checks.sec001": {
+          "type": "boolean",
+          "default": true,
+          "description": "SEC-001: Flag http:// URLs (should be https)"
+        },
+        "ukGovStandards.checks.sec003": {
+          "type": "boolean",
+          "default": true,
+          "description": "SEC-003: Flag hardcoded secrets"
+        },
+        "ukGovStandards.checks.eng001": {
+          "type": "boolean",
+          "default": true,
+          "description": "ENG-001: Check LICENCE file exists"
+        },
+        "ukGovStandards.checks.sec002": {
+          "type": "boolean",
+          "default": true,
+          "description": "SEC-002: Check dependency scanning configured"
+        },
+        "ukGovStandards.checks.eng003": {
+          "type": "boolean",
+          "default": true,
+          "description": "ENG-003: Check CI workflow exists"
+        },
+        "ukGovStandards.checks.eng004": {
+          "type": "boolean",
+          "default": true,
+          "description": "ENG-004: Check README exists and is substantial"
+        }
+      }
+    }
+  }
+}
