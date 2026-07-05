@@ -170,6 +170,8 @@ Standards marked `automated` are checked in two places — the VS Code extension
 
 Standards can have multiple enforcement types. The compliance checker automates what it can and flags the rest for manual review.
 
+If you genuinely cannot comply with a MUST standard, document an exemption. See [docs/exemptions.md](docs/exemptions.md).
+
 ## Source frameworks
 
 Every standard traces back to at least one published framework. Key sources include:
@@ -197,6 +199,7 @@ See [docs/sources.md](docs/sources.md) for the full list, synthesis methodology,
 | [mcp-server/README.md](mcp-server/README.md) | MCP server for AI agents — tools, resources, setup |
 | [SECURITY.md](SECURITY.md) | Security policy, permissions model, what each component accesses |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to add a standard (CLI scaffold, Issue form, CI checks) |
+| [docs/exemptions.md](docs/exemptions.md) | How to document exemptions/waivers from MUST standards |
 
 ## Development
 
