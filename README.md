@@ -56,7 +56,7 @@ See [docs/usage-by-role.md](docs/usage-by-role.md) for detailed workflows per ro
 | Reusable GitHub Action | `.github/workflows/compliance.yml` | ✅ Built |
 | Onboarding tool | `scripts/onboarding.py` | ✅ Built |
 | Compliance dashboard | Web view: services × standards matrix | 🔲 Planned |
-| IDE plugin | Inline warnings | 🔲 Planned |
+| VS Code extension | `vscode-extension/` — inline warnings as you type | ✅ Built |
 
 ## Who uses this and how
 
