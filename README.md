@@ -94,3 +94,39 @@ Every standard traces back to at least one published framework:
 - [DORA Metrics](https://dora.dev/) (Google, 4+1 metrics)
 - [OWASP Top 10 / ASVS](https://owasp.org/www-project-application-security-verification-standard/) (Industry, security)
 - ISO 27001, NIST, 12-Factor, WCAG, and others as referenced
+
+## Governance and contribution
+
+> **Status: MVP / Draft.** This standards set is not yet adopted by any teams. It is being developed in the open for feedback and iteration.
+
+### Current approval process (lightweight)
+
+This is an early-stage project. The approval process is intentionally minimal to allow rapid iteration:
+
+- **No PR approval required** — direct pushes to `main` are allowed for the sole maintainer
+- **Force pushes blocked** — history is protected to maintain an audit trail
+- **Branch deletions blocked** — prevents accidental loss
+
+### When teams start adopting (planned)
+
+Once this moves beyond MVP and teams begin referencing these standards, governance will tighten:
+
+| Setting | Current (MVP) | Future (adopted) |
+|---------|---------------|-------------------|
+| PR required | No | Yes |
+| Approvals needed | 0 | 2 |
+| CI checks must pass | No | Yes (YAML lint, index consistency) |
+| CODEOWNERS | None | Category owners (SEC → security team, etc.) |
+| Dismiss stale reviews | No | Yes |
+| Conversation resolution | No | Yes |
+| Change communication | None | Changelog + notify consuming teams |
+
+### Proposing a change
+
+Even during MVP, the intent is:
+
+1. Open an issue describing the change and why
+2. Create a branch and PR (even if self-merging)
+3. Give it 24 hours for async comment before merging
+
+This creates a paper trail for when the governance review happens later.
