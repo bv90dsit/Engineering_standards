@@ -21,7 +21,7 @@ title: Engineering Standards
     <span class="filters__label">Category</span>
     <div class="filters__buttons">
       <a href="#" class="filter-btn filter-btn--active" onclick="filterByCategory('all')">All</a>
-      {% assign categories = site.standards | map: "category" | uniq | sort %}
+      {% assign categories = site.standards | map: "category" | compact | uniq | sort %}
       {% for cat in categories %}
       <a href="#{{ cat | downcase }}" class="filter-btn" onclick="filterByCategory('{{ cat }}')">{{ cat }}</a>
       {% endfor %}
@@ -32,7 +32,7 @@ title: Engineering Standards
     <span class="filters__label">Enforcement</span>
     <div class="filters__buttons">
       <a href="#" class="filter-btn filter-btn--active" onclick="filterByEnforcement('all')">All</a>
-      {% assign enforcements = site.standards | map: "enforcement" | uniq | sort %}
+      {% assign enforcements = site.standards | map: "enforcement" | compact | uniq | sort %}
       {% for enf in enforcements %}
       <a href="#{{ enf | slugify }}" class="filter-btn" onclick="filterByEnforcement('{{ enf }}')">{{ enf }}</a>
       {% endfor %}
