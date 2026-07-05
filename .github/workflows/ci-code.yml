@@ -39,6 +39,27 @@ jobs:
       - name: Smoke test (query_standards.py)
         run: python scripts/query_standards.py --module all > /dev/null
 
+      - name: Check tests included for code changes
+        if: github.event_name == 'pull_request'
+        run: |
+          # Get changed files in this PR
+          CHANGED=$(gh pr diff ${{ github.event.pull_request.number }} --name-only || git diff --name-only origin/main...HEAD)
+
+          # Check if Python source files changed (not just standards)
+          CODE_CHANGED=$(echo "$CHANGED" | grep -E "^(scripts/|standards_lib/)" | grep -v "__pycache__" || true)
+          TEST_CHANGED=$(echo "$CHANGED" | grep -E "^tests/" || true)
+
+          if [ -n "$CODE_CHANGED" ] && [ -z "$TEST_CHANGED" ]; then
+            echo "::warning::Python code changed but no test files were modified. Consider adding tests for your changes."
+            echo ""
+            echo "Changed code files:"
+            echo "$CODE_CHANGED"
+            echo ""
+            echo "See CONTRIBUTING.md → Testing requirements for guidance."
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   typescript:
     runs-on: ubuntu-latest
     steps:

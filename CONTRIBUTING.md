@@ -208,10 +208,32 @@ Two pipelines run based on what your PR touches:
 |-------|-------------|----------------|
 | Lint (ruff) | Python code style and errors | Unused import, line too long |
 | Security (bandit) | Python SAST scan | Hardcoded password, insecure function |
+| Unit tests (pytest) | 29 Python tests must pass | New code broke existing behaviour |
+| Unit tests (mocha) | 20 TypeScript tests must pass | Glob matching or rule pattern broken |
 | Type check (tsc) | TypeScript compiles cleanly | Type error in extension code |
 | npm audit | Known vulnerabilities in JS dependencies | Outdated dependency with CVE |
+| **Test coverage check** | Code changes must include tests | See below |
 
 **Both must pass and 1 maintainer must approve before merge.**
+
+### Testing requirements
+
+| What you changed | Tests required? | Where to add them |
+|-----------------|:---:|-------------------|
+| Standard `.md` file + index entry | No | CI validates format automatically |
+| `rules.json` entry | No | Regex patterns are reviewed; glob engine is already tested |
+| New function in `scripts/` or `standards_lib/` | **Yes** | `tests/test_*.py` — add a test proving it works |
+| Changed existing Python logic | **Yes** | Update or add test covering the change |
+| VS Code extension pure logic (`glob.ts`, new pattern) | **Yes** | `vscode-extension/src/test/suite/*.test.ts` |
+| VS Code extension VS Code API code | Best effort | Hard to unit test; compile check + manual verification |
+| CI workflow changes | No | The PR itself tests the workflow |
+
+**Rule of thumb:** if your change adds or modifies a function, add a test that calls that function and asserts the result. If you're only adding a standard or a regex rule, CI handles validation.
+
+**What a test should prove:**
+- The happy path works (correct input → correct output)
+- Edge cases don't crash (empty input, missing file, bad data)
+- The fix actually fixes the bug (regression test)
 
 ### Adding a new trusted source
 
