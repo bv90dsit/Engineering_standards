@@ -4,8 +4,8 @@ Standards are organised into **modules** — pluggable rule packs that can be mi
 
 ## Available modules
 
-| Module | Description | Standards | VS Code rules |
-|--------|-------------|-----------|---------------|
+| Module | Description | Standards | Also checked in IDE |
+|--------|-------------|-----------|---------------------|
 | [core](core/) | Cross-cutting UK Gov engineering standards | 33 | SEC-001, SEC-003 |
 | [python](python/) | Python + Django + Flask | 8 | PY-001, PY-003, PY-004, PY-005, PY-006, PY-008 |
 | [java](java/) | Java + Spring Boot | 6 | JV-002, JV-003, JV-006 |

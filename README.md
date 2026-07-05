@@ -130,10 +130,12 @@ Each standard has a **conformance level** (how mandatory) and an **enforcement m
 
 | Enforcement | When | Example standards |
 |-------------|------|-------------------|
-| **automated** | Every PR via CI/CD | ENG-001, SEC-002, SEC-003, PY-001, JV-002, TS-001 |
+| **automated** | As you type (IDE) + every PR (CI/CD) | ENG-001, SEC-002, SEC-003, PY-001, JV-002, TS-001 |
 | **peer-review** | During code review | SEC-004, ARC-004, EMG-001, PY-002, JV-004 |
 | **periodic-audit** | Service assessment / quarterly | SEC-005, SEC-007, OPS-001, DAT-001 |
 | **ways-of-working** | Team charter / runbooks | OPS-003, ENG-005, ENG-006 |
+
+Standards marked `automated` are checked in two places — the VS Code extension (instant, as you type) and the CI pipeline (on every PR). Not all automated standards have IDE rules; those that do are listed in [modules/README.md](modules/README.md).
 
 Standards can have multiple enforcement types. The compliance checker automates what it can and flags the rest for manual review.
 
