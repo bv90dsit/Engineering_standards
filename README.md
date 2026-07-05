@@ -8,21 +8,41 @@ Machine-readable, context-aware engineering standards for UK Government digital 
 
 ## Quick start
 
+### Add standards checking to your service (2 minutes)
+
+Add this file to your service repo at `.github/workflows/standards.yml`:
+
+```yaml
+jobs:
+  compliance:
+    uses: bv90dsit/Engineering_standards/.github/workflows/compliance.yml@main
+    with:
+      role: engineer
+      platform: python   # or java, node, any
+```
+
+Every PR now checks compliance automatically. That's the whole integration.
+
+### Explore the standards locally
+
 ```bash
+git clone https://github.com/bv90dsit/Engineering_standards.git
+cd Engineering_standards
 pip install pyyaml
 
-# New joiner? See what applies to you
+# See what applies to you and how to comply
 python scripts/onboarding.py --role engineer --platform python
 
 # Check a repo's compliance
-python scripts/check_compliance.py --repo-path /path/to/repo
+python scripts/check_compliance.py --repo-path /path/to/your-service
 
 # Query standards
 python scripts/query_standards.py --conformance MUST
 python scripts/query_standards.py --category SEC --json
 python scripts/query_standards.py --enforcement automated
-python scripts/query_standards.py --tag ai
 ```
+
+See [docs/usage-by-role.md](docs/usage-by-role.md) for detailed workflows per role.
 
 ## What's in the box
 
