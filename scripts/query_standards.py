@@ -18,7 +18,7 @@ from pathlib import Path
 # Ensure the package is importable when running the script directly
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from standards_lib.query import query_standards, to_json
+from standards_lib.query import query_standards, list_modules, to_json
 
 
 def main():
@@ -30,8 +30,15 @@ def main():
     parser.add_argument("--tag", help="filter by tag")
     parser.add_argument("--enforcement", help="filter by enforcement type: automated, peer-review, periodic-audit, ways-of-working")
     parser.add_argument("--conformance", help="filter by conformance level: MUST, SHOULD, COULD")
+    parser.add_argument("--module", help="module to query: core (default), python, org-example, or 'all'")
+    parser.add_argument("--list-modules", action="store_true", help="list available modules and exit")
     parser.add_argument("--json", action="store_true", dest="json_output", help="output results as JSON")
     args = parser.parse_args()
+
+    if args.list_modules:
+        for m in list_modules():
+            print(f"  {m['name']:<15} {m.get('description', '')}")
+        sys.exit(0)
 
     results = query_standards(
         role=args.role,
@@ -41,6 +48,7 @@ def main():
         tag=args.tag,
         enforcement=args.enforcement,
         conformance=args.conformance,
+        module=args.module,
     )
 
     if not results:

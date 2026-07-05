@@ -1,0 +1,31 @@
+{
+  "module": "python",
+  "rules": [
+    {
+      "id": "PY-001",
+      "pattern": "\\bprint\\s*\\(",
+      "excludePattern": "^\\s*#",
+      "filePattern": "**/*.py",
+      "excludeFilePattern": "**/{test_*,*_test.py,conftest.py,manage.py}",
+      "severity": "warning",
+      "message": "PY-001: Use the logging module instead of print() in production code."
+    },
+    {
+      "id": "PY-003",
+      "pattern": "(f['\"]\\s*(SELECT|INSERT|UPDATE|DELETE)|['\"]\\s*(SELECT|INSERT|UPDATE|DELETE)[^'\"]*['\"]\\s*\\+)",
+      "excludePattern": "^\\s*#",
+      "filePattern": "**/*.py",
+      "excludeFilePattern": "**/{test_*,*_test.py,migrations/**}",
+      "severity": "error",
+      "message": "PY-003: Raw SQL string construction detected. Use parameterised queries or an ORM."
+    },
+    {
+      "id": "PY-004",
+      "pattern": "^from\\s+\\S+\\s+import\\s+\\*",
+      "filePattern": "**/*.py",
+      "excludeFilePattern": "**/{__init__.py,test_*,conftest.py}",
+      "severity": "warning",
+      "message": "PY-004: Avoid wildcard imports. Use explicit imports for clarity."
+    }
+  ]
+}

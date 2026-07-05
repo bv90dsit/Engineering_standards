@@ -1,0 +1,7 @@
+name: core
+description: UK Government cross-cutting engineering standards
+version: 1.0.0
+author: UK Gov Engineering
+applies_to:
+  role: any
+  platform: any

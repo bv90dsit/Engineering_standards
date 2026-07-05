@@ -1,0 +1,44 @@
+standards:
+  - id: PY-001
+    title: Use logging module, not print()
+    conformance: SHOULD
+    enforcement: [automated]
+    applies_to:
+      role: any
+      platform: python
+    category: ENG
+    source: python-best-practices
+    tags: [python, logging, observability]
+
+  - id: PY-002
+    title: Type hints on public function signatures
+    conformance: SHOULD
+    enforcement: [peer-review]
+    applies_to:
+      role: any
+      platform: python
+    category: ENG
+    source: python-best-practices
+    tags: [python, typing, maintainability]
+
+  - id: PY-003
+    title: No raw SQL string construction
+    conformance: MUST
+    enforcement: [automated]
+    applies_to:
+      role: any
+      platform: python
+    category: SEC
+    source: owasp-top-10
+    tags: [python, sql-injection, security]
+
+  - id: PY-004
+    title: No wildcard imports
+    conformance: SHOULD
+    enforcement: [automated]
+    applies_to:
+      role: any
+      platform: python
+    category: ENG
+    source: python-best-practices
+    tags: [python, imports, maintainability]

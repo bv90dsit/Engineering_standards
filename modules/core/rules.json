@@ -1,0 +1,49 @@
+{
+  "module": "core",
+  "rules": [
+    {
+      "id": "SEC-001",
+      "pattern": "http://(?!localhost|127\\.0\\.0\\.1|0\\.0\\.0\\.0|\\[::1\\])",
+      "excludePattern": "^\\s*(#|//|\\*)",
+      "filePattern": "**/*.{py,js,ts,go,java,rb}",
+      "excludeFilePattern": "**/{test_*,*.test.*,*.spec.*}",
+      "severity": "warning",
+      "message": "SEC-001: Use HTTPS instead of HTTP. All connections must use TLS."
+    },
+    {
+      "id": "SEC-003-password",
+      "pattern": "(password|passwd|pwd)\\s*[=:]\\s*['\"][^'\"]{8,}['\"]",
+      "excludePattern": "^\\s*(#|//|\\*)",
+      "filePattern": "**/*.{py,js,ts,go,java,rb,yaml,yml}",
+      "excludeFilePattern": "**/{*.example,*.sample,*.template,test_*,*.test.*,*.spec.*}",
+      "severity": "error",
+      "message": "SEC-003: Possible hardcoded password. Use environment variables or a secrets manager."
+    },
+    {
+      "id": "SEC-003-apikey",
+      "pattern": "(api_key|apikey|api_secret)\\s*[=:]\\s*['\"][^'\"]{8,}['\"]",
+      "excludePattern": "^\\s*(#|//|\\*)",
+      "filePattern": "**/*.{py,js,ts,go,java,rb,yaml,yml}",
+      "excludeFilePattern": "**/{*.example,*.sample,*.template,test_*,*.test.*,*.spec.*}",
+      "severity": "error",
+      "message": "SEC-003: Possible hardcoded API key. Use environment variables or a secrets manager."
+    },
+    {
+      "id": "SEC-003-token",
+      "pattern": "(secret|secret_key|token|auth_token|access_token)\\s*[=:]\\s*['\"][^'\"]{8,}['\"]",
+      "excludePattern": "^\\s*(#|//|\\*)",
+      "filePattern": "**/*.{py,js,ts,go,java,rb,yaml,yml}",
+      "excludeFilePattern": "**/{*.example,*.sample,*.template,test_*,*.test.*,*.spec.*}",
+      "severity": "error",
+      "message": "SEC-003: Possible hardcoded secret/token. Use environment variables or a secrets manager."
+    },
+    {
+      "id": "SEC-003-aws",
+      "pattern": "AKIA[0-9A-Z]{16}",
+      "filePattern": "**/*",
+      "excludeFilePattern": "**/{*.example,*.sample,test_*,*.test.*}",
+      "severity": "error",
+      "message": "SEC-003: AWS access key detected. Remove immediately and rotate the key."
+    }
+  ]
+}

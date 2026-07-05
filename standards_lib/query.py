@@ -8,15 +8,68 @@ from typing import Optional
 
 import yaml
 
-INDEX_PATH = Path(__file__).resolve().parent.parent / "standards-index.yaml"
-STANDARDS_DIR = Path(__file__).resolve().parent.parent / "standards"
+REPO_ROOT = Path(__file__).resolve().parent.parent
+MODULES_DIR = REPO_ROOT / "modules"
+INDEX_PATH = REPO_ROOT / "standards-index.yaml"
+STANDARDS_DIR = REPO_ROOT / "standards"
 
 
-def load_index() -> list[dict]:
-    """Load and return the list of standard dicts from the index YAML."""
-    with open(INDEX_PATH) as f:
+def _discover_modules() -> list[Path]:
+    """Find all module directories that contain a standards-index.yaml."""
+    if not MODULES_DIR.is_dir():
+        return []
+    return sorted(
+        p.parent for p in MODULES_DIR.glob("*/standards-index.yaml")
+    )
+
+
+def _load_module_index(module_path: Path) -> list[dict]:
+    """Load standards from a single module's index, tagging each with the module name."""
+    index_file = module_path / "standards-index.yaml"
+    with open(index_file) as f:
         data = yaml.safe_load(f)
-    return data["standards"]
+    standards = data.get("standards", [])
+    module_name = module_path.name
+    for s in standards:
+        s["_module"] = module_name
+    return standards
+
+
+def load_index(module: Optional[str] = None) -> list[dict]:
+    """Load standards from modules.
+
+    Args:
+        module: Filter to a specific module name, "all" for everything,
+                or None for "core" only (backwards compatible).
+    """
+    modules = _discover_modules()
+
+    if modules:
+        if module == "all":
+            standards = []
+            for m in modules:
+                standards.extend(_load_module_index(m))
+            return standards
+        elif module:
+            matching = [m for m in modules if m.name == module]
+            if not matching:
+                raise ValueError(f"Module '{module}' not found. Available: {[m.name for m in modules]}")
+            return _load_module_index(matching[0])
+        else:
+            core = [m for m in modules if m.name == "core"]
+            if core:
+                return _load_module_index(core[0])
+
+    # Fallback: no modules directory, use root-level index (backwards compatible)
+    if INDEX_PATH.exists():
+        with open(INDEX_PATH) as f:
+            data = yaml.safe_load(f)
+        standards = data.get("standards", [])
+        for s in standards:
+            s["_module"] = "core"
+        return standards
+
+    return []
 
 
 def _matches_context(
@@ -67,9 +120,14 @@ def query_standards(
     tag: Optional[str] = None,
     enforcement: Optional[str] = None,
     conformance: Optional[str] = None,
+    module: Optional[str] = None,
 ) -> list[dict]:
-    """Filter standards by context. All parameters are optional."""
-    standards = load_index()
+    """Filter standards by context. All parameters are optional.
+
+    Args:
+        module: "core" (default), a specific module name, or "all".
+    """
+    standards = load_index(module=module)
     return [
         s
         for s in standards
@@ -78,22 +136,48 @@ def query_standards(
 
 
 def get_standard(standard_id: str) -> str:
-    """Return the full markdown content of a single standard file."""
+    """Return the full markdown content of a single standard file.
+
+    Searches across all modules for the standard ID.
+    """
+    # Search in modules first
+    modules = _discover_modules()
+    for m in modules:
+        file_path = m / "standards" / f"{standard_id}.md"
+        if file_path.exists():
+            return file_path.read_text()
+
+    # Fallback to root-level standards
     file_path = STANDARDS_DIR / f"{standard_id}.md"
-    if not file_path.exists():
-        raise FileNotFoundError(f"Standard file not found: {file_path}")
-    return file_path.read_text()
+    if file_path.exists():
+        return file_path.read_text()
+
+    raise FileNotFoundError(f"Standard file not found for ID: {standard_id}")
 
 
-def list_categories() -> list[str]:
+def list_modules() -> list[dict]:
+    """Return metadata for all available modules."""
+    modules = _discover_modules()
+    result = []
+    for m in modules:
+        meta_file = m / "module.yaml"
+        if meta_file.exists():
+            with open(meta_file) as f:
+                meta = yaml.safe_load(f)
+            meta["path"] = str(m)
+            result.append(meta)
+    return result
+
+
+def list_categories(module: Optional[str] = None) -> list[str]:
     """Return sorted unique categories from the index."""
-    standards = load_index()
+    standards = load_index(module=module or "all")
     return sorted({s.get("category", "") for s in standards if s.get("category")})
 
 
-def list_tags() -> list[str]:
+def list_tags(module: Optional[str] = None) -> list[str]:
     """Return sorted unique tags from the index."""
-    standards = load_index()
+    standards = load_index(module=module or "all")
     tags: set[str] = set()
     for s in standards:
         for t in s.get("tags", []):

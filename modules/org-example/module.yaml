@@ -1,0 +1,7 @@
+name: org-example
+description: Example organisation-specific standards (demonstrates how to add your own)
+version: 0.1.0
+author: Example Organisation
+applies_to:
+  role: any
+  platform: any

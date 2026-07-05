@@ -1,0 +1,22 @@
+{
+  "module": "org-example",
+  "rules": [
+    {
+      "id": "ORG-001",
+      "pattern": "^(import urllib|from urllib|from http\\.client|import http\\.client)",
+      "filePattern": "**/*.py",
+      "excludeFilePattern": "**/{test_*,*_test.py}",
+      "severity": "error",
+      "message": "ORG-001: Use 'requests' or 'httpx' instead. urllib and http.client are not approved."
+    },
+    {
+      "id": "ORG-002",
+      "pattern": "https?://(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|localhost)",
+      "excludePattern": "^\\s*(#|//)",
+      "filePattern": "**/*.{py,yaml,yml,json,env}",
+      "excludeFilePattern": "**/{test_*,*.test.*,docker-compose*}",
+      "severity": "error",
+      "message": "ORG-002: Use .internal.gov.uk domain for service-to-service calls, not raw IPs or localhost."
+    }
+  ]
+}

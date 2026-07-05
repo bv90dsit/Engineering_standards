@@ -1,0 +1,22 @@
+standards:
+  - id: ORG-001
+    title: Use approved HTTP client library
+    conformance: MUST
+    enforcement: [automated]
+    applies_to:
+      role: any
+      platform: python
+    category: ENG
+    source: org-internal-standards
+    tags: [http, approved-libraries, python]
+
+  - id: ORG-002
+    title: Internal APIs must use .internal.gov.uk domain
+    conformance: MUST
+    enforcement: [automated]
+    applies_to:
+      role: any
+      platform: any
+    category: SEC
+    source: org-internal-standards
+    tags: [api, dns, internal-services]
