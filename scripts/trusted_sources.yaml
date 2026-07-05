@@ -1,23 +1,23 @@
 # Trusted source domains for standards traceability
 #
-# Every domain here has a rationale for inclusion. To add a new domain,
-# add it under the appropriate tier with a rationale comment.
+# Only Tier 1 and Tier 2 domains are accepted in source traceability tables.
+# Library docs, books, and practitioner blogs belong in "What good looks like"
+# (implementation guidance), not in "Source traceability" (authority).
 #
 # TIERS:
 #   Tier 1 — Authoritative: Government bodies, international standards organisations,
 #            legislation. Can be cited as the sole authority for a MUST standard.
 #   Tier 2 — Established: Widely recognised industry bodies, peer-reviewed research,
-#            official framework/language documentation. Can support a standard but
-#            ideally paired with a Tier 1 source for MUST standards.
-#   Tier 3 — Reference: Practitioner resources, library docs, well-known publications.
-#            Useful for "What good looks like" guidance. Should not be the sole source
-#            for any MUST standard.
+#            official language/framework documentation. Can support a standard but
+#            should be paired with a Tier 1 source for MUST standards.
 #
 # CRITERIA FOR INCLUSION:
-#   - Is this source recognised by the UK Government digital community?
-#   - Would a service assessor accept this as evidence?
-#   - Is this a primary source (not a blog post about a primary source)?
+#   - Would a GDS service assessor accept this as evidence?
+#   - Is this a primary source (not a blog about a primary source)?
+#   - Is this organisation/project recognised by the UK Gov digital community?
 #   - Has this source been stable for 3+ years?
+#
+# TO ADD A NEW DOMAIN: add it below with a rationale comment, in a PR.
 
 trusted_domains:
 
@@ -26,48 +26,37 @@ trusted_domains:
 
   - gov.uk                  # UK Government (Technology Code of Practice, Service Standard, GDS)
   - legislation.gov.uk      # UK legislation (Accessibility Regs, Equality Act, DPA)
-  - ncsc.gov.uk             # National Cyber Security Centre
+  - ncsc.gov.uk             # National Cyber Security Centre (Secure by Design)
   - data.gov.uk             # UK Government open data portal
-  - ico.org.uk              # Information Commissioner's Office (UK GDPR, data protection)
+  - ico.org.uk              # Information Commissioner's Office (UK GDPR guidance)
   - owasp.org               # Open Web Application Security Project (Top 10, ASVS)
   - w3.org                  # World Wide Web Consortium (WCAG, web standards)
   - iso.org                 # International Organization for Standardization
-  - csrc.nist.gov           # NIST Computer Security Resource Center
-  - pages.nist.gov          # NIST publications (SP 800-63 etc.)
-  - cisecurity.org          # Center for Internet Security (benchmarks)
+  - csrc.nist.gov           # NIST Computer Security Resource Center (SP 800 series)
+  - pages.nist.gov          # NIST publications (SP 800-63 Digital Identity)
+  - cisecurity.org          # Center for Internet Security (CIS Benchmarks)
   - opendatacharter.net     # International Open Data Charter
 
   # ─── TIER 2: Established ───────────────────────────────────────────────
   # Industry research with broad recognition, official language/framework docs.
 
-  - dora.dev                # DORA metrics (Google-backed research, State of DevOps)
+  - dora.dev                # DORA metrics (Google-backed, State of DevOps research)
   - sre.google              # Google SRE Book (de facto standard for reliability engineering)
-  - itrevolution.com        # IT Revolution (Accelerate, The Phoenix Project — peer-reviewed research)
-  - 12factor.net            # Twelve-Factor App methodology (Heroku, widely adopted)
-  - agilealliance.org       # Agile Alliance (definitions, glossary, research)
+  - itrevolution.com        # IT Revolution (Accelerate — peer-reviewed delivery research)
+  - 12factor.net            # Twelve-Factor App methodology (widely adopted, 10+ years)
+  - agilealliance.org       # Agile Alliance (definitions and research)
   - spec.openapis.org       # OpenAPI Specification (industry standard for API contracts)
   - docs.python.org         # Python official documentation
-  - peps.python.org         # Python Enhancement Proposals (language standards)
-  - docs.djangoproject.com  # Django official documentation
+  - peps.python.org         # Python Enhancement Proposals (language-level standards)
+  - docs.djangoproject.com  # Django official documentation (deployment checklist, security)
   - flask.palletsprojects.com  # Flask official documentation
   - docs.spring.io          # Spring Framework official documentation
-  - spring.io               # Spring project blog (official team communications)
-  - typescriptlang.org      # TypeScript official documentation
+  - spring.io               # Spring project (official team communications)
+  - typescriptlang.org      # TypeScript official documentation and handbook
   - react.dev               # React official documentation
   - docs.aws.amazon.com     # AWS documentation (Well-Architected Framework)
   - slf4j.org               # SLF4J official documentation (logging facade standard)
   - docs.sqlalchemy.org     # SQLAlchemy official documentation
-
-  # ─── TIER 3: Reference ─────────────────────────────────────────────────
-  # Practitioner resources, library docs. Supporting material only.
-
-  - martinfowler.com        # Martin Fowler's bliki (widely cited architecture patterns)
-  - response.pagerduty.com  # PagerDuty incident response guide (practitioner reference)
-  - mypy.readthedocs.io     # mypy type checker documentation
-  - getpino.io              # Pino logger documentation (Node.js reference implementation)
-  - zod.dev                 # Zod schema validation library documentation
-  - cognitect.com           # Cognitect blog (original ADR format publication)
-  - pragprog.com            # Pragmatic Programmers (Release It! publication)
 
   # ─── Internal references ────────────────────────────────────────────────
   - github.com              # Cross-references to other standards in this repo

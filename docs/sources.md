@@ -4,6 +4,32 @@ Every standard traces back to at least one published framework. This page lists 
 
 See also: [Main README](../README.md) | [Modules](../modules/README.md) | [Usage by role](usage-by-role.md)
 
+## Source tiers
+
+Only Tier 1 and Tier 2 sources are accepted in source traceability tables. Library docs, books, and practitioner blogs belong in "What good looks like" (implementation guidance).
+
+| Tier | What qualifies | Can justify a MUST? | Enforced by CI? |
+|------|---------------|:---:|:---:|
+| **Tier 1 — Authoritative** | Government bodies, legislation, international standards organisations (OWASP, W3C, NIST, ISO) | Yes — sole authority | Yes — domain must be in [trusted_sources.yaml](../scripts/trusted_sources.yaml) |
+| **Tier 2 — Established** | Recognised industry research (DORA, Google SRE), official language/framework documentation | Supports a standard; pair with Tier 1 for MUST | Yes — domain must be in trusted_sources.yaml |
+| **Not accepted** | Library docs (zod.dev, getpino.io), practitioner blogs (martinfowler.com), book publishers (pragprog.com) | No — these are implementation references | Rejected by CI if used in source traceability |
+
+### Criteria for a source to be trusted
+
+1. **Would a GDS service assessor accept this as evidence?** — if you'd be embarrassed citing it in a service assessment, it doesn't belong.
+2. **Is it a primary source?** — not a blog post *about* a primary source. Cite the standard itself, not someone's explanation of it.
+3. **Is it recognised by the UK Gov digital community?** — has it been referenced in GDS guidance, NCSC recommendations, or cross-government architecture?
+4. **Has it been stable for 3+ years?** — a source that might disappear next year isn't a foundation for a standard.
+
+### Where implementation references belong
+
+Tools, libraries, and practitioner resources go in the **"What good looks like"** section of each standard — not in source traceability. For example:
+
+- ✅ "What good looks like": *"Use a structured logger (pino, winston) instead of console"*
+- ❌ Source traceability: `| Pino | Node.js logger | https://getpino.io/ | ... |`
+
+The distinction: source traceability answers "why must we do this?" (authority). Implementation guidance answers "how do we comply?" (tooling).
+
 ## UK Government
 
 | Source | Publisher | Standards derived |
