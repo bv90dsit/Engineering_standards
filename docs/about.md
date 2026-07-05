@@ -129,6 +129,9 @@ permalink: /about/
 <div class="hero">
   <h1>UK Government Engineering Standards</h1>
   <p>A single, machine-readable set of engineering rules — enforceable by tooling, traceable to authority, and filterable by your team's context.</p>
+  <p style="margin-top: 16px; padding: 10px 16px; background: rgba(255,255,255,0.15); border-radius: 4px; font-size: 0.9rem;">
+    ⚠️ <strong>Early ideation</strong> — this is a concept under active development. Nothing here is finalised or officially adopted. Standards, tooling, and structure may change significantly based on feedback.
+  </p>
 </div>
 
 <div class="stats-grid">
