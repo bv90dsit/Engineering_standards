@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import { CheckResult, REPO_URL } from './types';
+import { matchesGlob } from './glob';
 
 export interface Rule {
     id: string;
@@ -159,106 +160,6 @@ export function runRuleEngine(document: vscode.TextDocument): CheckResult[] {
     }
 
     return results;
-}
-
-function matchesGlob(filePath: string, pattern: string): boolean {
-    const regex = globToRegex(pattern);
-    return regex.test(filePath);
-}
-
-function globToRegex(pattern: string): RegExp {
-    let regexStr = '';
-    let i = 0;
-
-    while (i < pattern.length) {
-        const ch = pattern[i];
-
-        if (ch === '\\') {
-            // Escaped character — take next char literally (regex-escaped)
-            i++;
-            if (i < pattern.length) {
-                regexStr += escapeRegexChar(pattern[i]);
-            }
-        } else if (ch === '*') {
-            if (i + 1 < pattern.length && pattern[i + 1] === '*') {
-                // Globstar **
-                i++; // consume second *
-                // ** may be surrounded by slashes: consume a trailing slash if present
-                if (i + 1 < pattern.length && pattern[i + 1] === '/') {
-                    i++; // consume trailing /
-                }
-                // Match any path depth (zero or more path segments)
-                regexStr += '(?:.+/)?';
-            } else {
-                // Single * — match anything except /
-                regexStr += '[^/]*';
-            }
-        } else if (ch === '?') {
-            // Match any single character except /
-            regexStr += '[^/]';
-        } else if (ch === '{') {
-            // Brace expansion: {a,b,c}
-            const closeIdx = pattern.indexOf('}', i);
-            if (closeIdx === -1) {
-                // No closing brace — treat as literal
-                regexStr += '\\{';
-            } else {
-                const braceContent = pattern.substring(i + 1, closeIdx);
-                const alternatives = splitBraceAlternatives(braceContent);
-                // Recursively convert each alternative (they may contain dots, wildcards, etc.)
-                const altRegexes = alternatives.map(alt => globToRegex(alt).source.slice(1, -1)); // strip ^ and $
-                regexStr += '(?:' + altRegexes.join('|') + ')';
-                i = closeIdx; // will be incremented at end of loop
-            }
-        } else if (ch === '[') {
-            // Character class — pass through to regex as-is until closing ]
-            const closeIdx = pattern.indexOf(']', i + 1);
-            if (closeIdx === -1) {
-                regexStr += '\\[';
-            } else {
-                regexStr += pattern.substring(i, closeIdx + 1);
-                i = closeIdx;
-            }
-        } else {
-            // Literal character — escape regex metacharacters
-            regexStr += escapeRegexChar(ch);
-        }
-
-        i++;
-    }
-
-    return new RegExp('^' + regexStr + '$');
-}
-
-function escapeRegexChar(ch: string): string {
-    if ('.+^${}()|[]\\/?*'.indexOf(ch) !== -1) {
-        return '\\' + ch;
-    }
-    return ch;
-}
-
-function splitBraceAlternatives(content: string): string[] {
-    // Split on commas, but respect nested braces
-    const parts: string[] = [];
-    let depth = 0;
-    let current = '';
-
-    for (const ch of content) {
-        if (ch === '{') {
-            depth++;
-            current += ch;
-        } else if (ch === '}') {
-            depth--;
-            current += ch;
-        } else if (ch === ',' && depth === 0) {
-            parts.push(current);
-            current = '';
-        } else {
-            current += ch;
-        }
-    }
-    parts.push(current);
-    return parts;
 }
 
 export function getRuleCount(): number {

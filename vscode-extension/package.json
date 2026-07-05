@@ -17,12 +17,15 @@
   "scripts": {
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "package": "vsce package"
+    "package": "vsce package",
+    "test": "mocha ./out/test/suite/**/*.test.js --ui tdd"
   },
   "devDependencies": {
+    "@types/mocha": "^10.0.10",
     "@types/node": "^26.1.0",
     "@types/vscode": "^1.85.0",
     "@vscode/vsce": "^2.22.0",
+    "mocha": "^11.7.6",
     "typescript": "^5.3.0"
   },
   "contributes": {

@@ -148,6 +148,7 @@ See [docs/sources.md](docs/sources.md) for the full list, synthesis methodology,
 | [vscode-extension/README.md](vscode-extension/README.md) | VS Code extension install and configuration |
 | [docs/versioning.md](docs/versioning.md) | Version policy, pinning, migration windows |
 | [CHANGELOG.md](CHANGELOG.md) | Release history |
+| [docs/testing.md](docs/testing.md) | Test strategy, what's covered, how to add tests |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to add a standard (CLI scaffold, Issue form, CI checks) |
 
 ## Development
