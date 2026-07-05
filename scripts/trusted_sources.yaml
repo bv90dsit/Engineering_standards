@@ -1,51 +1,73 @@
 # Trusted source domains for standards traceability
-# URLs in source traceability tables must match one of these domains.
-# Add new domains here when referencing a new authoritative source.
+#
+# Every domain here has a rationale for inclusion. To add a new domain,
+# add it under the appropriate tier with a rationale comment.
+#
+# TIERS:
+#   Tier 1 — Authoritative: Government bodies, international standards organisations,
+#            legislation. Can be cited as the sole authority for a MUST standard.
+#   Tier 2 — Established: Widely recognised industry bodies, peer-reviewed research,
+#            official framework/language documentation. Can support a standard but
+#            ideally paired with a Tier 1 source for MUST standards.
+#   Tier 3 — Reference: Practitioner resources, library docs, well-known publications.
+#            Useful for "What good looks like" guidance. Should not be the sole source
+#            for any MUST standard.
+#
+# CRITERIA FOR INCLUSION:
+#   - Is this source recognised by the UK Government digital community?
+#   - Would a service assessor accept this as evidence?
+#   - Is this a primary source (not a blog post about a primary source)?
+#   - Has this source been stable for 3+ years?
 
 trusted_domains:
-  # UK Government
-  - gov.uk
-  - legislation.gov.uk
-  - ncsc.gov.uk
-  - data.gov.uk
 
-  # International standards bodies
-  - owasp.org
-  - w3.org
-  - iso.org
-  - dora.dev
-  - csrc.nist.gov
-  - pages.nist.gov
-  - cisecurity.org
-  - opendatacharter.net
-  - ico.org.uk
+  # ─── TIER 1: Authoritative ─────────────────────────────────────────────
+  # Government, legislation, international standards bodies.
 
-  # Industry research & practice
-  - sre.google
-  - itrevolution.com
-  - 12factor.net
-  - martinfowler.com
-  - cognitect.com
-  - agilealliance.org
-  - pragprog.com
-  - response.pagerduty.com
+  - gov.uk                  # UK Government (Technology Code of Practice, Service Standard, GDS)
+  - legislation.gov.uk      # UK legislation (Accessibility Regs, Equality Act, DPA)
+  - ncsc.gov.uk             # National Cyber Security Centre
+  - data.gov.uk             # UK Government open data portal
+  - ico.org.uk              # Information Commissioner's Office (UK GDPR, data protection)
+  - owasp.org               # Open Web Application Security Project (Top 10, ASVS)
+  - w3.org                  # World Wide Web Consortium (WCAG, web standards)
+  - iso.org                 # International Organization for Standardization
+  - csrc.nist.gov           # NIST Computer Security Resource Center
+  - pages.nist.gov          # NIST publications (SP 800-63 etc.)
+  - cisecurity.org          # Center for Internet Security (benchmarks)
+  - opendatacharter.net     # International Open Data Charter
 
-  # Language & framework documentation
-  - docs.python.org
-  - peps.python.org
-  - docs.djangoproject.com
-  - flask.palletsprojects.com
-  - docs.spring.io
-  - spring.io
-  - slf4j.org
-  - docs.sqlalchemy.org
-  - typescriptlang.org
-  - react.dev
-  - spec.openapis.org
-  - getpino.io
-  - zod.dev
-  - mypy.readthedocs.io
-  - docs.aws.amazon.com
+  # ─── TIER 2: Established ───────────────────────────────────────────────
+  # Industry research with broad recognition, official language/framework docs.
 
-  # GitHub (for internal standard cross-references)
-  - github.com
+  - dora.dev                # DORA metrics (Google-backed research, State of DevOps)
+  - sre.google              # Google SRE Book (de facto standard for reliability engineering)
+  - itrevolution.com        # IT Revolution (Accelerate, The Phoenix Project — peer-reviewed research)
+  - 12factor.net            # Twelve-Factor App methodology (Heroku, widely adopted)
+  - agilealliance.org       # Agile Alliance (definitions, glossary, research)
+  - spec.openapis.org       # OpenAPI Specification (industry standard for API contracts)
+  - docs.python.org         # Python official documentation
+  - peps.python.org         # Python Enhancement Proposals (language standards)
+  - docs.djangoproject.com  # Django official documentation
+  - flask.palletsprojects.com  # Flask official documentation
+  - docs.spring.io          # Spring Framework official documentation
+  - spring.io               # Spring project blog (official team communications)
+  - typescriptlang.org      # TypeScript official documentation
+  - react.dev               # React official documentation
+  - docs.aws.amazon.com     # AWS documentation (Well-Architected Framework)
+  - slf4j.org               # SLF4J official documentation (logging facade standard)
+  - docs.sqlalchemy.org     # SQLAlchemy official documentation
+
+  # ─── TIER 3: Reference ─────────────────────────────────────────────────
+  # Practitioner resources, library docs. Supporting material only.
+
+  - martinfowler.com        # Martin Fowler's bliki (widely cited architecture patterns)
+  - response.pagerduty.com  # PagerDuty incident response guide (practitioner reference)
+  - mypy.readthedocs.io     # mypy type checker documentation
+  - getpino.io              # Pino logger documentation (Node.js reference implementation)
+  - zod.dev                 # Zod schema validation library documentation
+  - cognitect.com           # Cognitect blog (original ADR format publication)
+  - pragprog.com            # Pragmatic Programmers (Release It! publication)
+
+  # ─── Internal references ────────────────────────────────────────────────
+  - github.com              # Cross-references to other standards in this repo
