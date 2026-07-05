@@ -145,6 +145,9 @@ See [docs/sources.md](docs/sources.md) for the full list, synthesis methodology,
 | [docs/sources.md](docs/sources.md) | All source frameworks, how standards are synthesised, traceability template |
 | [modules/README.md](modules/README.md) | How to create and use modules |
 | [vscode-extension/README.md](vscode-extension/README.md) | VS Code extension install and configuration |
+| [docs/versioning.md](docs/versioning.md) | Version policy, pinning, migration windows |
+| [CHANGELOG.md](CHANGELOG.md) | Release history |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How to add a standard (CLI scaffold, Issue form, CI checks) |
 
 ## Governance
 
@@ -173,6 +176,23 @@ Both must pass before merge. A PR touching both standards and code triggers both
 ### Trusted sources
 
 Source traceability URLs are validated against an [allowlist](scripts/trusted_sources.yaml). Adding a new source domain requires updating this file — which itself goes through PR review.
+
+### Versioning
+
+Standards are released as tagged versions. Teams pin to a version and upgrade on their own schedule.
+
+```yaml
+# Pin to a specific version
+uses: bv90dsit/Engineering_standards/.github/workflows/compliance.yml@v1.0.0
+```
+
+| Version bump | What changed | Teams must act? |
+|:---:|-------------|:---:|
+| **Major** (v2.0.0) | New MUST standard or breaking change | Yes (12-week window) |
+| **Minor** (v1.1.0) | New SHOULD/COULD, new module, refinements | No |
+| **Patch** (v1.0.1) | Typos, URL fixes, docs | No |
+
+See [docs/versioning.md](docs/versioning.md) for the full policy and [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ### Future
 
