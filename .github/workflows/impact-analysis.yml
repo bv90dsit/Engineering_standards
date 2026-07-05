@@ -1,0 +1,77 @@
+name: Impact Analysis
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  analyse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install pyyaml
+
+      - name: Run impact analysis on changed files
+        id: analysis
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get changed files in this PR
+          CHANGED=$(gh pr diff ${{ github.event.pull_request.number }} --name-only)
+
+          # Run impact analysis on relevant files
+          OUTPUT=""
+          for file in $CHANGED; do
+            # Only analyse standards, rules, code, and workflows
+            case "$file" in
+              modules/*/standards/*.md|modules/*/rules.json|scripts/*.py|standards_lib/*.py|vscode-extension/src/*|.github/workflows/*.yml)
+                RESULT=$(python scripts/impact_analysis.py --changed "$file" 2>&1 || true)
+                if [ -n "$RESULT" ]; then
+                  OUTPUT="${OUTPUT}${RESULT}
+
+"
+                fi
+                ;;
+            esac
+          done
+
+          if [ -z "$OUTPUT" ]; then
+            echo "No impact analysis needed for this PR."
+            echo "has_output=false" >> "$GITHUB_OUTPUT"
+          else
+            # Write to file (multiline output handling)
+            echo "$OUTPUT" > /tmp/impact.txt
+            echo "has_output=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Comment on PR
+        if: steps.analysis.outputs.has_output == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BODY=$(cat <<'COMMENT'
+          ## 🔍 Impact Analysis
+
+          The following files in this PR have been analysed for downstream impact:
+
+          ```
+          COMMENT
+          )
+          BODY="${BODY}
+          $(cat /tmp/impact.txt)
+          \`\`\`
+
+          *This is an automated analysis. Items marked ⚠ need action before merge. Items marked ? need human review.*"
+
+          gh pr comment ${{ github.event.pull_request.number }} --body "$BODY"
