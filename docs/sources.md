@@ -97,11 +97,15 @@ When writing a new standard that draws from multiple sources:
 ```markdown
 ## Source traceability
 
-| Framework | Specific reference | What it contributes |
-|-----------|-------------------|---------------------|
-| [Source 1] | Clause/section number | The specific requirement or criterion |
-| [Source 2] | Clause/section number | What this adds beyond Source 1 |
-| [Source 3] | Clause/section number | Additional context or authority |
+| Framework | Reference | URL | What it says |
+|-----------|-----------|-----|--------------|
+| [Source 1] | Clause/section number | https://... | Direct quote or paraphrase of what this source requires |
+| [Source 2] | Clause/section number | https://... | What this source adds beyond Source 1 |
+| [Source 3] | Clause/section number | https://... | Additional context or authority |
 ```
 
-The **"What it contributes"** column is key — it shows why each source is listed, not just that it exists.
+Every row must have:
+- **Framework** — the publishing body or document name
+- **Reference** — the specific clause, section, or point number
+- **URL** — direct link to the source (use `—` if internal/unpublished)
+- **What it says** — a short quote or paraphrase of the specific requirement; shows *why* this source is listed, not just that it exists
