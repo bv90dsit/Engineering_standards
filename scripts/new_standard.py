@@ -212,6 +212,78 @@ def run_update_counts() -> bool:
     return result.returncode == 0
 
 
+def prompt_for_vscode_rule(standard_id: str, module_path: Path) -> bool:
+    """Ask whether to add a VS Code rule and collect the pattern."""
+    print()
+    print("─" * 50)
+    print("  VS Code Extension Rule")
+    print("─" * 50)
+    print()
+    print("  Can this standard be detected by a regex pattern")
+    print("  on a single line of code?")
+    print()
+    print("  Examples that CAN:  http:// URLs, print(), hardcoded secrets")
+    print("  Examples that CAN'T: architecture decisions, SLOs, team process")
+    print()
+
+    answer = input("  Add a VS Code rule? (y/n): ").strip().lower()
+    if answer != "y":
+        return False
+
+    print()
+    file_pattern = input("  File pattern (e.g. **/*.py, **/*.{ts,tsx}): ").strip()
+    if not file_pattern:
+        file_pattern = "**/*"
+
+    pattern = input("  Regex pattern to match violations: ").strip()
+    if not pattern:
+        print("  Skipped — no pattern provided.")
+        return False
+
+    severity = input("  Severity (error/warning/information) [warning]: ").strip()
+    if severity not in ("error", "warning", "information"):
+        severity = "warning"
+
+    message = input(f"  Message shown to engineer [{standard_id}: ...]: ").strip()
+    if not message:
+        message = f"{standard_id}: Violation detected. See the standard for guidance."
+
+    exclude_pattern = input("  Exclude pattern for comments (leave blank for default ^\\s*(#|//|\\*)): ").strip()
+    if not exclude_pattern:
+        exclude_pattern = "^\\s*(#|//|\\*)"
+
+    exclude_file = input("  Exclude file pattern (e.g. **/test_*, leave blank for none): ").strip()
+
+    # Build the rule
+    import json as json_mod
+    rule = {
+        "id": standard_id,
+        "pattern": pattern,
+        "excludePattern": exclude_pattern,
+        "filePattern": file_pattern,
+        "severity": severity,
+        "message": message,
+    }
+    if exclude_file:
+        rule["excludeFilePattern"] = exclude_file
+
+    # Append to rules.json
+    rules_file = module_path / "rules.json"
+    if rules_file.exists():
+        with open(rules_file) as f:
+            data = json_mod.load(f)
+    else:
+        data = {"module": module_path.name, "rules": []}
+
+    data["rules"].append(rule)
+
+    with open(rules_file, "w") as f:
+        json_mod.dump(data, f, indent=2)
+
+    print(f"  ✓ Added rule to {rules_file.relative_to(REPO_ROOT)}")
+    return True
+
+
 def main() -> int:
     args = parse_args()
 
@@ -291,11 +363,17 @@ def main() -> int:
     else:
         print("! Could not update counts (run scripts/update_counts.py manually)")
 
+    # Ask about VS Code rule
+    rule_added = prompt_for_vscode_rule(args.id, module_path)
+
     print(f"\nNext steps:")
     print(f"  1. Fill in the TODO sections in {rel_md}")
-    print(f"  2. (Optional) Add a rules.json entry for VS Code line-level checking")
-    print(f"  3. Run: python scripts/validate_standards.py")
-    print(f"  4. Open a PR")
+    if not rule_added:
+        print(f"  2. (Optional) Add a rules.json entry for VS Code line-level checking")
+    print(f"  {'2' if rule_added else '3'}. Run: python scripts/validate_standards.py")
+    print(f"  {'3' if rule_added else '4'}. Open a PR")
+    if rule_added:
+        print(f"\n  Note: When your PR merges, the VS Code extension rebuilds automatically.")
 
     return 0
 
