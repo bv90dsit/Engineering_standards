@@ -52,10 +52,56 @@ Every standard traces back to at least one published framework. This page lists 
 | [TypeScript Handbook — strict](https://www.typescriptlang.org/tsconfig#strict) | TS-001 |
 | [React Error Boundaries](https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary) | TS-005 |
 
-## How sources are used
+## How standards are synthesised from multiple sources
 
-Each standard's `.md` file has a **Source traceability** section that links to the specific clause, point, or recommendation within the source framework. This ensures:
+Most standards trace to more than one source. When multiple frameworks cover the same concern, we synthesise them — not by picking one, but by combining their strengths.
 
-- Every standard has authority behind it (not opinion)
-- Assessors can verify alignment with the originating framework
-- If a source framework updates, affected standards can be identified and reviewed
+### Principles
+
+1. **The standard statement uses the tightest common ground** — the requirement all sources agree on
+2. **"What good looks like" pulls specifics from the most detailed source** — concrete implementation guidance
+3. **We never contradict a source** — if sources disagree on strictness, we take the stricter position and note the difference
+4. **We never invent requirements beyond what sources say** — enforcement and tooling are our value-add, not the requirement itself
+5. **The source traceability table cites the specific clause** — not just the framework name
+
+### Worked example: SEC-001 (HTTPS everywhere)
+
+Three sources inform this standard:
+
+| Source | Specific reference | What it says |
+|--------|-------------------|--------------|
+| NCSC Secure by Design | Transport Layer Security | "Use TLS 1.2 or above for all connections. Enable HSTS." |
+| OWASP ASVS | V9.1.1 | "Verify that TLS is used for all client connectivity, not just limited to sensitive endpoints." |
+| GDS Service Standard | Point 9: Create a secure service | "Protect users' privacy... evaluate what data the service collects, stores and provides." |
+
+**How they were combined:**
+
+| Part of the standard | Where it came from |
+|---------------------|-------------------|
+| "All services MUST use HTTPS for every connection, with no HTTP fallback" | Tightest common ground — all three require it |
+| "TLS 1.2 is the minimum; TLS 1.3 SHOULD be preferred" | NCSC (most specific on protocol version) |
+| "HSTS headers with a minimum max-age of 1 year" | NCSC (specific technical requirement) |
+| "No mixed content warnings" | OWASP (verification criterion) |
+| "Certificate renewal is automated" | Our operational guidance — not in any source, but derived from "What good looks like" for maintaining TLS |
+
+**What was NOT included:**
+
+- GDS Point 9 is broader than just HTTPS — we didn't expand the standard to cover all of Point 9
+- OWASP V9 has sub-requirements about cipher suites — we kept SEC-001 focused on the core requirement and would create SEC-008 if cipher suite guidance were needed
+- None of the sources specify *enforcement mechanism* — that's our addition (automated grep for `http://` + periodic audit for TLS config)
+
+### Template for traceability
+
+When writing a new standard that draws from multiple sources:
+
+```markdown
+## Source traceability
+
+| Framework | Specific reference | What it contributes |
+|-----------|-------------------|---------------------|
+| [Source 1] | Clause/section number | The specific requirement or criterion |
+| [Source 2] | Clause/section number | What this adds beyond Source 1 |
+| [Source 3] | Clause/section number | Additional context or authority |
+```
+
+The **"What it contributes"** column is key — it shows why each source is listed, not just that it exists.
