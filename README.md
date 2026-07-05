@@ -20,42 +20,70 @@ See the [full architecture diagram](docs/architecture.png) for the visual versio
 
 ## Quick start
 
-### 1. Install the VS Code extension (instant feedback)
+Two modes — auto-detect your stack, or manually specify your context:
+
+### Auto mode (recommended)
+
+Point the scanner at your repo and it tells you what applies:
+
+```bash
+git clone https://github.com/bv90dsit/Engineering_standards.git
+cd Engineering_standards && pip install pyyaml
+
+python scripts/suggest_standards.py --repo-path /path/to/your-service
+```
+
+This detects your languages/frameworks and lists all applicable standards grouped by MUST/SHOULD/COULD.
+
+### Manual mode
+
+Specify your context explicitly:
+
+```bash
+python scripts/onboarding.py --role engineer --platform python
+```
+
+See [usage by role](docs/usage-by-role.md) for detailed workflows per role.
+
+### Adopt in your service
+
+**1. Install the VS Code extension (instant feedback)**
 
 Download the `.vsix` from the [latest release](https://github.com/bv90dsit/Engineering_standards/releases/latest), then:
 
 ```bash
-code --install-extension uk-gov-engineering-standards-0.1.0.vsix
+code --install-extension uk-gov-engineering-standards-1.0.0.vsix
 ```
 
-You'll get inline warnings as you type — `http://` URLs, hardcoded secrets, missing LICENCE/CI/README. See the [extension docs](vscode-extension/README.md) for full details.
+See the [extension docs](vscode-extension/README.md) for full details.
 
-### 2. Add the CI check to your service (2 minutes)
-
-Add `.github/workflows/standards.yml` to your repo:
+**2. Add the CI check (2 minutes)**
 
 ```yaml
+# .github/workflows/standards.yml
 jobs:
   compliance:
     uses: bv90dsit/Engineering_standards/.github/workflows/compliance.yml@v1.0.0
     with:
       role: engineer
-      platform: python   # or java, node, any
+      platform: python   # or java, typescript, any
 ```
 
-Every PR now checks compliance automatically.
+**3. Connect AI agents via MCP (optional)**
 
-### 3. See what applies to you
-
-```bash
-git clone https://github.com/bv90dsit/Engineering_standards.git
-cd Engineering_standards
-pip install pyyaml
-
-python scripts/onboarding.py --role engineer --platform python
+```json
+{
+  "mcpServers": {
+    "uk-gov-standards": {
+      "command": "python",
+      "args": ["mcp-server/server.py"],
+      "cwd": "/path/to/engineering_standards"
+    }
+  }
+}
 ```
 
-This tells you which standards apply, how each is enforced, and what to do to comply. See [usage by role](docs/usage-by-role.md) for detailed workflows per role.
+AI coding agents can then query standards and check code in real time. See [mcp-server/README.md](mcp-server/README.md).
 
 ## What's in the box
 
@@ -69,8 +97,11 @@ This tells you which standards apply, how each is enforced, and what to do to co
 | Reusable GitHub Action | `.github/workflows/compliance.yml` | ✅ Built |
 | Onboarding tool | `scripts/onboarding.py` | ✅ Built |
 | VS Code extension | [`vscode-extension/`](vscode-extension/README.md) — inline warnings as you type | ✅ Built |
-| Test suite | `tests/` — 29 pytest tests covering query, validation, compliance, scaffold | ✅ Built |
-| Compliance dashboard | Web view: services × standards matrix | 🔲 Planned |
+| Repo scanner | `scripts/suggest_standards.py` — auto-detects stack, recommends standards | ✅ Built |
+| MCP server | [`mcp-server/`](mcp-server/README.md) — exposes standards to AI coding agents | ✅ Built |
+| Test suite | `tests/` — 49 tests (29 pytest + 20 mocha) | ✅ Built |
+| GitHub Pages site | Browsable web view with filters | ✅ Built |
+| Compliance dashboard | Cross-service compliance matrix | 🔲 Planned |
 
 ## Modules
 
@@ -163,6 +194,7 @@ See [docs/sources.md](docs/sources.md) for the full list, synthesis methodology,
 | [docs/versioning.md](docs/versioning.md) | Version policy, pinning, migration windows |
 | [CHANGELOG.md](CHANGELOG.md) | Release history |
 | [docs/testing.md](docs/testing.md) | Test strategy, what's covered, how to add tests |
+| [mcp-server/README.md](mcp-server/README.md) | MCP server for AI agents — tools, resources, setup |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to add a standard (CLI scaffold, Issue form, CI checks) |
 
 ## Development
