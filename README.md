@@ -195,6 +195,7 @@ See [docs/sources.md](docs/sources.md) for the full list, synthesis methodology,
 | [CHANGELOG.md](CHANGELOG.md) | Release history |
 | [docs/testing.md](docs/testing.md) | Test strategy, what's covered, how to add tests |
 | [mcp-server/README.md](mcp-server/README.md) | MCP server for AI agents — tools, resources, setup |
+| [SECURITY.md](SECURITY.md) | Security policy, permissions model, what each component accesses |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to add a standard (CLI scaffold, Issue form, CI checks) |
 
 ## Development
