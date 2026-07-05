@@ -2,12 +2,14 @@ import * as vscode from 'vscode';
 import { checkSec001 } from './checks/sec001';
 import { checkSec003 } from './checks/sec003';
 import { checkWorkspace } from './checks/workspace';
+import { loadRules, runRuleEngine, getRuleCount } from './rule-engine';
 import { CheckResult } from './types';
 
 let diagnosticCollection: vscode.DiagnosticCollection;
 let workspaceDiagnosticCollection: vscode.DiagnosticCollection;
 let debounceTimer: NodeJS.Timeout | undefined;
 let workspaceChecked = false;
+let useRuleEngine = false;
 
 export function activate(context: vscode.ExtensionContext): void {
     diagnosticCollection = vscode.languages.createDiagnosticCollection('uk-gov-standards');
@@ -15,6 +17,10 @@ export function activate(context: vscode.ExtensionContext): void {
 
     context.subscriptions.push(diagnosticCollection);
     context.subscriptions.push(workspaceDiagnosticCollection);
+
+    // Load rules from modules
+    loadRules(context.extensionPath);
+    useRuleEngine = getRuleCount() > 0;
 
     context.subscriptions.push(
         vscode.workspace.onDidChangeTextDocument(event => {
@@ -70,14 +76,20 @@ function runFileChecks(document: vscode.TextDocument): void {
         return;
     }
 
-    const results: CheckResult[] = [];
+    let results: CheckResult[];
 
-    if (config.get<boolean>('checks.sec001', true)) {
-        results.push(...checkSec001(document));
-    }
-
-    if (config.get<boolean>('checks.sec003', true)) {
-        results.push(...checkSec003(document));
+    if (useRuleEngine) {
+        // Module-based: rules.json drives the checks
+        results = runRuleEngine(document);
+    } else {
+        // Fallback: hardcoded checks (standalone install without modules)
+        results = [];
+        if (config.get<boolean>('checks.sec001', true)) {
+            results.push(...checkSec001(document));
+        }
+        if (config.get<boolean>('checks.sec003', true)) {
+            results.push(...checkSec003(document));
+        }
     }
 
     const diagnostics = results.map(result => {

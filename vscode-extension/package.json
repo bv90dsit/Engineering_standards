@@ -63,6 +63,34 @@
           "type": "boolean",
           "default": true,
           "description": "ENG-004: Check README exists and is substantial"
+        },
+        "ukGovStandards.additionalModules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Paths to additional rule modules (each containing a rules.json)"
+        },
+        "ukGovStandards.modules.core": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable core module rules"
+        },
+        "ukGovStandards.modules.python": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Python module rules"
+        },
+        "ukGovStandards.modules.java": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Java module rules"
+        },
+        "ukGovStandards.modules.typescript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable TypeScript module rules"
         }
       }
     }
