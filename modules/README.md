@@ -1,16 +1,22 @@
 # Modules
 
-Standards are organised into **modules** — pluggable rule packs that can be mixed and matched.
+Standards are organised into **modules** — pluggable rule packs that can be mixed and matched. An organisation picks the modules that apply to their stack.
 
 ## Available modules
 
-| Module | Description | Standards |
-|--------|-------------|-----------|
-| `core` | Cross-cutting UK Gov engineering standards | 33 |
-| `python` | Python-specific standards | 4 |
-| `org-example` | Example showing how an organisation adds custom rules | 2 |
+| Module | Description | Standards | VS Code rules |
+|--------|-------------|-----------|---------------|
+| [core](core/) | Cross-cutting UK Gov engineering standards | 33 | SEC-001, SEC-003 |
+| [python](python/) | Python + Django + Flask | 8 | PY-001, PY-003, PY-004, PY-005, PY-006, PY-008 |
+| [java](java/) | Java + Spring Boot | 6 | JV-002, JV-003, JV-006 |
+| [typescript](typescript/) | TypeScript + React + Node | 6 | TS-001, TS-002, TS-004 |
+| [org-example](org-example/) | Example showing how an org adds custom rules | 2 | ORG-001, ORG-002 |
+
+**Total: 55 standards** across 5 modules.
 
 ## Using modules
+
+### CLI
 
 ```bash
 # List available modules
@@ -24,6 +30,30 @@ python scripts/query_standards.py --module python
 
 # Query all modules
 python scripts/query_standards.py --module all
+```
+
+### VS Code extension
+
+The extension auto-discovers `modules/*/rules.json` and applies rules based on file type. Toggle modules in settings:
+
+```json
+{
+  "ukGovStandards.modules.core": true,
+  "ukGovStandards.modules.python": true,
+  "ukGovStandards.modules.java": false,
+  "ukGovStandards.modules.typescript": true
+}
+```
+
+### CI/CD compliance checker
+
+The checker reads all modules by default. To restrict to specific modules in a consuming repo, create `.standards-config.yaml`:
+
+```yaml
+modules:
+  - core
+  - python
+  - /path/to/your-org-module
 ```
 
 ## Creating your own module
@@ -57,7 +87,9 @@ Same format as the core index. Each entry needs: `id`, `title`, `conformance`, `
 
 ### standards/*.md
 
-Same format as core standards: YAML frontmatter + Standard + Rationale + What good looks like + Enforcement + Source traceability. See [docs/sources.md](../docs/sources.md) for the traceability format, synthesis methodology, and list of approved source frameworks.
+Same format as core standards: YAML frontmatter + Standard + Rationale + What good looks like + Enforcement + Source traceability.
+
+See [docs/sources.md](../docs/sources.md) for the traceability format, synthesis methodology, and list of approved source frameworks.
 
 ### rules.json (optional)
 
@@ -80,18 +112,15 @@ For the VS Code extension — defines regex-based line-level checks:
 }
 ```
 
-## Adding your module to a consuming repo
-
-Create `.standards-config.yaml` in the consuming service's root:
-
-```yaml
-modules:
-  - core
-  - python
-  - /path/to/your-org-module
-```
-
-The compliance checker reads this file and applies only the listed modules.
+| Field | Required | Description |
+|-------|----------|-------------|
+| `id` | Yes | Standard ID this rule checks |
+| `pattern` | Yes | Regex to match violations (per line) |
+| `excludePattern` | No | Lines matching this are skipped (e.g. comments) |
+| `filePattern` | Yes | Glob for which files this rule applies to |
+| `excludeFilePattern` | No | Glob for files to exclude (e.g. tests) |
+| `severity` | Yes | `error`, `warning`, or `information` |
+| `message` | Yes | Shown to the engineer in the squiggly tooltip |
 
 ## ID naming convention
 
@@ -101,7 +130,14 @@ Use a short prefix unique to your module:
 |--------|--------|
 | ENG, SEC, ARC, OPS, DAT, ACC, EMG | core |
 | PY | python |
-| TS | typescript (future) |
-| JV | java (future) |
+| JV | java |
+| TS | typescript |
 | ORG | org-example |
 | MYMOD | your custom module |
+
+## Related docs
+
+- [Main README](../README.md) — architecture overview and quick start
+- [VS Code extension](../vscode-extension/README.md) — how the extension loads rules from modules
+- [Sources](../docs/sources.md) — traceability format and approved source frameworks
+- [Usage by role](../docs/usage-by-role.md) — how different roles use the standards
