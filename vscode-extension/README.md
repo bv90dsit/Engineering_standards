@@ -19,15 +19,41 @@ Hovering any diagnostic shows the standard ID — click it to read the full stan
 
 ## Install
 
+### For engineers (one command)
+
+Download the `.vsix` from the [latest release](https://github.com/bv90dsit/Engineering_standards/releases/latest), then:
+
+```bash
+code --install-extension uk-gov-engineering-standards-0.1.0.vsix
+```
+
+Or in VS Code: `Ctrl+Shift+P` → "Extensions: Install from VSIX" → select the downloaded file.
+
+That's it. Restart VS Code and the extension is active in every workspace.
+
+### For teams using dev containers
+
+Add to your `.devcontainer/devcontainer.json`:
+
+```json
+{
+  "customizations": {
+    "vscode": {
+      "extensions": ["uk-gov-engineering.uk-gov-engineering-standards"]
+    }
+  }
+}
+```
+
+### For contributors (development mode)
+
 ```bash
 cd vscode-extension
 npm install
 npm run compile
 ```
 
-Then in VS Code: `Ctrl+Shift+P` → "Extensions: Install from VSIX" → select the `.vsix` file.
-
-Or for development: open this folder in VS Code, press `F5` to launch the Extension Development Host.
+Then press `F5` in VS Code to launch the Extension Development Host.
 
 ## Settings
 
