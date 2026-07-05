@@ -1,11 +1,18 @@
 # UK Government Engineering Standards — Index
 # Every standard has one row here. Consumers filter by context (role, platform, data_class).
 # Conformance levels follow RFC 2119: MUST | SHOULD | COULD
+#
+# Enforcement types:
+#   automated    — checked by CI/CD pipeline (file exists, pattern match, config present)
+#   peer-review  — checked during code review on pull requests
+#   periodic-audit — checked at service assessment or quarterly review
+#   ways-of-working — team practice, documented in team charter/runbooks
 
 standards:
   - id: ENG-001
     title: Open source by default
     conformance: MUST
+    enforcement: [automated, periodic-audit]
     applies_to:
       role: any
       platform: any
@@ -16,6 +23,7 @@ standards:
   - id: ENG-002
     title: Version control for all source code
     conformance: MUST
+    enforcement: [automated, peer-review]
     applies_to:
       role: any
       platform: any
@@ -26,6 +34,7 @@ standards:
   - id: ENG-003
     title: Continuous integration and automated testing
     conformance: MUST
+    enforcement: [automated]
     applies_to:
       role: any
       platform: any
@@ -36,6 +45,7 @@ standards:
   - id: SEC-001
     title: HTTPS everywhere
     conformance: MUST
+    enforcement: [automated, periodic-audit]
     applies_to:
       role: any
       platform: any
@@ -46,6 +56,7 @@ standards:
   - id: SEC-002
     title: Dependency vulnerability scanning
     conformance: MUST
+    enforcement: [automated]
     applies_to:
       role: any
       platform: any
@@ -56,6 +67,7 @@ standards:
   - id: ARC-001
     title: Cloud-first architecture
     conformance: SHOULD
+    enforcement: [periodic-audit]
     applies_to:
       role: any
       platform: any
@@ -66,6 +78,7 @@ standards:
   - id: ARC-002
     title: Twelve-factor application design
     conformance: SHOULD
+    enforcement: [peer-review, periodic-audit]
     applies_to:
       role: any
       platform: any
@@ -76,6 +89,7 @@ standards:
   - id: OPS-001
     title: Monitor and alert on service health
     conformance: MUST
+    enforcement: [periodic-audit, ways-of-working]
     applies_to:
       role: any
       platform: any
@@ -86,6 +100,7 @@ standards:
   - id: OPS-002
     title: Deployment frequency target (weekly minimum)
     conformance: SHOULD
+    enforcement: [periodic-audit, ways-of-working]
     applies_to:
       role: any
       platform: any
@@ -96,6 +111,7 @@ standards:
   - id: EMG-001
     title: AI-generated code must be reviewed as any other contribution
     conformance: MUST
+    enforcement: [peer-review, ways-of-working]
     applies_to:
       role: any
       platform: any
