@@ -1,0 +1,60 @@
+name: CI — Code
+
+on:
+  pull_request:
+    paths:
+      - "scripts/**"
+      - "standards_lib/**"
+      - "vscode-extension/**"
+      - "requirements.txt"
+  workflow_dispatch:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install pyyaml ruff bandit
+
+      - name: Lint (ruff)
+        run: ruff check scripts/ standards_lib/
+
+      - name: Security scan (bandit)
+        run: bandit -r scripts/ standards_lib/ -ll -q
+
+      - name: Smoke test (validate_standards.py)
+        run: python scripts/validate_standards.py
+
+      - name: Smoke test (query_standards.py)
+        run: python scripts/query_standards.py --module all > /dev/null
+
+  typescript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "vscode-extension/package-lock.json"
+
+      - name: Install dependencies
+        working-directory: vscode-extension
+        run: npm ci
+
+      - name: Type check and compile
+        working-directory: vscode-extension
+        run: npx tsc -p ./ --noEmit
+
+      - name: Security audit
+        working-directory: vscode-extension
+        run: npm audit --omit=dev || true

@@ -1,0 +1,51 @@
+# Trusted source domains for standards traceability
+# URLs in source traceability tables must match one of these domains.
+# Add new domains here when referencing a new authoritative source.
+
+trusted_domains:
+  # UK Government
+  - gov.uk
+  - legislation.gov.uk
+  - ncsc.gov.uk
+  - data.gov.uk
+
+  # International standards bodies
+  - owasp.org
+  - w3.org
+  - iso.org
+  - dora.dev
+  - csrc.nist.gov
+  - pages.nist.gov
+  - cisecurity.org
+  - opendatacharter.net
+  - ico.org.uk
+
+  # Industry research & practice
+  - sre.google
+  - itrevolution.com
+  - 12factor.net
+  - martinfowler.com
+  - cognitect.com
+  - agilealliance.org
+  - pragprog.com
+  - response.pagerduty.com
+
+  # Language & framework documentation
+  - docs.python.org
+  - peps.python.org
+  - docs.djangoproject.com
+  - flask.palletsprojects.com
+  - docs.spring.io
+  - spring.io
+  - slf4j.org
+  - docs.sqlalchemy.org
+  - typescriptlang.org
+  - react.dev
+  - spec.openapis.org
+  - getpino.io
+  - zod.dev
+  - mypy.readthedocs.io
+  - docs.aws.amazon.com
+
+  # GitHub (for internal standard cross-references)
+  - github.com

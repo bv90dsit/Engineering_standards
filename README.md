@@ -148,15 +148,35 @@ See [docs/sources.md](docs/sources.md) for the full list, synthesis methodology,
 
 ## Governance
 
-**Current (MVP):** Direct pushes to `main` allowed. Force pushes and branch deletions blocked.
+**All changes require a PR.** Direct pushes to `main` are blocked.
 
-**When teams adopt:**
+### CI pipelines (run automatically on PRs)
 
-| Setting | Now | Future |
-|---------|-----|--------|
-| PR required | No | Yes |
-| Approvals | 0 | 2 |
-| CI checks | No | YAML lint + index consistency |
-| CODEOWNERS | None | Per-category owners |
+| Pipeline | Triggers on | What it checks |
+|----------|-------------|----------------|
+| **CI — Standards** | `modules/**` | Format validation, trusted sources, source traceability completeness, README counts |
+| **CI — Code** | `scripts/`, `standards_lib/`, `vscode-extension/` | Lint (ruff), security scan (bandit), type check (tsc), npm audit |
 
-Even during MVP: open an issue, create a PR (even if self-merging), give 24 hours for async comment.
+Both must pass before merge. A PR touching both standards and code triggers both pipelines.
+
+### Merge requirements
+
+| Control | Status |
+|---------|--------|
+| PR required | ✅ Enforced |
+| CI must pass | ✅ Enforced |
+| 1 maintainer approval | ✅ Required |
+| Force pushes | ❌ Blocked |
+| Branch deletions | ❌ Blocked |
+| Conversations resolved | ✅ Required |
+
+### Trusted sources
+
+Source traceability URLs are validated against an [allowlist](scripts/trusted_sources.yaml). Adding a new source domain requires updating this file — which itself goes through PR review.
+
+### Future
+
+| Setting | Status |
+|---------|--------|
+| CODEOWNERS per category | Planned |
+| 2 approvals | When more maintainers join |

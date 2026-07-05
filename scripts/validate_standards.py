@@ -11,6 +11,7 @@ import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MODULES_DIR = REPO_ROOT / "modules"
+TRUSTED_SOURCES_FILE = Path(__file__).resolve().parent / "trusted_sources.yaml"
 
 REQUIRED_FRONTMATTER = {"id", "title", "conformance", "category", "applies_to", "source", "tags", "last_reviewed"}
 REQUIRED_INDEX_FIELDS = {"id", "title", "conformance", "enforcement", "applies_to", "category", "source", "tags"}
@@ -18,6 +19,14 @@ REQUIRED_RULES_FIELDS = {"id", "pattern", "filePattern", "severity", "message"}
 VALID_CONFORMANCE = {"MUST", "SHOULD", "COULD"}
 VALID_ENFORCEMENT = {"automated", "peer-review", "periodic-audit", "ways-of-working"}
 VALID_SEVERITY = {"error", "warning", "information"}
+
+
+def load_trusted_domains() -> set[str]:
+    if not TRUSTED_SOURCES_FILE.exists():
+        return set()
+    with open(TRUSTED_SOURCES_FILE) as f:
+        data = yaml.safe_load(f)
+    return set(data.get("trusted_domains", []))
 
 errors: list[str] = []
 
@@ -56,7 +65,7 @@ def validate_frontmatter(file_path: Path, content: str) -> dict | None:
     return fm
 
 
-def validate_body(file_path: Path, content: str) -> None:
+def validate_body(file_path: Path, content: str, trusted_domains: set[str]) -> None:
     if "## Enforcement" not in content:
         error(f"{file_path}: Missing '## Enforcement' section")
 
@@ -65,6 +74,43 @@ def validate_body(file_path: Path, content: str) -> None:
 
     if "| Framework | Reference | URL | What it says |" not in content:
         error(f"{file_path}: Source traceability table not in 4-column format (Framework | Reference | URL | What it says)")
+        return
+
+    # Extract source traceability rows and validate
+    in_table = False
+    header_seen = False
+    for line in content.split("\n"):
+        if "| Framework | Reference | URL | What it says |" in line:
+            in_table = True
+            header_seen = True
+            continue
+        if in_table and line.startswith("|--"):
+            continue
+        if in_table and line.startswith("|"):
+            cols = [c.strip() for c in line.split("|")[1:-1]]
+            if len(cols) < 4:
+                error(f"{file_path}: Source traceability row has fewer than 4 columns")
+                continue
+
+            framework, reference, url, what_it_says = cols[0], cols[1], cols[2], cols[3]
+
+            # Completeness: no TODOs or blanks
+            if "TODO" in framework or not framework:
+                error(f"{file_path}: Source traceability has TODO/blank in Framework column")
+            if "TODO" in reference or not reference:
+                error(f"{file_path}: Source traceability has TODO/blank in Reference column")
+            if "TODO" in url:
+                error(f"{file_path}: Source traceability has TODO in URL column")
+            if "TODO" in what_it_says or not what_it_says:
+                error(f"{file_path}: Source traceability has TODO/blank in 'What it says' column")
+
+            # Trusted sources: validate URL domain
+            if url and url != "—" and url.startswith("http"):
+                domain = url.split("//")[1].split("/")[0].split(":")[0]
+                if not any(domain == d or domain.endswith("." + d) for d in trusted_domains):
+                    error(f"{file_path}: URL domain '{domain}' is not in trusted_sources.yaml. Add it if it's an authoritative source.")
+        elif in_table and header_seen:
+            break  # end of table
 
 
 def validate_index(module_path: Path) -> set[str]:
@@ -142,7 +188,7 @@ def validate_rules_json(module_path: Path) -> None:
             error(f"{rules_file}: Rule '{rule.get('id', f'#{i}')}' invalid severity '{rule.get('severity')}'")
 
 
-def validate_module(module_path: Path) -> None:
+def validate_module(module_path: Path, trusted_domains: set[str]) -> None:
     module_name = module_path.name
 
     # Validate module.yaml exists
@@ -165,7 +211,7 @@ def validate_module(module_path: Path) -> None:
         fm = validate_frontmatter(md_file, content)
         if fm:
             file_ids.add(fm.get("id", ""))
-        validate_body(md_file, content)
+        validate_body(md_file, content, trusted_domains)
 
     # Check for orphans (in index but no file)
     index_only = index_ids - file_ids
@@ -187,11 +233,12 @@ def main() -> int:
         return 1
 
     modules = sorted(p for p in MODULES_DIR.iterdir() if p.is_dir() and (p / "standards-index.yaml").exists())
+    trusted_domains = load_trusted_domains()
 
-    print(f"Validating {len(modules)} modules...")
+    print(f"Validating {len(modules)} modules ({len(trusted_domains)} trusted source domains loaded)...")
 
     for module_path in modules:
-        validate_module(module_path)
+        validate_module(module_path, trusted_domains)
 
     if errors:
         print(f"\n{'='*60}")
