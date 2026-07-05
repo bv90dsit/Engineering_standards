@@ -162,6 +162,15 @@ def main() -> None:
         print(f"  https://github.com/bv90dsit/Engineering_standards/releases/tag/{args.version}")
         print(f"{'='*50}")
 
+    print(f"\n⚠️  Before announcing: review these docs are still accurate:")
+    print(f"  - README.md")
+    print(f"  - CONTRIBUTING.md")
+    print(f"  - modules/README.md")
+    print(f"  - vscode-extension/README.md")
+    print(f"  - docs/usage-by-role.md")
+    print(f"  - docs/sources.md")
+    print(f"  - docs/versioning.md")
+
 
 if __name__ == "__main__":
     main()
