@@ -29,24 +29,17 @@ jobs:
         run: |
           CHANGED=$(gh pr diff ${{ github.event.pull_request.number }} --name-only)
 
-          OUTPUT=""
+          touch /tmp/impact.txt
           for file in $CHANGED; do
-            case "$file" in
-              modules/*/standards/*.md|modules/*/rules.json|scripts/*.py|standards_lib/*.py|vscode-extension/src/*|.github/workflows/*.yml)
-                RESULT=$(python scripts/impact_analysis.py --changed "$file" 2>&1 || true)
-                if [ -n "$RESULT" ]; then
-                  OUTPUT="$OUTPUT
-$RESULT"
-                fi
-                ;;
-            esac
+            if echo "$file" | grep -qE '^(modules/.*/standards/.*\.md|modules/.*/rules\.json|scripts/.*\.py|standards_lib/.*\.py|vscode-extension/src/|\.github/workflows/)'; then
+              python scripts/impact_analysis.py --changed "$file" >> /tmp/impact.txt 2>&1 || true
+            fi
           done
 
-          if [ -z "$OUTPUT" ]; then
-            echo "has_output=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "$OUTPUT" > /tmp/impact.txt
+          if [ -s /tmp/impact.txt ]; then
             echo "has_output=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_output=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Comment on PR
