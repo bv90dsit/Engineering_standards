@@ -33,3 +33,12 @@ jobs:
             git diff
             exit 1
           fi
+
+      - name: Check skill is up to date
+        run: |
+          python scripts/build_skill.py
+          if [ -n "$(git diff --name-only skills/)" ]; then
+            echo "::error::Skill is stale. Run 'python scripts/build_skill.py' and commit."
+            git diff skills/
+            exit 1
+          fi

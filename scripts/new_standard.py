@@ -365,6 +365,11 @@ def main() -> int:
             module_readme.write_text(readme_content)
             print(f"✓ Added row to {module_readme.relative_to(REPO_ROOT)}")
 
+    # Regenerate skill file
+    build_skill = REPO_ROOT / "scripts" / "build_skill.py"
+    if build_skill.exists():
+        subprocess.run([sys.executable, str(build_skill)], capture_output=True, cwd=str(REPO_ROOT))
+
     # Run update_counts.py
     counts_updated = run_update_counts()
 

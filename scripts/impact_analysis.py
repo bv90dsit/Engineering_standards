@@ -59,6 +59,7 @@ def analyse_standard_change(file_path: Path) -> None:
             print(f"  ⚠ {index_file.relative_to(REPO_ROOT)} — add index entry (or use scaffold command)")
 
         print(f"  ⚠ Run: python scripts/update_counts.py (updates README counts + version refs)")
+        print(f"  ⚠ Run: python scripts/build_skill.py (updates Claude Code skill with new standard)")
 
         # Check module README
         module_readme = file_path.parent.parent / "README.md"

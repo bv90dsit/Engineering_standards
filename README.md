@@ -57,7 +57,13 @@ jobs:
       platform: python   # or java, typescript, any
 ```
 
-**3. MCP server** — AI agents query standards in real time ([details](mcp-server/README.md)):
+**3. Claude Code skill** — Claude follows standards proactively when writing code:
+```bash
+# Copy the skill into your project
+cp -r skills/uk-gov-standards /path/to/your-project/.claude/skills/
+```
+
+**4. MCP server** — AI agents query standards and check code in real time ([details](mcp-server/README.md)):
 ```json
 {"mcpServers": {"uk-gov-standards": {"command": "python", "args": ["mcp-server/server.py"]}}}
 ```
