@@ -4,17 +4,9 @@ A machine-readable, context-aware set of engineering standards for UK Government
 
 ## Architecture
 
-```
-Layer 0 — Source frameworks (GDS Service Standard, NCSC, DORA, OWASP, etc.)
-    ↓ synthesised into
-Layer 1 — Individual standard files (one .md per standard, with frontmatter tags)
-    ↓ catalogued in
-Layer 2 — standards-index.yaml (lightweight index, always loaded)
-    ↓ filtered by
-Layer 3 — query_standards(context) → returns only what applies
-    ↓ served to
-Layer 4 — Consumers (CI/CD, onboarding, compliance checks, IDE plugins, humans)
-```
+![UK Government Engineering Standards — How It Works](docs/architecture.png)
+
+Five layers from raw source material to the engineer at their desk:
 
 ## Quick start
 
