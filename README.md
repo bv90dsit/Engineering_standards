@@ -4,7 +4,19 @@ Machine-readable, context-aware engineering standards for UK Government digital 
 
 > **Status: MVP / Draft** — not yet adopted by teams. Being developed in the open for feedback.
 
-![UK Government Engineering Standards — How It Works](docs/architecture.png)
+```
+Layer 0 — Source frameworks (GDS, NCSC, DORA, OWASP, WCAG, etc.)
+    ↓ synthesised into
+Layer 1 — Individual standard files (one .md per standard, with frontmatter)
+    ↓ catalogued in
+Layer 2 — standards-index.yaml (lightweight, always loaded)
+    ↓ filtered by
+Layer 3 — query_standards(context) → returns only what applies
+    ↓ served to
+Layer 4 — Consumers (CI/CD, VS Code extension, onboarding, compliance checker)
+```
+
+See the [full architecture diagram](docs/architecture.png) for the visual version.
 
 ## Quick start
 
