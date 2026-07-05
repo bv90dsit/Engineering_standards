@@ -16,7 +16,7 @@ Add one workflow file to your service repo. The standards are pulled at runtime:
 # .github/workflows/standards.yml
 jobs:
   compliance:
-    uses: bv90dsit/Engineering_standards/.github/workflows/compliance.yml@v1.0.0
+    uses: bv90dsit/Engineering_standards/.github/workflows/compliance.yml@v1.1.0
     with:
       role: engineer
       platform: python   # or java, node, etc.

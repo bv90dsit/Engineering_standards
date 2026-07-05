@@ -65,7 +65,7 @@ See the [extension docs](vscode-extension/README.md) for full details.
 # .github/workflows/standards.yml
 jobs:
   compliance:
-    uses: bv90dsit/Engineering_standards/.github/workflows/compliance.yml@v1.0.0
+    uses: bv90dsit/Engineering_standards/.github/workflows/compliance.yml@v1.1.0
     with:
       role: engineer
       platform: python   # or java, typescript, any
@@ -256,7 +256,7 @@ Standards are released as tagged versions. Teams pin to a version and upgrade on
 
 ```yaml
 # Pin to a specific version
-uses: bv90dsit/Engineering_standards/.github/workflows/compliance.yml@v1.0.0
+uses: bv90dsit/Engineering_standards/.github/workflows/compliance.yml@v1.1.0
 ```
 
 | Version bump | What changed | Teams must act? |
