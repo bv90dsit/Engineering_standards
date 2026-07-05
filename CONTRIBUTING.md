@@ -163,13 +163,42 @@ This checks your standard has:
 
 ### 7. Open a PR
 
-CI runs both validation and count checks automatically. If either fails, fix and push again.
+All changes go through PRs — direct pushes to `main` are blocked.
+
+## What CI checks on your PR
+
+Two pipelines run based on what your PR touches:
+
+### Standards changes (`modules/**`)
+
+| Check | What it does | Common failure |
+|-------|-------------|----------------|
+| Format validation | Frontmatter has all required fields, index matches files | Missing `last_reviewed` or `enforcement` field |
+| Trusted sources | Every URL in source traceability matches [trusted_sources.yaml](scripts/trusted_sources.yaml) | Citing a domain not in the allowlist |
+| Traceability completeness | No TODOs or blanks in the 4-column table | Left a placeholder unfilled |
+| Counts up to date | README numbers match actual standard count | Forgot to run `update_counts.py` |
+
+### Code changes (`scripts/`, `standards_lib/`, `vscode-extension/`)
+
+| Check | What it does | Common failure |
+|-------|-------------|----------------|
+| Lint (ruff) | Python code style and errors | Unused import, line too long |
+| Security (bandit) | Python SAST scan | Hardcoded password, insecure function |
+| Type check (tsc) | TypeScript compiles cleanly | Type error in extension code |
+| npm audit | Known vulnerabilities in JS dependencies | Outdated dependency with CVE |
+
+**Both must pass and 1 maintainer must approve before merge.**
+
+### Adding a new trusted source
+
+If your standard cites a source from a domain not in `scripts/trusted_sources.yaml`, add the domain to that file in the same PR. The domain addition itself gets reviewed — this is intentional; it prevents arbitrary websites being cited as authority.
 
 ## Checklist
 
 - [ ] Standard file created with all sections
 - [ ] Index entry added with all required fields
-- [ ] Source traceability uses 4-column format with URLs
-- [ ] `python scripts/validate_standards.py` passes
+- [ ] Source traceability uses 4-column format with URLs from [trusted sources](scripts/trusted_sources.yaml)
+- [ ] `python scripts/validate_standards.py` passes locally
 - [ ] `python scripts/update_counts.py` run and changes committed
 - [ ] (Optional) `rules.json` entry for VS Code extension
+- [ ] PR opened — CI runs automatically
