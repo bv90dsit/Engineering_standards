@@ -4,6 +4,12 @@ layout: default
 
 <a href="{{ '/' | relative_url }}" class="back-link">Back to all standards</a>
 
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <a href="{{ '/' | relative_url }}">Standards</a> /
+  <a href="{{ '/' | relative_url }}?category={{ page.category }}">{{ page.category }}</a> /
+  <span aria-current="page">{{ page.standard_id }}</span>
+</nav>
+
 <article>
   <div class="standard-header">
     <h1>{{ page.standard_id }}: {{ page.title }}</h1>
@@ -42,3 +48,16 @@ layout: default
     {{ content }}
   </div>
 </article>
+
+{% assign related = site.standards | where: "category", page.category %}
+{% assign related_filtered = related | where_exp: "s", "s.standard_id != page.standard_id" %}
+{% if related_filtered.size > 0 %}
+<div class="related-standards">
+  <h3>Other {{ page.category }} standards</h3>
+  <ul>
+    {% for std in related_filtered limit: 5 %}
+    <li><a href="{{ std.url | relative_url }}">{{ std.standard_id }}: {{ std.title }}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}

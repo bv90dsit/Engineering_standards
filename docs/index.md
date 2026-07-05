@@ -7,34 +7,36 @@ title: Engineering Standards
 <p>Machine-readable, context-aware engineering standards for UK Government digital services.</p>
 
 <div class="filters">
+  <button class="filter-btn" onclick="clearAllFilters()" aria-label="Clear all filters" style="margin-bottom:12px;">Clear all filters</button>
+
   <div class="filters__group">
-    <span class="filters__label">Conformance</span>
-    <div class="filters__buttons">
-      <a href="{{ '/' | relative_url }}" class="filter-btn filter-btn--active">All</a>
-      <a href="#must" class="filter-btn" onclick="filterByConformance('MUST')">MUST</a>
-      <a href="#should" class="filter-btn" onclick="filterByConformance('SHOULD')">SHOULD</a>
-      <a href="#could" class="filter-btn" onclick="filterByConformance('COULD')">COULD</a>
+    <span class="filters__label" id="conformance-label">Conformance</span>
+    <div class="filters__buttons" role="group" aria-labelledby="conformance-label">
+      <button class="filter-btn filter-btn--active" data-filter-group="conformance" data-filter-value="all" aria-pressed="true" onclick="filterByConformance('all')">All</button>
+      <button class="filter-btn" data-filter-group="conformance" data-filter-value="MUST" aria-pressed="false" onclick="filterByConformance('MUST')">MUST</button>
+      <button class="filter-btn" data-filter-group="conformance" data-filter-value="SHOULD" aria-pressed="false" onclick="filterByConformance('SHOULD')">SHOULD</button>
+      <button class="filter-btn" data-filter-group="conformance" data-filter-value="COULD" aria-pressed="false" onclick="filterByConformance('COULD')">COULD</button>
     </div>
   </div>
 
   <div class="filters__group">
-    <span class="filters__label">Category</span>
-    <div class="filters__buttons">
-      <a href="#" class="filter-btn filter-btn--active" onclick="filterByCategory('all')">All</a>
+    <span class="filters__label" id="category-label">Category</span>
+    <div class="filters__buttons" role="group" aria-labelledby="category-label">
+      <button class="filter-btn filter-btn--active" data-filter-group="category" data-filter-value="all" aria-pressed="true" onclick="filterByCategory('all')">All</button>
       {% assign categories = site.standards | map: "category" | compact | uniq | sort %}
       {% for cat in categories %}
-      <a href="#{{ cat | downcase }}" class="filter-btn" onclick="filterByCategory('{{ cat }}')">{{ cat }}</a>
+      <button class="filter-btn" data-filter-group="category" data-filter-value="{{ cat }}" aria-pressed="false" onclick="filterByCategory('{{ cat }}')">{{ cat }}</button>
       {% endfor %}
     </div>
   </div>
 
   <div class="filters__group">
-    <span class="filters__label">Enforcement</span>
-    <div class="filters__buttons">
-      <a href="#" class="filter-btn filter-btn--active" onclick="filterByEnforcement('all')">All</a>
+    <span class="filters__label" id="enforcement-label">Enforcement</span>
+    <div class="filters__buttons" role="group" aria-labelledby="enforcement-label">
+      <button class="filter-btn filter-btn--active" data-filter-group="enforcement" data-filter-value="all" aria-pressed="true" onclick="filterByEnforcement('all')">All</button>
       {% assign enforcements = site.standards | map: "enforcement" | compact | uniq | sort %}
       {% for enf in enforcements %}
-      <a href="#{{ enf | slugify }}" class="filter-btn" onclick="filterByEnforcement('{{ enf }}')">{{ enf }}</a>
+      <button class="filter-btn" data-filter-group="enforcement" data-filter-value="{{ enf }}" aria-pressed="false" onclick="filterByEnforcement('{{ enf }}')">{{ enf }}</button>
       {% endfor %}
     </div>
   </div>
@@ -89,37 +91,48 @@ title: Engineering Standards
 </div>
 {% endfor %}
 
+<div id="filter-status" role="status" aria-live="polite" aria-atomic="true" style="font-size:14px; color:#3d4648; margin:12px 0;"></div>
+
 <script>
-function filterByConformance(value) {
-  var items = document.querySelectorAll('.standards-list__item');
-  items.forEach(function(item) {
-    if (value === 'all' || item.getAttribute('data-conformance') === value) {
-      item.style.display = '';
-    } else {
-      item.style.display = 'none';
-    }
+var activeConformance = 'all';
+var activeCategory = 'all';
+var activeEnforcement = 'all';
+
+function applyFilters() {
+  var count = 0;
+  document.querySelectorAll('.standards-list__item').forEach(function(item) {
+    var conf = item.dataset.conformance || '';
+    var cat = item.dataset.category || '';
+    var enf = item.dataset.enforcement || '';
+    var show = (activeConformance === 'all' || conf === activeConformance) &&
+               (activeCategory === 'all' || cat === activeCategory) &&
+               (activeEnforcement === 'all' || enf.indexOf(activeEnforcement) !== -1);
+    item.style.display = show ? '' : 'none';
+    if (show) count++;
   });
+  document.querySelectorAll('.category-section').forEach(function(section) {
+    var items = section.querySelectorAll('.standards-list__item');
+    var visible = Array.from(items).some(function(i) { return i.style.display !== 'none'; });
+    section.style.display = visible ? '' : 'none';
+  });
+  document.getElementById('filter-status').textContent = count + ' standard' + (count !== 1 ? 's' : '') + ' shown';
+  updateButtons();
 }
 
-function filterByCategory(value) {
-  var sections = document.querySelectorAll('.category-section');
-  sections.forEach(function(section) {
-    if (value === 'all' || section.getAttribute('data-category') === value) {
-      section.style.display = '';
-    } else {
-      section.style.display = 'none';
-    }
-  });
-}
+function filterByConformance(val) { activeConformance = val; applyFilters(); }
+function filterByCategory(val) { activeCategory = val; applyFilters(); }
+function filterByEnforcement(val) { activeEnforcement = val; applyFilters(); }
+function clearAllFilters() { activeConformance = 'all'; activeCategory = 'all'; activeEnforcement = 'all'; applyFilters(); }
 
-function filterByEnforcement(value) {
-  var items = document.querySelectorAll('.standards-list__item');
-  items.forEach(function(item) {
-    if (value === 'all' || item.getAttribute('data-enforcement') === value) {
-      item.style.display = '';
-    } else {
-      item.style.display = 'none';
-    }
+function updateButtons() {
+  document.querySelectorAll('[data-filter-group]').forEach(function(btn) {
+    var group = btn.dataset.filterGroup;
+    var val = btn.dataset.filterValue;
+    var active = (group === 'conformance' && val === activeConformance) ||
+                 (group === 'category' && val === activeCategory) ||
+                 (group === 'enforcement' && val === activeEnforcement);
+    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    btn.classList.toggle('filter-btn--active', active);
   });
 }
 </script>

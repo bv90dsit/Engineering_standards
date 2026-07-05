@@ -85,7 +85,10 @@ svg { display: block; margin: 0 auto; }
   </div>
 </div>
 
-<svg id="graph" width="900" height="900"></svg>
+<div id="graph-status" role="status" aria-live="polite" style="font-size:13px; color:#3d4648; margin:8px 0;"></div>
+<div style="width:100%; max-width:900px; margin:0 auto;">
+  <svg id="graph" viewBox="0 0 900 900" style="width:100%; height:auto;"></svg>
+</div>
 
 <p style="color:#666; font-size:12px; margin-top:8px;">
   Click any grey standard node to view it. Drag nodes to rearrange. Blue = government/legislation/standards bodies. Orange = industry research/framework docs.
@@ -241,50 +244,48 @@ allSources.forEach(s => {
   sourceFiltersEl.appendChild(btn);
 });
 
-// Filter by source
-function filterSource(sourceId) {
-  if (sourceId === "all") {
-    node.style("opacity", 1);
-    link.style("opacity", 1);
-  } else {
-    const src = allSources.find(s => s.id === sourceId);
-    const visibleStds = new Set(src.standards);
-    node.style("opacity", d => {
-      if (d.id === sourceId) return 1;
-      if (d.group === "standard" && visibleStds.has(d.id)) return 1;
-      return 0.08;
-    });
-    link.style("opacity", d => {
-      if (d.source.id === sourceId || d.target.id === sourceId) return 1;
-      return 0.05;
-    });
+// Combined filter state
+let activeSource = "all";
+let activeCat = "all";
+
+function filterSource(sourceId) { activeSource = sourceId; applyGraphFilters(); }
+function filterCategory(cat) { activeCat = cat; applyGraphFilters(); }
+function resetFilters() { activeSource = "all"; activeCat = "all"; applyGraphFilters(); }
+
+function applyGraphFilters() {
+  let visibleStds = new Set(stdSet);
+
+  if (activeSource !== "all") {
+    const src = allSources.find(s => s.id === activeSource);
+    visibleStds = new Set(src.standards);
   }
+
+  if (activeCat !== "all") {
+    visibleStds = new Set([...visibleStds].filter(std => std.startsWith(activeCat + "-")));
+  }
+
+  const connectedSources = new Set();
+  links.forEach(l => {
+    const tid = typeof l.target === "string" ? l.target : l.target.id;
+    const sid = typeof l.source === "string" ? l.source : l.source.id;
+    if (visibleStds.has(tid)) connectedSources.add(sid);
+  });
+
+  node.style("opacity", d => {
+    if (d.group === "standard") return visibleStds.has(d.id) ? 1 : 0.08;
+    if (activeSource !== "all" && d.id === activeSource) return 1;
+    return connectedSources.has(d.id) ? 1 : 0.08;
+  });
+  link.style("opacity", d => {
+    const tid = typeof d.target === "string" ? d.target : d.target.id;
+    return visibleStds.has(tid) ? 0.6 : 0.05;
+  });
+
+  document.getElementById("graph-status").textContent = visibleStds.size + " standards shown";
 }
 
-// Filter by category
-function filterCategory(cat) {
-  if (cat === "all") {
-    node.style("opacity", 1);
-    link.style("opacity", 1);
-  } else {
-    const matchingStds = new Set();
-    stdSet.forEach(std => { if (std.startsWith(cat + "-")) matchingStds.add(std); });
-    const connectedSources = new Set();
-    links.forEach(l => {
-      const tid = typeof l.target === "string" ? l.target : l.target.id;
-      const sid = typeof l.source === "string" ? l.source : l.source.id;
-      if (matchingStds.has(tid)) connectedSources.add(sid);
-    });
-    node.style("opacity", d => {
-      if (d.group === "standard" && matchingStds.has(d.id)) return 1;
-      if (d.group !== "standard" && connectedSources.has(d.id)) return 1;
-      return 0.08;
-    });
-    link.style("opacity", d => {
-      const tid = typeof d.target === "string" ? d.target : d.target.id;
-      if (matchingStds.has(tid)) return 1;
-      return 0.05;
-    });
-  }
-}
+// Keyboard accessibility for standard nodes
+node.filter(d => d.group === "standard")
+  .attr("tabindex", "0")
+  .on("keydown", (e, d) => { if (e.key === "Enter" && d.url) window.location.href = d.url; });
 </script>

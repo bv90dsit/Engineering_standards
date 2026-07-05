@@ -4,7 +4,7 @@
   --govuk-blue: #1d70b8;
   --govuk-dark-blue: #003078;
   --govuk-black: #0b0c0c;
-  --govuk-grey-1: #505a5f;
+  --govuk-grey-1: #3d4648;
   --govuk-grey-2: #b1b4b6;
   --govuk-grey-3: #f3f2f1;
   --govuk-white: #ffffff;
@@ -71,6 +71,13 @@ body {
   text-decoration: underline;
 }
 
+.site-header__nav a.active,
+.site-header__nav a[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-weight: bold;
+}
+
 /* Main content */
 .main-content {
   max-width: 960px;
@@ -127,10 +134,10 @@ a {
   color: var(--govuk-blue);
 }
 
-a:focus {
-  outline: 3px solid var(--govuk-focus);
-  outline-offset: 0;
-  background: var(--govuk-focus);
+a:focus,
+a:focus-visible {
+  outline: 3px solid #fd0;
+  outline-offset: 2px;
 }
 
 /* Badges */
@@ -149,13 +156,19 @@ a:focus {
   background: var(--govuk-red);
 }
 
+.badge--must::before { content: "\25CF "; }
+
 .badge--should {
   background: var(--govuk-amber);
 }
 
+.badge--should::before { content: "\25B2 "; }
+
 .badge--could {
   background: var(--govuk-green);
 }
+
+.badge--could::before { content: "\25CB "; }
 
 /* Standards list */
 .standards-list {
@@ -393,4 +406,79 @@ a:focus {
 }
 .category-key__items strong {
   color: var(--govuk-dark-blue);
+}
+
+/* Focus states for all interactive elements */
+.filter-btn:focus,
+.filter-btn:focus-visible,
+button:focus,
+button:focus-visible {
+  outline: 3px solid #fd0;
+  outline-offset: 2px;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip-link:focus {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: auto;
+  height: auto;
+  padding: 12px 24px;
+  background: #fd0;
+  color: #0b0c0c;
+  font-weight: bold;
+  z-index: 9999;
+  text-decoration: none;
+}
+
+/* Responsive tables */
+.main-content table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px) {
+  .main-content table th,
+  .main-content table td {
+    padding: 8px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 0.85rem;
+  color: #505a5f;
+  margin-bottom: 16px;
+}
+.breadcrumb a {
+  color: var(--govuk-blue);
+}
+
+/* Related standards */
+.related-standards {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
+}
+.related-standards h3 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+.related-standards ul {
+  list-style: none;
+  padding: 0;
+}
+.related-standards li {
+  margin-bottom: 6px;
 }
