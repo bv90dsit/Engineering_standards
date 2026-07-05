@@ -60,7 +60,7 @@ def main() -> None:
     print()
     print("    jobs:")
     print("      standards:")
-    print(f"        uses: {REPO_URL.split('github.com/')[1]}/.github/workflows/compliance.yml@main")
+    print(f"        uses: {REPO_URL.split('github.com/')[1]}/.github/workflows/compliance.yml@v1.0.0")
     print("        with:")
     print(f"          role: {args.role}")
     print(f"          platform: {args.platform}")

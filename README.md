@@ -25,7 +25,7 @@ Add `.github/workflows/standards.yml` to your repo:
 ```yaml
 jobs:
   compliance:
-    uses: bv90dsit/Engineering_standards/.github/workflows/compliance.yml@main
+    uses: bv90dsit/Engineering_standards/.github/workflows/compliance.yml@v1.0.0
     with:
       role: engineer
       platform: python   # or java, node, any
