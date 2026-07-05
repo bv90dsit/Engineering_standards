@@ -27,30 +27,24 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Get changed files in this PR
           CHANGED=$(gh pr diff ${{ github.event.pull_request.number }} --name-only)
 
-          # Run impact analysis on relevant files
           OUTPUT=""
           for file in $CHANGED; do
-            # Only analyse standards, rules, code, and workflows
             case "$file" in
               modules/*/standards/*.md|modules/*/rules.json|scripts/*.py|standards_lib/*.py|vscode-extension/src/*|.github/workflows/*.yml)
                 RESULT=$(python scripts/impact_analysis.py --changed "$file" 2>&1 || true)
                 if [ -n "$RESULT" ]; then
-                  OUTPUT="${OUTPUT}${RESULT}
-
-"
+                  OUTPUT="$OUTPUT
+$RESULT"
                 fi
                 ;;
             esac
           done
 
           if [ -z "$OUTPUT" ]; then
-            echo "No impact analysis needed for this PR."
             echo "has_output=false" >> "$GITHUB_OUTPUT"
           else
-            # Write to file (multiline output handling)
             echo "$OUTPUT" > /tmp/impact.txt
             echo "has_output=true" >> "$GITHUB_OUTPUT"
           fi
@@ -60,18 +54,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          BODY=$(cat <<'COMMENT'
-          ## 🔍 Impact Analysis
-
-          The following files in this PR have been analysed for downstream impact:
-
-          ```
-          COMMENT
-          )
-          BODY="${BODY}
-          $(cat /tmp/impact.txt)
-          \`\`\`
-
-          *This is an automated analysis. Items marked ⚠ need action before merge. Items marked ? need human review.*"
-
-          gh pr comment ${{ github.event.pull_request.number }} --body "$BODY"
+          {
+            echo "## Impact Analysis"
+            echo ""
+            echo "The following files in this PR have been analysed for downstream impact:"
+            echo ""
+            echo '```'
+            cat /tmp/impact.txt
+            echo '```'
+            echo ""
+            echo "*Items marked with warning need action before merge. Items marked ? need human review.*"
+          } > /tmp/comment.md
+          gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/comment.md
