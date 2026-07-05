@@ -4,7 +4,7 @@ Machine-readable, context-aware engineering standards for UK Government digital 
 
 > **Status: MVP / Draft** — not yet adopted by teams. Being developed in the open for feedback.
 >
-> **Browse the standards:** https://bv90dsit.github.io/Engineering_standards/
+> **Browse the standards:** https://bv90dsit.github.io/Engineering_standards/about/
 
 ```
 Layer 0 — Source frameworks (GDS, NCSC, DORA, OWASP, WCAG, etc.)
