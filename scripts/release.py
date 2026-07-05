@@ -118,8 +118,52 @@ def create_release(version: str, dry_run: bool) -> None:
     run(["npm", "run", "compile"], check=True, capture=True)
     vsix_name = f"uk-gov-engineering-standards-{version.lstrip('v')}.vsix"
     run(["npx", "vsce", "package", "--out", vsix_name], check=True, capture=True)
-
     vsix_path = vscode_dir / vsix_name
+
+    # Generate SBOM (Software Bill of Materials)
+    print("Generating SBOM...")
+    sbom_files = []
+    # Python SBOM
+    python_sbom = REPO_ROOT / f"sbom-python-{version.lstrip('v')}.json"
+    pip_result = run(
+        ["pip", "list", "--format=json"],
+        check=False, capture=True
+    )
+    if pip_result.returncode == 0:
+        import json as json_mod
+        deps = json_mod.loads(pip_result.stdout)
+        sbom = {
+            "bomFormat": "CycloneDX",
+            "specVersion": "1.5",
+            "version": 1,
+            "metadata": {
+                "component": {
+                    "name": "uk-gov-engineering-standards",
+                    "version": version.lstrip("v"),
+                    "type": "application",
+                }
+            },
+            "components": [
+                {"type": "library", "name": d["name"], "version": d["version"]}
+                for d in deps
+            ],
+        }
+        python_sbom.write_text(json_mod.dumps(sbom, indent=2))
+        sbom_files.append(str(python_sbom))
+        print(f"  ✓ Python SBOM: {python_sbom.name} ({len(deps)} components)")
+
+    # npm SBOM
+    npm_sbom = REPO_ROOT / f"sbom-npm-{version.lstrip('v')}.json"
+    npm_result = run(
+        ["npm", "sbom", "--sbom-format", "cyclonedx", "--omit", "dev"],
+        check=False, capture=True
+    )
+    if npm_result.returncode == 0 and npm_result.stdout.strip():
+        npm_sbom.write_text(npm_result.stdout)
+        sbom_files.append(str(npm_sbom))
+        print(f"  ✓ npm SBOM: {npm_sbom.name}")
+    else:
+        print("  ⚠ npm sbom not available (requires npm 9+)")
 
     # Create release
     cmd = [
@@ -129,6 +173,8 @@ def create_release(version: str, dry_run: bool) -> None:
     ]
     if vsix_path.exists():
         cmd.append(str(vsix_path))
+    for sbom_file in sbom_files:
+        cmd.append(sbom_file)
 
     run(cmd)
     print(f"✓ Created GitHub release: {version}")

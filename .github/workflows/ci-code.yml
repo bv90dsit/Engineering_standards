@@ -22,13 +22,16 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pyyaml ruff bandit
+          pip install pyyaml ruff bandit pytest
 
       - name: Lint (ruff)
         run: ruff check scripts/ standards_lib/
 
       - name: Security scan (bandit)
         run: bandit -r scripts/ standards_lib/ -ll -q
+
+      - name: Unit tests (pytest)
+        run: pytest tests/ -q
 
       - name: Smoke test (validate_standards.py)
         run: python scripts/validate_standards.py
@@ -53,7 +56,11 @@ jobs:
 
       - name: Type check and compile
         working-directory: vscode-extension
-        run: npx tsc -p ./ --noEmit
+        run: npx tsc -p ./
+
+      - name: Unit tests (mocha)
+        working-directory: vscode-extension
+        run: npx mocha ./out/test/suite/**/*.test.js --ui tdd
 
       - name: Security audit
         working-directory: vscode-extension
