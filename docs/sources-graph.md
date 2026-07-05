@@ -98,17 +98,17 @@ svg { display: block; margin: 0 auto; }
 
 | Source | Tier | Standards it informs |
 |--------|:----:|---------------------|
-| Technology Code of Practice | 1 | [ENG-001]({{ site.baseurl }}/standards/ENG-001/), [ENG-002]({{ site.baseurl }}/standards/ENG-002/), [ARC-001]({{ site.baseurl }}/standards/ARC-001/), [DAT-004]({{ site.baseurl }}/standards/DAT-004/), [ENG-005]({{ site.baseurl }}/standards/ENG-005/), [EMG-001]({{ site.baseurl }}/standards/EMG-001/) |
-| GDS Service Standard | 1 | [ENG-003]({{ site.baseurl }}/standards/ENG-003/), [OPS-001]({{ site.baseurl }}/standards/OPS-001/), [OPS-002]({{ site.baseurl }}/standards/OPS-002/), [ARC-004]({{ site.baseurl }}/standards/ARC-004/), [ARC-005]({{ site.baseurl }}/standards/ARC-005/), [OPS-003]({{ site.baseurl }}/standards/OPS-003/), [OPS-006]({{ site.baseurl }}/standards/OPS-006/), [OPS-007]({{ site.baseurl }}/standards/OPS-007/) |
-| NCSC Secure by Design | 1 | [SEC-001]({{ site.baseurl }}/standards/SEC-001/), [SEC-003]({{ site.baseurl }}/standards/SEC-003/), [SEC-005]({{ site.baseurl }}/standards/SEC-005/), [SEC-006]({{ site.baseurl }}/standards/SEC-006/), [SEC-007]({{ site.baseurl }}/standards/SEC-007/), [SEC-008]({{ site.baseurl }}/standards/SEC-008/) |
-| OWASP Top 10 / ASVS | 1 | [SEC-001]({{ site.baseurl }}/standards/SEC-001/), [SEC-002]({{ site.baseurl }}/standards/SEC-002/), [SEC-004]({{ site.baseurl }}/standards/SEC-004/), [SEC-009]({{ site.baseurl }}/standards/SEC-009/), [PY-003]({{ site.baseurl }}/standards/PY-003/), [JV-003]({{ site.baseurl }}/standards/JV-003/) |
-| WCAG 2.2 | 1 | [ACC-001]({{ site.baseurl }}/standards/ACC-001/) |
-| UK GDPR | 1 | [DAT-002]({{ site.baseurl }}/standards/DAT-002/), [DAT-005]({{ site.baseurl }}/standards/DAT-005/) |
-| CDDO AI Framework | 1 | [EMG-002]({{ site.baseurl }}/standards/EMG-002/), [EMG-003]({{ site.baseurl }}/standards/EMG-003/), [EMG-004]({{ site.baseurl }}/standards/EMG-004/) |
-| DORA Metrics | 2 | [OPS-002]({{ site.baseurl }}/standards/OPS-002/), [OPS-005]({{ site.baseurl }}/standards/OPS-005/), [ENG-007]({{ site.baseurl }}/standards/ENG-007/) |
-| 12-Factor App | 2 | [ARC-002]({{ site.baseurl }}/standards/ARC-002/), [TS-006]({{ site.baseurl }}/standards/TS-006/), [OPS-006]({{ site.baseurl }}/standards/OPS-006/) |
-| AWS Well-Architected | 2 | [ARC-005]({{ site.baseurl }}/standards/ARC-005/), [ARC-006]({{ site.baseurl }}/standards/ARC-006/) |
-| Google SRE Book | 2 | [OPS-001]({{ site.baseurl }}/standards/OPS-001/), [OPS-003]({{ site.baseurl }}/standards/OPS-003/) |
+| Technology Code of Practice | 1 | [ENG-001]({{ site.baseurl }}/standards/eng-001/), [ENG-002]({{ site.baseurl }}/standards/eng-002/), [ARC-001]({{ site.baseurl }}/standards/arc-001/), [DAT-004]({{ site.baseurl }}/standards/dat-004/), [ENG-005]({{ site.baseurl }}/standards/eng-005/), [EMG-001]({{ site.baseurl }}/standards/emg-001/) |
+| GDS Service Standard | 1 | [ENG-003]({{ site.baseurl }}/standards/eng-003/), [OPS-001]({{ site.baseurl }}/standards/ops-001/), [OPS-002]({{ site.baseurl }}/standards/ops-002/), [ARC-004]({{ site.baseurl }}/standards/arc-004/), [ARC-005]({{ site.baseurl }}/standards/arc-005/), [OPS-003]({{ site.baseurl }}/standards/ops-003/), [OPS-006]({{ site.baseurl }}/standards/ops-006/), [OPS-007]({{ site.baseurl }}/standards/ops-007/) |
+| NCSC Secure by Design | 1 | [SEC-001]({{ site.baseurl }}/standards/sec-001/), [SEC-003]({{ site.baseurl }}/standards/sec-003/), [SEC-005]({{ site.baseurl }}/standards/sec-005/), [SEC-006]({{ site.baseurl }}/standards/sec-006/), [SEC-007]({{ site.baseurl }}/standards/sec-007/), [SEC-008]({{ site.baseurl }}/standards/sec-008/) |
+| OWASP Top 10 / ASVS | 1 | [SEC-001]({{ site.baseurl }}/standards/sec-001/), [SEC-002]({{ site.baseurl }}/standards/sec-002/), [SEC-004]({{ site.baseurl }}/standards/sec-004/), [SEC-009]({{ site.baseurl }}/standards/sec-009/), [PY-003]({{ site.baseurl }}/standards/py-003/), [JV-003]({{ site.baseurl }}/standards/jv-003/) |
+| WCAG 2.2 | 1 | [ACC-001]({{ site.baseurl }}/standards/acc-001/) |
+| UK GDPR | 1 | [DAT-002]({{ site.baseurl }}/standards/dat-002/), [DAT-005]({{ site.baseurl }}/standards/dat-005/) |
+| CDDO AI Framework | 1 | [EMG-002]({{ site.baseurl }}/standards/emg-002/), [EMG-003]({{ site.baseurl }}/standards/emg-003/), [EMG-004]({{ site.baseurl }}/standards/emg-004/) |
+| DORA Metrics | 2 | [OPS-002]({{ site.baseurl }}/standards/ops-002/), [OPS-005]({{ site.baseurl }}/standards/ops-005/), [ENG-007]({{ site.baseurl }}/standards/eng-007/) |
+| 12-Factor App | 2 | [ARC-002]({{ site.baseurl }}/standards/arc-002/), [TS-006]({{ site.baseurl }}/standards/ts-006/), [OPS-006]({{ site.baseurl }}/standards/ops-006/) |
+| AWS Well-Architected | 2 | [ARC-005]({{ site.baseurl }}/standards/arc-005/), [ARC-006]({{ site.baseurl }}/standards/arc-006/) |
+| Google SRE Book | 2 | [OPS-001]({{ site.baseurl }}/standards/ops-001/), [OPS-003]({{ site.baseurl }}/standards/ops-003/) |
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script>
@@ -156,7 +156,7 @@ data.tier2.forEach(s => {
 });
 const baseUrl = "{{ site.baseurl }}/standards/";
 stdSet.forEach(std => {
-  nodes.push({ id: std, label: std, group: "standard", radius: 5, url: baseUrl + std + "/" });
+  nodes.push({ id: std, label: std, group: "standard", radius: 5, url: baseUrl + std.toLowerCase() + "/" });
 });
 
 const width = 900, height = 900;
