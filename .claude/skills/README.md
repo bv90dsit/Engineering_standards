@@ -1,8 +1,27 @@
-# Claude Code Skills
+# Claude Code Integration
 
-These are slash commands available when working in this repo with [Claude Code](https://claude.ai/code). Type the command name in the Claude Code prompt to invoke it.
+This repo has two types of Claude Code skill, serving different audiences.
 
-## Available skills
+## 1. Coding skill — `skills/uk-gov-standards/`
+
+**Audience:** Any developer using Claude Code to write code for UK Gov services.
+
+**What it does:** Makes Claude proactively write standards-compliant code without being asked. When installed, Claude follows all MUST/SHOULD standards (security, accessibility, architecture, language-specific) from the start.
+
+**Install:**
+```bash
+claude skill add --from https://github.com/bv90dsit/Engineering_standards
+```
+
+**How it stays current:** Generated automatically by `scripts/build_skill.py` from the standards index. Run that script after adding or changing standards — CI verifies it's up to date.
+
+---
+
+## 2. Maintainer skills — `.claude/skills/`
+
+**Audience:** People maintaining this standards repo using Claude Code.
+
+**What they do:** Slash commands for repo maintenance tasks. Type the command in a Claude Code session while in this repo.
 
 | Command | What it does |
 |---------|--------------|
@@ -12,15 +31,13 @@ These are slash commands available when working in this repo with [Claude Code](
 | `/impact` | Show what standards, graph nodes, and pages are affected by a change |
 | `/add-source` | Add a new source framework with trust criteria gate |
 
-## How skills work
+**How they work:** Each `.md` file in this directory defines a skill. When invoked, Claude follows the steps described in the file — asking questions, reading/writing files, and running scripts as needed. These only appear when Claude Code is running in this repository.
 
-Each `.md` file in this directory defines a skill. When invoked, Claude follows the steps described in the file — asking questions, reading/writing files, and running scripts as needed.
+---
 
-Skills are project-specific. They only appear when Claude Code is running in this repository.
+## Adding a new maintainer skill
 
-## Adding a new skill
-
-Create a new `.md` file in this directory with frontmatter:
+Create a `.md` file in this directory:
 
 ```markdown
 ---
@@ -30,5 +47,15 @@ description: One-line description shown in skill listings
 
 # Skill Title
 
-Instructions for Claude to follow when this skill is invoked.
+Steps for Claude to follow when invoked.
 ```
+
+## Updating the coding skill
+
+After adding or modifying standards:
+
+```bash
+python scripts/build_skill.py
+```
+
+This regenerates `skills/uk-gov-standards/SKILL.md` from the current index.
