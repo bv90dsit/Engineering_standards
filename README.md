@@ -59,8 +59,7 @@ jobs:
 
 **3. Claude Code skill** — Claude follows standards proactively when writing code:
 ```bash
-# Copy the skill into your project
-cp -r skills/uk-gov-standards /path/to/your-project/.claude/skills/
+claude skill add --from https://github.com/bv90dsit/Engineering_standards
 ```
 
 **4. MCP server** — AI agents query standards and check code in real time ([details](mcp-server/README.md)):
