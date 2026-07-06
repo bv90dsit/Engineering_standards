@@ -46,12 +46,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout target repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: target-repo
 
       - name: Checkout standards
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: bv90dsit/Engineering_standards
           path: standards
