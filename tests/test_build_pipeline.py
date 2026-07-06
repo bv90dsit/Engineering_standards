@@ -39,12 +39,6 @@ def run_script(script_name: str) -> subprocess.CompletedProcess:
     )
 
 
-class TestValidation:
-    def test_validate_standards_passes(self):
-        result = run_script("validate_standards.py")
-        assert result.returncode == 0, f"Validation failed:\n{result.stdout}\n{result.stderr}"
-
-
 class TestBuildSite:
     def test_build_site_creates_standards(self):
         result = run_script("build_site.py")

@@ -55,6 +55,7 @@ sys.exit(exit_code)
         capture_output=True,
         text=True,
         cwd=str(tmp_repo),
+        input="n\n",
     )
 
 
