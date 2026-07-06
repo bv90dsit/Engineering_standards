@@ -18,7 +18,7 @@
 - The `source` frontmatter field is kebab-case (e.g. `technology-code-of-practice`)
 - The graph data in `sources-graph.md` must stay in sync with actual traceability tables — use `/rebuild-graph` after changes
 
-## Skills
+## Repo developer skills
 
 - `/new-standard` — scaffold a new standard with guided prompts
 - `/rebuild-graph` — regenerate sources graph from traceability tables

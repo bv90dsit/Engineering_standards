@@ -10,18 +10,20 @@ This repo has two types of Claude Code skill, serving different audiences.
 
 **Install:**
 ```bash
-claude skill add --from https://github.com/bv90dsit/Engineering_standards
+mkdir -p .claude/skills/uk-gov-standards
+curl -sL https://raw.githubusercontent.com/bv90dsit/Engineering_standards/main/skills/uk-gov-standards/SKILL.md \
+  -o .claude/skills/uk-gov-standards/SKILL.md
 ```
 
 **How it stays current:** Generated automatically by `scripts/build_skill.py` from the standards index. Run that script after adding or changing standards — CI verifies it's up to date.
 
 ---
 
-## 2. Maintainer skills — `.claude/skills/`
+## 2. Repo developer skills — `.claude/skills/`
 
-**Audience:** People maintaining this standards repo using Claude Code.
+**Audience:** Developers maintaining this standards repo using Claude Code.
 
-**What they do:** Slash commands for repo maintenance tasks. Type the command in a Claude Code session while in this repo.
+**What they do:** Slash commands for repo development tasks. Type the command in a Claude Code session while in this repo.
 
 | Command | What it does |
 |---------|--------------|
