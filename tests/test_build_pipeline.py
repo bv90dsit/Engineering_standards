@@ -31,6 +31,7 @@ def clean_output():
 
 
 def run_script(script_name: str) -> subprocess.CompletedProcess:
+    """Run a script from the scripts/ directory and return the result."""
     return subprocess.run(
         [sys.executable, str(SCRIPTS_DIR / script_name)],
         capture_output=True,
@@ -40,14 +41,16 @@ def run_script(script_name: str) -> subprocess.CompletedProcess:
 
 
 class TestBuildSite:
+    """Tests that build_site.py correctly generates docs/_standards/ from module sources."""
+
     def test_build_site_creates_standards(self):
+        """build_site.py exits 0 and creates the _standards/ output directory."""
         result = run_script("build_site.py")
         assert result.returncode == 0, f"Build failed:\n{result.stdout}\n{result.stderr}"
         assert STANDARDS_OUTPUT.exists(), "_standards directory not created"
 
     def test_build_site_copies_all_standards(self):
-        from pathlib import Path
-
+        """Every standard in modules/ produces a corresponding file in _standards/."""
         run_script("build_site.py")
 
         source_count = len(list(REPO_ROOT.glob("modules/*/standards/*.md")))
@@ -57,6 +60,7 @@ class TestBuildSite:
         )
 
     def test_built_standards_have_required_frontmatter(self):
+        """Each built file has layout: standard and render_with_liquid: false."""
         run_script("build_site.py")
 
         import re
@@ -70,6 +74,7 @@ class TestBuildSite:
             assert "render_with_liquid: false" in fm, f"{filepath.name} missing render_with_liquid"
 
     def test_built_standards_wrapped_in_raw(self):
+        """Each built file body is wrapped in raw/endraw to prevent Liquid parsing."""
         run_script("build_site.py")
 
         for filepath in STANDARDS_OUTPUT.glob("*.md"):
@@ -81,17 +86,24 @@ class TestBuildSite:
 
 
 class TestGraphSync:
+    """Tests that the sources graph data stays in sync with source traceability tables."""
+
     def test_graph_data_matches_traceability(self):
+        """check_graph_sync.py finds no drift between graph and standard files."""
         result = run_script("check_graph_sync.py")
         assert result.returncode == 0, f"Graph out of sync:\n{result.stdout}"
 
 
 class TestSkillGeneration:
+    """Tests that build_skill.py generates a valid coding skill file."""
+
     def test_skill_generates_without_error(self):
+        """build_skill.py exits 0."""
         result = run_script("build_skill.py")
         assert result.returncode == 0, f"Skill build failed:\n{result.stdout}\n{result.stderr}"
 
     def test_skill_output_exists(self):
+        """The generated skill file exists at .claude/skills/uk-gov-standards.md."""
         run_script("build_skill.py")
         skill_path = REPO_ROOT / ".claude" / "skills" / "uk-gov-standards.md"
         assert skill_path.exists(), "Skill file not generated"

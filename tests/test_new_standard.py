@@ -1,4 +1,8 @@
-"""Tests for scripts/new_standard.py."""
+"""Tests for the standard scaffolding tool (scripts/new_standard.py).
+
+Verifies that the scaffold command creates valid files and prevents
+accidental overwrites.
+"""
 
 from __future__ import annotations
 
