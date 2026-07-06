@@ -2,17 +2,17 @@
 
 This repo has two types of Claude Code skill, serving different audiences.
 
-## 1. Coding skill — `skills/uk-gov-standards/`
+## 1. Coding skill — `uk-gov-standards.md`
 
 **Audience:** Any developer using Claude Code to write code for UK Gov services.
 
 **What it does:** Makes Claude proactively write standards-compliant code without being asked. When installed, Claude follows all MUST/SHOULD standards (security, accessibility, architecture, language-specific) from the start.
 
-**Install:**
+**Install in another project:**
 ```bash
-mkdir -p .claude/skills/uk-gov-standards
-curl -sL https://raw.githubusercontent.com/bv90dsit/Engineering_standards/main/skills/uk-gov-standards/SKILL.md \
-  -o .claude/skills/uk-gov-standards/SKILL.md
+mkdir -p .claude/skills
+curl -sL https://raw.githubusercontent.com/bv90dsit/Engineering_standards/main/.claude/skills/uk-gov-standards.md \
+  -o .claude/skills/uk-gov-standards.md
 ```
 
 **How it stays current:** Generated automatically by `scripts/build_skill.py` from the standards index. Run that script after adding or changing standards — CI verifies it's up to date.
@@ -60,4 +60,4 @@ After adding or modifying standards:
 python scripts/build_skill.py
 ```
 
-This regenerates `skills/uk-gov-standards/SKILL.md` from the current index.
+This regenerates `.claude/skills/uk-gov-standards.md` from the current index.

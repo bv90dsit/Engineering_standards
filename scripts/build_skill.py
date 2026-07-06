@@ -18,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from standards_lib.query import query_standards
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SKILL_PATH = REPO_ROOT / "skills" / "uk-gov-standards" / "SKILL.md"
+SKILL_PATH = REPO_ROOT / ".claude" / "skills" / "uk-gov-standards.md"
 
 MODULE_LABELS = {
     "core": "Always (all languages)",

@@ -59,12 +59,12 @@ jobs:
 
 **3. Claude Code skill** — Claude follows standards proactively when writing code:
 ```bash
-# Add the skill to your project (creates .claude/skills/uk-gov-standards/)
-mkdir -p .claude/skills/uk-gov-standards
-curl -sL https://raw.githubusercontent.com/bv90dsit/Engineering_standards/main/skills/uk-gov-standards/SKILL.md \
-  -o .claude/skills/uk-gov-standards/SKILL.md
+# Add the skill to your project
+mkdir -p .claude/skills
+curl -sL https://raw.githubusercontent.com/bv90dsit/Engineering_standards/main/.claude/skills/uk-gov-standards.md \
+  -o .claude/skills/uk-gov-standards.md
 ```
-See [`skills/uk-gov-standards/SKILL.md`](skills/uk-gov-standards/SKILL.md) for what's included.
+See [`.claude/skills/uk-gov-standards.md`](.claude/skills/uk-gov-standards.md) for what's included.
 
 **4. MCP server** — AI agents query standards and check code in real time ([details](mcp-server/README.md)):
 ```json
@@ -108,7 +108,7 @@ See [modules/README.md](modules/README.md) for how to create your own.
 | [docs/testing.md](docs/testing.md) | Test strategy (49 tests) |
 | [docs/exemptions.md](docs/exemptions.md) | Waiver process for MUST standards |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to add a standard |
-| [skills/uk-gov-standards/SKILL.md](skills/uk-gov-standards/SKILL.md) | Claude Code skill — AI writes compliant code proactively |
+| [.claude/skills/uk-gov-standards.md](.claude/skills/uk-gov-standards.md) | Claude Code skill — AI writes compliant code proactively |
 | [mcp-server/README.md](mcp-server/README.md) | MCP server for AI agents — tools, resources, setup |
 | [SECURITY.md](SECURITY.md) | Trust model, permissions, vulnerability reporting |
 | [CHANGELOG.md](CHANGELOG.md) | Release history |
