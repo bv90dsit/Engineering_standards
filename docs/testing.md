@@ -7,9 +7,11 @@ See also: [Main README](../README.md) | [CONTRIBUTING.md](../CONTRIBUTING.md)
 | Suite | Framework | Files | Tests | What it covers |
 |-------|-----------|-------|-------|----------------|
 | Python unit tests | pytest | `tests/` | 29 | Query library, validation, compliance checker, scaffold |
+| Build pipeline tests | pytest | `tests/test_build_pipeline.py` | 8 | End-to-end: validate → build → graph sync → skill |
 | VS Code extension tests | mocha | `vscode-extension/src/test/suite/` | 20 | Glob matching, rule pattern matching |
 | Standards validation | Custom (`validate_standards.py`) | — | — | Format, traceability, trusted sources, orphans |
-| **Total** | | | **49** | |
+| Graph sync check | Custom (`check_graph_sync.py`) | — | — | Graph data matches source traceability |
+| **Total** | | | **57+** | |
 
 ## Python tests (`tests/`)
 
@@ -90,6 +92,48 @@ Tests the actual regex patterns from `modules/*/rules.json` to verify they match
 | `JV-002: System.out` | Matches println/print on out/err | Java logging check works |
 | `TS-002: any type` | Matches `: any` annotation | TypeScript type safety check works |
 | `exclude patterns` | Comment lines skipped | Rules don't fire inside comments |
+
+### test_build_pipeline.py (8 tests) — End-to-end build
+
+Tests the full pipeline that CI and Pages deploy rely on:
+
+| Test | What it proves | Why it matters |
+|------|---------------|----------------|
+| `validate_standards_passes` | All standards pass validation | Broken standards can't reach the site |
+| `build_site_creates_standards` | `_standards/` directory is created | Pages has content to deploy |
+| `build_site_copies_all_standards` | Output count matches source count | No standards silently dropped |
+| `built_standards_have_required_frontmatter` | layout + render_with_liquid present | Jekyll renders them correctly |
+| `built_standards_wrapped_in_raw` | Body wrapped in raw/endraw | Liquid syntax in code examples doesn't break the build |
+| `graph_data_matches_traceability` | Graph nodes match actual sources | The visual graph is truthful |
+| `skill_generates_without_error` | build_skill.py exits 0 | Skill generation isn't broken |
+| `skill_output_exists` | .claude/skills/uk-gov-standards.md created | The file developers install actually exists |
+
+---
+
+## CI Pipelines
+
+### What CI tests (automated on every PR)
+
+| Workflow | Triggers on | What it checks |
+|----------|------------|----------------|
+| `ci-standards.yml` | modules/**, docs/sources-graph.md, scripts/ | Standard format validation, README counts, skill freshness, graph sync |
+| `ci-code.yml` | scripts/**, tests/**, standards_lib/** | Python tests (pytest), linting |
+| `compliance.yml` | PR to main | Compliance check against the standards themselves |
+| `impact-analysis.yml` | modules/** | Reports which standards/pages are affected by the change |
+| `pages.yml` | push to main | Build site + deploy to GitHub Pages |
+
+### What CI does NOT test
+
+| Gap | Why | Risk | Mitigation |
+|-----|-----|------|------------|
+| Jekyll HTML output | No Jekyll in CI unit tests; only the Pages workflow does a full build | Broken layouts or links | Pages workflow fails on build errors; visual check after deploy |
+| Browser rendering | No visual regression testing | CSS/JS bugs on the live site | Manual check after significant page changes |
+| MCP server integration | Requires a running Claude session | MCP tool calls could break | Unit tests for query library cover the data layer |
+| VS Code extension in real editor | Mocha tests run without VS Code host | Extension activation or UI bugs | Manual testing + marketplace reviews |
+| Cross-browser compatibility | No browser matrix | Layout issues on Safari/Firefox | GOV.UK design system is well-tested across browsers |
+| Performance / load | No lighthouse or load tests | Slow pages | Static site with minimal JS; low risk |
+
+---
 
 ## What's NOT unit tested (and why)
 
