@@ -4,9 +4,11 @@ on:
   pull_request:
     paths:
       - "modules/**"
+      - "docs/sources-graph.md"
       - "scripts/validate_standards.py"
       - "scripts/trusted_sources.yaml"
       - "scripts/update_counts.py"
+      - "scripts/check_graph_sync.py"
   workflow_dispatch:
 
 jobs:
@@ -37,8 +39,11 @@ jobs:
       - name: Check skill is up to date
         run: |
           python scripts/build_skill.py
-          if [ -n "$(git diff --name-only skills/)" ]; then
+          if [ -n "$(git diff --name-only .claude/skills/)" ]; then
             echo "::error::Skill is stale. Run 'python scripts/build_skill.py' and commit."
-            git diff skills/
+            git diff .claude/skills/
             exit 1
           fi
+
+      - name: Check sources graph is in sync
+        run: python scripts/check_graph_sync.py

@@ -129,9 +129,13 @@ permalink: /about/
 <div class="hero">
   <h1>UK Government Engineering Standards</h1>
   <p>A single, machine-readable set of engineering rules — enforceable by tooling, traceable to authority, and filterable by your team's context.</p>
-  <p style="margin-top: 16px; padding: 10px 16px; background: rgba(255,255,255,0.15); border-radius: 4px; font-size: 0.9rem;">
-    ⚠️ <strong>Early ideation</strong> — this is a concept under active development. Nothing here is finalised or officially adopted. Standards, tooling, and structure may change significantly based on feedback.
-  </p>
+  <div style="margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap; font-size: 0.8rem;">
+    <span style="padding: 4px 12px; background: rgba(255,255,255,0.9); color: #00703c; border-radius: 12px; font-weight: 600;">Standards: Stable</span>
+    <span style="padding: 4px 12px; background: rgba(255,255,255,0.9); color: #00703c; border-radius: 12px; font-weight: 600;">Methodology: Stable</span>
+    <span style="padding: 4px 12px; background: rgba(255,255,255,0.9); color: #00703c; border-radius: 12px; font-weight: 600;">CI enforcement: Stable</span>
+    <span style="padding: 4px 12px; background: rgba(255,255,255,0.9); color: #f47738; border-radius: 12px; font-weight: 600;">Tooling: Beta</span>
+    <span style="padding: 4px 12px; background: rgba(255,255,255,0.9); color: #f47738; border-radius: 12px; font-weight: 600;">Adoption: Beta</span>
+  </div>
 </div>
 
 <div class="stats-grid">
