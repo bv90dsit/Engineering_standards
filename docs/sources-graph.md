@@ -98,44 +98,48 @@ svg { display: block; margin: 0 auto; }
 
 | Source | Tier | Standards it informs |
 |--------|:----:|---------------------|
-| Technology Code of Practice | 1 | [ENG-001]({{ site.baseurl }}/standards/eng-001/), [ENG-002]({{ site.baseurl }}/standards/eng-002/), [ARC-001]({{ site.baseurl }}/standards/arc-001/), [DAT-004]({{ site.baseurl }}/standards/dat-004/), [ENG-005]({{ site.baseurl }}/standards/eng-005/), [EMG-001]({{ site.baseurl }}/standards/emg-001/) |
-| GDS Service Standard | 1 | [ENG-003]({{ site.baseurl }}/standards/eng-003/), [OPS-001]({{ site.baseurl }}/standards/ops-001/), [OPS-002]({{ site.baseurl }}/standards/ops-002/), [ARC-004]({{ site.baseurl }}/standards/arc-004/), [ARC-005]({{ site.baseurl }}/standards/arc-005/), [OPS-003]({{ site.baseurl }}/standards/ops-003/), [OPS-006]({{ site.baseurl }}/standards/ops-006/), [OPS-007]({{ site.baseurl }}/standards/ops-007/) |
-| NCSC Secure by Design | 1 | [SEC-001]({{ site.baseurl }}/standards/sec-001/), [SEC-003]({{ site.baseurl }}/standards/sec-003/), [SEC-005]({{ site.baseurl }}/standards/sec-005/), [SEC-006]({{ site.baseurl }}/standards/sec-006/), [SEC-007]({{ site.baseurl }}/standards/sec-007/), [SEC-008]({{ site.baseurl }}/standards/sec-008/) |
-| OWASP Top 10 / ASVS | 1 | [SEC-001]({{ site.baseurl }}/standards/sec-001/), [SEC-002]({{ site.baseurl }}/standards/sec-002/), [SEC-004]({{ site.baseurl }}/standards/sec-004/), [SEC-009]({{ site.baseurl }}/standards/sec-009/), [PY-003]({{ site.baseurl }}/standards/py-003/), [JV-003]({{ site.baseurl }}/standards/jv-003/) |
+| Technology Code of Practice | 1 | [ARC-001]({{ site.baseurl }}/standards/arc-001/), [ARC-002]({{ site.baseurl }}/standards/arc-002/), [DAT-004]({{ site.baseurl }}/standards/dat-004/), [EMG-001]({{ site.baseurl }}/standards/emg-001/), [ENG-001]({{ site.baseurl }}/standards/eng-001/), [ENG-002]({{ site.baseurl }}/standards/eng-002/), [ENG-003]({{ site.baseurl }}/standards/eng-003/), [ENG-004]({{ site.baseurl }}/standards/eng-004/), [ENG-005]({{ site.baseurl }}/standards/eng-005/), [SEC-003]({{ site.baseurl }}/standards/sec-003/) |
+| GDS Service Standard | 1 | [ACC-001]({{ site.baseurl }}/standards/acc-001/), [ACC-002]({{ site.baseurl }}/standards/acc-002/), [ACC-003]({{ site.baseurl }}/standards/acc-003/), [ARC-002]({{ site.baseurl }}/standards/arc-002/), [ARC-003]({{ site.baseurl }}/standards/arc-003/), [ARC-004]({{ site.baseurl }}/standards/arc-004/), [ARC-005]({{ site.baseurl }}/standards/arc-005/), [ARC-006]({{ site.baseurl }}/standards/arc-006/), [ENG-001]({{ site.baseurl }}/standards/eng-001/), [ENG-002]({{ site.baseurl }}/standards/eng-002/), [ENG-003]({{ site.baseurl }}/standards/eng-003/), [ENG-004]({{ site.baseurl }}/standards/eng-004/), [ENG-006]({{ site.baseurl }}/standards/eng-006/), [OPS-001]({{ site.baseurl }}/standards/ops-001/), [OPS-002]({{ site.baseurl }}/standards/ops-002/), [OPS-003]({{ site.baseurl }}/standards/ops-003/), [OPS-005]({{ site.baseurl }}/standards/ops-005/), [OPS-006]({{ site.baseurl }}/standards/ops-006/), [OPS-007]({{ site.baseurl }}/standards/ops-007/), [SEC-001]({{ site.baseurl }}/standards/sec-001/), [SEC-007]({{ site.baseurl }}/standards/sec-007/), [TS-005]({{ site.baseurl }}/standards/ts-005/) |
+| NCSC Secure by Design | 1 | [ARC-001]({{ site.baseurl }}/standards/arc-001/), [ARC-006]({{ site.baseurl }}/standards/arc-006/), [DAT-003]({{ site.baseurl }}/standards/dat-003/), [DAT-005]({{ site.baseurl }}/standards/dat-005/), [EMG-001]({{ site.baseurl }}/standards/emg-001/), [ENG-002]({{ site.baseurl }}/standards/eng-002/), [JV-005]({{ site.baseurl }}/standards/jv-005/), [JV-006]({{ site.baseurl }}/standards/jv-006/), [OPS-004]({{ site.baseurl }}/standards/ops-004/), [PY-009]({{ site.baseurl }}/standards/py-009/), [SEC-001]({{ site.baseurl }}/standards/sec-001/), [SEC-002]({{ site.baseurl }}/standards/sec-002/), [SEC-003]({{ site.baseurl }}/standards/sec-003/), [SEC-004]({{ site.baseurl }}/standards/sec-004/), [SEC-005]({{ site.baseurl }}/standards/sec-005/), [SEC-006]({{ site.baseurl }}/standards/sec-006/), [SEC-007]({{ site.baseurl }}/standards/sec-007/), [SEC-008]({{ site.baseurl }}/standards/sec-008/), [SEC-009]({{ site.baseurl }}/standards/sec-009/) |
+| OWASP Top 10 / ASVS | 1 | [JV-003]({{ site.baseurl }}/standards/jv-003/), [JV-004]({{ site.baseurl }}/standards/jv-004/), [PY-003]({{ site.baseurl }}/standards/py-003/), [PY-005]({{ site.baseurl }}/standards/py-005/), [PY-007]({{ site.baseurl }}/standards/py-007/), [PY-008]({{ site.baseurl }}/standards/py-008/), [PY-009]({{ site.baseurl }}/standards/py-009/), [SEC-001]({{ site.baseurl }}/standards/sec-001/), [SEC-002]({{ site.baseurl }}/standards/sec-002/), [SEC-003]({{ site.baseurl }}/standards/sec-003/), [SEC-004]({{ site.baseurl }}/standards/sec-004/), [SEC-005]({{ site.baseurl }}/standards/sec-005/), [SEC-008]({{ site.baseurl }}/standards/sec-008/), [SEC-009]({{ site.baseurl }}/standards/sec-009/) |
 | WCAG 2.2 | 1 | [ACC-001]({{ site.baseurl }}/standards/acc-001/) |
-| UK GDPR | 1 | [DAT-002]({{ site.baseurl }}/standards/dat-002/), [DAT-005]({{ site.baseurl }}/standards/dat-005/) |
-| CDDO AI Framework | 1 | [EMG-002]({{ site.baseurl }}/standards/emg-002/), [EMG-003]({{ site.baseurl }}/standards/emg-003/), [EMG-004]({{ site.baseurl }}/standards/emg-004/) |
-| DORA Metrics | 2 | [OPS-002]({{ site.baseurl }}/standards/ops-002/), [OPS-005]({{ site.baseurl }}/standards/ops-005/), [ENG-007]({{ site.baseurl }}/standards/eng-007/) |
-| 12-Factor App | 2 | [ARC-002]({{ site.baseurl }}/standards/arc-002/), [TS-006]({{ site.baseurl }}/standards/ts-006/), [OPS-006]({{ site.baseurl }}/standards/ops-006/) |
+| NIST / ISO | 1 | [DAT-003]({{ site.baseurl }}/standards/dat-003/), [OPS-004]({{ site.baseurl }}/standards/ops-004/), [SEC-002]({{ site.baseurl }}/standards/sec-002/), [SEC-005]({{ site.baseurl }}/standards/sec-005/), [SEC-006]({{ site.baseurl }}/standards/sec-006/) |
+| UK GDPR / ICO | 1 | [DAT-002]({{ site.baseurl }}/standards/dat-002/), [DAT-005]({{ site.baseurl }}/standards/dat-005/), [EMG-004]({{ site.baseurl }}/standards/emg-004/) |
+| CDDO AI Framework | 1 | [EMG-001]({{ site.baseurl }}/standards/emg-001/), [EMG-002]({{ site.baseurl }}/standards/emg-002/), [EMG-003]({{ site.baseurl }}/standards/emg-003/), [EMG-004]({{ site.baseurl }}/standards/emg-004/) |
+| DORA Metrics | 2 | [ENG-003]({{ site.baseurl }}/standards/eng-003/), [ENG-005]({{ site.baseurl }}/standards/eng-005/), [ENG-007]({{ site.baseurl }}/standards/eng-007/), [OPS-001]({{ site.baseurl }}/standards/ops-001/), [OPS-002]({{ site.baseurl }}/standards/ops-002/), [OPS-005]({{ site.baseurl }}/standards/ops-005/) |
+| 12-Factor App | 2 | [ARC-002]({{ site.baseurl }}/standards/arc-002/), [JV-002]({{ site.baseurl }}/standards/jv-002/), [JV-008]({{ site.baseurl }}/standards/jv-008/), [OPS-006]({{ site.baseurl }}/standards/ops-006/), [PY-001]({{ site.baseurl }}/standards/py-001/), [TS-004]({{ site.baseurl }}/standards/ts-004/), [TS-006]({{ site.baseurl }}/standards/ts-006/) |
 | AWS Well-Architected | 2 | [ARC-005]({{ site.baseurl }}/standards/arc-005/), [ARC-006]({{ site.baseurl }}/standards/arc-006/) |
-| Google SRE Book | 2 | [OPS-001]({{ site.baseurl }}/standards/ops-001/), [OPS-003]({{ site.baseurl }}/standards/ops-003/) |
+| Google SRE Book | 2 | [ENG-007]({{ site.baseurl }}/standards/eng-007/), [OPS-001]({{ site.baseurl }}/standards/ops-001/), [OPS-003]({{ site.baseurl }}/standards/ops-003/) |
+| Accelerate | 2 | [ENG-006]({{ site.baseurl }}/standards/eng-006/), [ENG-007]({{ site.baseurl }}/standards/eng-007/), [OPS-002]({{ site.baseurl }}/standards/ops-002/), [OPS-005]({{ site.baseurl }}/standards/ops-005/) |
+| Spring | 2 | [JV-001]({{ site.baseurl }}/standards/jv-001/), [JV-003]({{ site.baseurl }}/standards/jv-003/), [JV-004]({{ site.baseurl }}/standards/jv-004/), [JV-005]({{ site.baseurl }}/standards/jv-005/) |
+| Django | 2 | [PY-003]({{ site.baseurl }}/standards/py-003/), [PY-005]({{ site.baseurl }}/standards/py-005/), [PY-007]({{ site.baseurl }}/standards/py-007/), [PY-008]({{ site.baseurl }}/standards/py-008/) |
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script>
 const data = {
   tier1: [
-    { id: "tcop", label: "Technology\nCode of Practice", url: "https://www.gov.uk/guidance/the-technology-code-of-practice", standards: ["ENG-001","ENG-002","ARC-001","DAT-004","ENG-005","EMG-001"] },
-    { id: "gds", label: "GDS Service\nStandard", url: "https://www.gov.uk/service-manual/service-standard", standards: ["ENG-003","OPS-001","OPS-002","ACC-002","ARC-004","ARC-005","ENG-004","ENG-006","OPS-003","OPS-006","OPS-007"] },
-    { id: "ncsc", label: "NCSC Secure\nby Design", url: "https://www.ncsc.gov.uk/collection/developers-collection", standards: ["SEC-001","SEC-003","SEC-005","SEC-006","SEC-007","SEC-008","DAT-003","OPS-004"] },
-    { id: "owasp", label: "OWASP", url: "https://owasp.org/www-project-top-ten/", standards: ["SEC-001","SEC-002","SEC-004","SEC-009","PY-003","PY-005","JV-003"] },
+    { id: "tcop", label: "Technology\nCode of Practice", url: "https://www.gov.uk/guidance/the-technology-code-of-practice", standards: ["ARC-001","ARC-002","DAT-004","EMG-001","ENG-001","ENG-002","ENG-003","ENG-004","ENG-005","SEC-003"] },
+    { id: "gds", label: "GDS Service\nStandard", url: "https://www.gov.uk/service-manual/service-standard", standards: ["ACC-001","ACC-002","ACC-003","ARC-002","ARC-003","ARC-004","ARC-005","ARC-006","ENG-001","ENG-002","ENG-003","ENG-004","ENG-006","OPS-001","OPS-002","OPS-003","OPS-005","OPS-006","OPS-007","SEC-001","SEC-007","TS-005"] },
+    { id: "ncsc", label: "NCSC Secure\nby Design", url: "https://www.ncsc.gov.uk/collection/developers-collection", standards: ["ARC-001","ARC-006","DAT-003","DAT-005","EMG-001","ENG-002","JV-005","JV-006","OPS-004","PY-009","SEC-001","SEC-002","SEC-003","SEC-004","SEC-005","SEC-006","SEC-007","SEC-008","SEC-009"] },
+    { id: "owasp", label: "OWASP", url: "https://owasp.org/www-project-top-ten/", standards: ["JV-003","JV-004","PY-003","PY-005","PY-007","PY-008","PY-009","SEC-001","SEC-002","SEC-003","SEC-004","SEC-005","SEC-008","SEC-009"] },
     { id: "wcag", label: "WCAG 2.2", url: "https://www.w3.org/TR/WCAG22/", standards: ["ACC-001"] },
-    { id: "nist", label: "NIST", url: "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final", standards: ["SEC-002","SEC-005"] },
-    { id: "ukgdpr", label: "UK GDPR", url: "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/", standards: ["DAT-002","DAT-005"] },
+    { id: "nist", label: "NIST / ISO", url: "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final", standards: ["DAT-003","OPS-004","SEC-002","SEC-005","SEC-006"] },
+    { id: "ukgdpr", label: "UK GDPR / ICO", url: "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/", standards: ["DAT-002","DAT-005","EMG-004"] },
     { id: "accessibility", label: "Accessibility\nRegs 2018", url: "https://www.legislation.gov.uk/uksi/2018/952", standards: ["ACC-001"] },
-    { id: "cddo-ai", label: "CDDO AI\nFramework", url: "https://www.gov.uk/government/publications/generative-ai-framework-for-hmg", standards: ["EMG-002","EMG-003","EMG-004"] },
-    { id: "gsc", label: "Security\nClassifications", url: "https://www.gov.uk/government/publications/government-security-classifications", standards: ["DAT-001"] },
+    { id: "cddo-ai", label: "CDDO AI\nFramework", url: "https://www.gov.uk/government/publications/generative-ai-framework-for-hmg", standards: ["EMG-001","EMG-002","EMG-003","EMG-004"] },
+    { id: "gsc", label: "Security\nClassifications", url: "https://www.gov.uk/government/publications/government-security-classifications", standards: ["DAT-001","OPS-004"] },
     { id: "ietf", label: "IETF RFCs", url: "https://datatracker.ietf.org/", standards: ["SEC-008"] },
   ],
   tier2: [
-    { id: "dora", label: "DORA", url: "https://dora.dev/", standards: ["OPS-002","OPS-005","ENG-007"] },
-    { id: "12factor", label: "12-Factor", url: "https://12factor.net/", standards: ["ARC-002","TS-006","OPS-006"] },
-    { id: "sre", label: "Google SRE", url: "https://sre.google/sre-book/table-of-contents/", standards: ["OPS-001","OPS-003"] },
+    { id: "dora", label: "DORA", url: "https://dora.dev/", standards: ["ENG-003","ENG-005","ENG-007","OPS-001","OPS-002","OPS-005"] },
+    { id: "12factor", label: "12-Factor", url: "https://12factor.net/", standards: ["ARC-002","JV-002","JV-008","OPS-006","PY-001","TS-004","TS-006"] },
+    { id: "sre", label: "Google SRE", url: "https://sre.google/sre-book/table-of-contents/", standards: ["ENG-007","OPS-001","OPS-003"] },
     { id: "aws-wa", label: "AWS Well-\nArchitected", url: "https://docs.aws.amazon.com/wellarchitected/latest/framework/", standards: ["ARC-005","ARC-006"] },
-    { id: "accelerate", label: "Accelerate", url: "https://itrevolution.com/product/accelerate/", standards: ["OPS-002","OPS-005","ENG-007"] },
+    { id: "accelerate", label: "Accelerate", url: "https://itrevolution.com/product/accelerate/", standards: ["ENG-006","ENG-007","OPS-002","OPS-005"] },
     { id: "openapi", label: "OpenAPI", url: "https://spec.openapis.org/oas/latest.html", standards: ["ARC-003"] },
-    { id: "spring", label: "Spring", url: "https://docs.spring.io/spring-framework/reference/", standards: ["JV-001","JV-005"] },
-    { id: "python-docs", label: "Python/PEP", url: "https://docs.python.org/3/", standards: ["PY-002","PY-004","PY-010"] },
-    { id: "django", label: "Django", url: "https://docs.djangoproject.com/en/stable/", standards: ["PY-005","PY-007","PY-008"] },
+    { id: "spring", label: "Spring", url: "https://docs.spring.io/spring-framework/reference/", standards: ["JV-001","JV-003","JV-004","JV-005"] },
+    { id: "python-docs", label: "Python/PEP", url: "https://docs.python.org/3/", standards: ["PY-001","PY-002","PY-004","PY-010"] },
+    { id: "django", label: "Django", url: "https://docs.djangoproject.com/en/stable/", standards: ["PY-003","PY-005","PY-007","PY-008"] },
     { id: "typescript", label: "TypeScript", url: "https://www.typescriptlang.org/docs/", standards: ["TS-001","TS-002","TS-003"] },
     { id: "react", label: "React", url: "https://react.dev/", standards: ["TS-005"] },
     { id: "mdn", label: "MDN", url: "https://developer.mozilla.org/", standards: ["SEC-009"] },
