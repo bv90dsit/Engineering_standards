@@ -15,6 +15,7 @@
       <a href="{{ '/' | relative_url }}" class="site-header__title">{{ site.title }}</a>
       <nav class="site-header__nav">
         <a href="{{ '/about' | relative_url }}" {% if page.permalink == '/about/' or page.url == '/about/' %}class="active" aria-current="page"{% endif %}>About</a>
+        <a href="{{ '/methodology' | relative_url }}" {% if page.permalink == '/methodology/' or page.url == '/methodology/' %}class="active" aria-current="page"{% endif %}>Methodology</a>
         <a href="{{ '/sources-graph' | relative_url }}" {% if page.permalink == '/sources-graph/' or page.url == '/sources-graph/' %}class="active" aria-current="page"{% endif %}>Sources</a>
         <a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.permalink == '/' %}class="active" aria-current="page"{% endif %}>Standards</a>
         <a href="https://github.com/bv90dsit/Engineering_standards" target="_blank">GitHub</a>
