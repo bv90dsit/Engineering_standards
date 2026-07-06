@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Force-Directed Source Graph — Template</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #0b0c0c;
+      margin: 0;
+      padding: 30px 20px;
+      max-width: 960px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    .subtitle { color: #505a5f; margin: 0 0 24px; }
+
+    .legend {
+      display: flex;
+      gap: 24px;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+    }
+    .legend-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .filters {
+      margin: 16px 0;
+    }
+    .filters strong {
+      font-size: 13px;
+      color: #505a5f;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .filters__buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .filter-btn {
+      padding: 4px 12px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .filter-btn--active {
+      background: #1d70b8;
+      color: white;
+      border-color: #1d70b8;
+    }
+
+    .graph-container {
+      width: 100%;
+      max-width: 900px;
+      margin: 16px auto;
+    }
+    svg { display: block; width: 100%; height: auto; }
+    .link { stroke: #b1b4b6; stroke-width: 1px; }
+    .source-label { font-weight: bold; font-size: 11px; pointer-events: none; }
+    .item-label { font-size: 9px; fill: #505a5f; pointer-events: none; }
+
+    .help {
+      color: #666;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    #status {
+      font-size: 13px;
+      color: #3d4648;
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Source Graph</h1>
+<p class="subtitle">Force-directed graph showing relationships between sources and items. <a href="https://github.com/bv90dsit/Engineering_standards">Original repo</a>.</p>
+
+<div class="legend" id="legend"></div>
+
+<div class="filters">
+  <strong>Filter by group:</strong>
+  <div class="filters__buttons" id="group-filters"></div>
+</div>
+
+<div id="status" role="status" aria-live="polite"></div>
+
+<div class="graph-container">
+  <svg id="graph" viewBox="0 0 900 700"></svg>
+</div>
+
+<p class="help">Click items to navigate. Drag nodes to rearrange. Double-click sources to visit their URL.</p>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+// ============================================================
+// CONFIGURATION — Edit this section to make the graph your own
+// ============================================================
+
+const CONFIG = {
+  width: 900,
+  height: 700,
+  // Force simulation parameters — tweak to change spacing
+  linkDistance: 60,
+  linkStrength: 0.8,
+  chargeStrength: -120,
+  collisionPadding: 15,
+};
+
+// Define your source groups (tiers/layers).
+// Each group gets a colour in the legend and on the graph.
+const SOURCE_GROUPS = [
+  { key: "tier1", label: "Tier 1 — Authoritative", colour: "#1d70b8" },
+  { key: "tier2", label: "Tier 2 — Established",   colour: "#f47738" },
+];
+
+// Item (leaf node) colour — the things your sources connect to
+const ITEM_COLOUR = "#505a5f";
+
+// Define your sources. Each source belongs to a group and links to items.
+// - id:        unique identifier (used internally)
+// - label:     display name (use \n for line breaks)
+// - group:     must match a key from SOURCE_GROUPS
+// - url:       (optional) opened on double-click
+// - items:     array of item IDs this source connects to
+const SOURCES = [
+  // --- Tier 1 examples ---
+  { id: "source-a", label: "Source A", group: "tier1", url: "https://example.com/a", items: ["ITEM-001", "ITEM-002", "ITEM-003"] },
+  { id: "source-b", label: "Source B", group: "tier2", url: "https://example.com/b", items: ["ITEM-002", "ITEM-004"] },
+  { id: "source-c", label: "Source C", group: "tier1", url: "https://example.com/c", items: ["ITEM-003", "ITEM-005"] },
+  { id: "source-d", label: "Source D\nMultiline", group: "tier2", url: "https://example.com/d", items: ["ITEM-001", "ITEM-004", "ITEM-005"] },
+];
+
+// (Optional) Map item IDs to filter categories.
+// If omitted, the category is derived from the ID prefix (before the hyphen).
+// Use this when your IDs don't follow a prefix convention.
+const ITEM_CATEGORIES = {
+  // "ITEM-001": "CategoryA",
+  // "ITEM-002": "CategoryB",
+};
+
+// (Optional) Base URL for item links. Items link to: ITEM_BASE_URL + id.toLowerCase() + "/"
+// Set to null to disable item click navigation.
+const ITEM_BASE_URL = null; // e.g. "/standards/"
+
+
+// ============================================================
+// GRAPH ENGINE — You shouldn't need to edit below this line
+// ============================================================
+
+// Build legend
+const legendEl = document.getElementById("legend");
+SOURCE_GROUPS.forEach(g => {
+  legendEl.innerHTML += `<div class="legend-item"><div class="legend-dot" style="background:${g.colour}"></div> ${g.label}</div>`;
+});
+legendEl.innerHTML += `<div class="legend-item"><div class="legend-dot" style="background:${ITEM_COLOUR}"></div> Item</div>`;
+
+// Build nodes and links
+const nodes = [];
+const links = [];
+const itemSet = new Set();
+const groupColours = Object.fromEntries(SOURCE_GROUPS.map(g => [g.key, g.colour]));
+
+SOURCES.forEach(s => {
+  nodes.push({ id: s.id, label: s.label, group: s.group, radius: 16, url: s.url });
+  s.items.forEach(item => {
+    itemSet.add(item);
+    links.push({ source: s.id, target: item });
+  });
+});
+
+itemSet.forEach(item => {
+  const url = ITEM_BASE_URL ? ITEM_BASE_URL + item.toLowerCase() + "/" : null;
+  nodes.push({ id: item, label: item, group: "item", radius: 5, url });
+});
+
+// Derive categories for filtering
+function getCategory(itemId) {
+  if (ITEM_CATEGORIES[itemId]) return ITEM_CATEGORIES[itemId];
+  return itemId.split("-")[0];
+}
+const allCategories = [...new Set([...itemSet].map(getCategory))].sort();
+
+// Build filter buttons
+const filtersEl = document.getElementById("group-filters");
+const allBtn = makeFilterBtn("All", true);
+allBtn.onclick = () => setFilter("all");
+filtersEl.appendChild(allBtn);
+allCategories.forEach(cat => {
+  const btn = makeFilterBtn(cat, false);
+  btn.onclick = () => setFilter(cat);
+  btn.dataset.cat = cat;
+  filtersEl.appendChild(btn);
+});
+
+function makeFilterBtn(text, active) {
+  const btn = document.createElement("button");
+  btn.textContent = text;
+  btn.className = "filter-btn" + (active ? " filter-btn--active" : "");
+  return btn;
+}
+
+let activeFilter = "all";
+function setFilter(cat) {
+  activeFilter = cat;
+  filtersEl.querySelectorAll(".filter-btn").forEach(btn => {
+    const isCurrent = (cat === "all" && btn.textContent === "All") || btn.dataset.cat === cat;
+    btn.classList.toggle("filter-btn--active", isCurrent);
+  });
+  applyFilter();
+}
+
+function applyFilter() {
+  const visibleItems = activeFilter === "all"
+    ? new Set(itemSet)
+    : new Set([...itemSet].filter(id => getCategory(id) === activeFilter));
+
+  const connectedSources = new Set();
+  links.forEach(l => {
+    const tid = typeof l.target === "string" ? l.target : l.target.id;
+    const sid = typeof l.source === "string" ? l.source : l.source.id;
+    if (visibleItems.has(tid)) connectedSources.add(sid);
+  });
+
+  node.style("opacity", d => {
+    if (d.group === "item") return visibleItems.has(d.id) ? 1 : 0.08;
+    return connectedSources.has(d.id) ? 1 : 0.08;
+  });
+  link.style("opacity", d => {
+    const tid = typeof d.target === "string" ? d.target : d.target.id;
+    return visibleItems.has(tid) ? 0.6 : 0.05;
+  });
+
+  document.getElementById("status").textContent = visibleItems.size + " items shown";
+}
+
+// D3 force simulation
+const svg = d3.select("#graph");
+
+const simulation = d3.forceSimulation(nodes)
+  .force("link", d3.forceLink(links).id(d => d.id).distance(CONFIG.linkDistance).strength(CONFIG.linkStrength))
+  .force("charge", d3.forceManyBody().strength(CONFIG.chargeStrength))
+  .force("center", d3.forceCenter(CONFIG.width / 2, CONFIG.height / 2))
+  .force("collision", d3.forceCollide().radius(d => d.radius + CONFIG.collisionPadding))
+  .force("x", d3.forceX(CONFIG.width / 2).strength(0.05))
+  .force("y", d3.forceY(CONFIG.height / 2).strength(0.05));
+
+const link = svg.append("g")
+  .selectAll("line")
+  .data(links)
+  .join("line")
+  .attr("class", "link");
+
+const node = svg.append("g")
+  .selectAll("g")
+  .data(nodes)
+  .join("g")
+  .call(d3.drag()
+    .on("start", (e, d) => { if (!e.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+    .on("drag", (e, d) => { d.fx = e.x; d.fy = e.y; })
+    .on("end", (e, d) => { if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; })
+  );
+
+// Item click navigation
+node.filter(d => d.group === "item" && d.url)
+  .style("cursor", "pointer")
+  .on("click", (e, d) => { window.location.href = d.url; });
+
+// Source double-click navigation
+node.filter(d => d.group !== "item")
+  .style("cursor", "pointer")
+  .on("dblclick", (e, d) => { if (d.url) window.open(d.url, "_blank"); });
+
+// Draw circles
+node.append("circle")
+  .attr("r", d => d.radius)
+  .attr("fill", d => d.group === "item" ? ITEM_COLOUR : (groupColours[d.group] || "#999"))
+  .attr("stroke", d => d.group === "item" ? "none" : "#fff")
+  .attr("stroke-width", d => d.group === "item" ? 0 : 2);
+
+// Tooltips
+node.append("title").text(d => d.group === "item"
+  ? d.label + (d.url ? " (click to view)" : "")
+  : d.label.replace(/\n/g, " ") + " (double-click to visit)");
+
+// Source labels
+node.filter(d => d.group !== "item")
+  .each(function(d) {
+    const lines = d.label.split("\n");
+    const text = d3.select(this).append("text")
+      .attr("class", "source-label")
+      .attr("text-anchor", "middle");
+    lines.forEach((line, i) => {
+      text.append("tspan")
+        .attr("x", 0)
+        .attr("dy", i === 0 ? d.radius + 12 : 12)
+        .text(line);
+    });
+  });
+
+// Item labels
+node.filter(d => d.group === "item")
+  .append("text")
+  .attr("class", "item-label")
+  .attr("x", 8)
+  .attr("y", 3)
+  .text(d => d.label);
+
+// Tick
+simulation.on("tick", () => {
+  link.attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+  node.attr("transform", d => `translate(${d.x},${d.y})`);
+});
+
+// Keyboard accessibility
+node.filter(d => d.group === "item" && d.url)
+  .attr("tabindex", "0")
+  .on("keydown", (e, d) => { if (e.key === "Enter") window.location.href = d.url; });
+</script>
+</body>
+</html>
