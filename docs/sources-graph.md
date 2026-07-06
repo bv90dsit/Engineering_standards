@@ -156,10 +156,10 @@ const stdCategories = {
   "DAT-001":"DAT","DAT-002":"DAT","DAT-003":"DAT","DAT-004":"DAT","DAT-005":"DAT",
   "ACC-001":"ACC","ACC-002":"ACC","ACC-003":"ACC",
   "EMG-001":"EMG","EMG-002":"EMG","EMG-003":"EMG","EMG-004":"EMG",
-  "PY-001":"ENG","PY-002":"ENG","PY-003":"SEC","PY-004":"ENG","PY-005":"SEC","PY-006":"SEC","PY-007":"SEC","PY-008":"SEC","PY-009":"SEC","PY-010":"ENG",
-  "JV-001":"ENG","JV-002":"ENG","JV-003":"SEC","JV-004":"ENG","JV-005":"SEC","JV-006":"ENG","JV-007":"ENG","JV-008":"OPS",
-  "TS-001":"ENG","TS-002":"ENG","TS-003":"ENG","TS-004":"ENG","TS-005":"ARC","TS-006":"ARC","TS-007":"ENG","TS-008":"ENG",
-  "ORG-001":"ENG","ORG-002":"SEC"
+  "PY-001":"PY","PY-002":"PY","PY-003":"PY","PY-004":"PY","PY-005":"PY","PY-006":"PY","PY-007":"PY","PY-008":"PY","PY-009":"PY","PY-010":"PY",
+  "JV-001":"JV","JV-002":"JV","JV-003":"JV","JV-004":"JV","JV-005":"JV","JV-006":"JV","JV-007":"JV","JV-008":"JV",
+  "TS-001":"TS","TS-002":"TS","TS-003":"TS","TS-004":"TS","TS-005":"TS","TS-006":"TS","TS-007":"TS","TS-008":"TS",
+  "ORG-001":"ORG","ORG-002":"ORG"
 };
 
 const nodes = [];
