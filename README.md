@@ -105,7 +105,7 @@ See [modules/README.md](modules/README.md) for how to create your own.
 | [docs/usage-by-role.md](docs/usage-by-role.md) | Workflows per role (engineer, tech lead, security, delivery) |
 | [docs/sources.md](docs/sources.md) | Source frameworks, synthesis methodology |
 | [docs/versioning.md](docs/versioning.md) | Version policy, pinning, migration windows |
-| [docs/testing.md](docs/testing.md) | Test strategy (49 tests) |
+| [docs/testing.md](docs/testing.md) | Test strategy and CI pipelines |
 | [docs/exemptions.md](docs/exemptions.md) | Waiver process for MUST standards |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to add a standard |
 | [.claude/skills/uk-gov-standards.md](.claude/skills/uk-gov-standards.md) | Claude Code skill — AI writes compliant code proactively |
