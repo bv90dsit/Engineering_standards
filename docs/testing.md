@@ -4,18 +4,17 @@ See also: [Main README](../README.md) | [CONTRIBUTING.md](../CONTRIBUTING.md)
 
 ## Overview
 
-| Suite | Framework | Files | Tests | What it covers |
-|-------|-----------|-------|-------|----------------|
-| Python unit tests | pytest | `tests/` | 29 | Query library, validation, compliance checker, scaffold |
-| Build pipeline tests | pytest | `tests/test_build_pipeline.py` | 8 | End-to-end: validate → build → graph sync → skill |
-| VS Code extension tests | mocha | `vscode-extension/src/test/suite/` | 20 | Glob matching, rule pattern matching |
-| Standards validation | Custom (`validate_standards.py`) | — | — | Format, traceability, trusted sources, orphans |
-| Graph sync check | Custom (`check_graph_sync.py`) | — | — | Graph data matches source traceability |
-| **Total** | | | **57+** | |
+| Suite | Framework | Files | What it covers |
+|-------|-----------|-------|----------------|
+| Python unit tests | pytest | `tests/` | Query library, validation, compliance checker, scaffold |
+| Build pipeline tests | pytest | `tests/test_build_pipeline.py` | End-to-end: build → graph sync → skill |
+| VS Code extension tests | mocha | `vscode-extension/src/test/suite/` | Glob matching, rule pattern matching |
+| Standards validation | Custom (`validate_standards.py`) | — | Format, traceability, trusted sources, orphans |
+| Graph sync check | Custom (`check_graph_sync.py`) | — | Graph data matches source traceability |
 
 ## Python tests (`tests/`)
 
-### test_query.py (14 tests) — Query library
+### test_query.py — Query library
 
 The query library (`standards_lib/`) powers every consumer. These tests verify:
 
@@ -27,7 +26,7 @@ The query library (`standards_lib/`) powers every consumer. These tests verify:
 | Error handling | Bad module name raises ValueError, missing ID raises FileNotFoundError | Clear errors vs silent wrong behaviour |
 | Serialisation | `to_json()` produces valid JSON | Machine consumers need parseable output |
 
-### test_validate.py (5 tests) — CI validation gate
+### test_validate.py — CI validation gate
 
 These test the script that prevents broken standards from merging:
 
@@ -39,18 +38,18 @@ These test the script that prevents broken standards from merging:
 | Catches untrusted source | The trusted sources gate actually works |
 | Catches TODOs | Half-finished standards can't ship |
 
-### test_check_compliance.py (6 tests) — Compliance checker
+### test_check_compliance.py — Compliance checker detection logic
 
-These test the tool that runs in consuming repos' CI:
+These test the compliance checker tool (`scripts/check_compliance.py`) that other teams run against their repos. They verify the checker's detection logic — not the standards themselves.
 
-| Test | Why it exists |
-|------|--------------|
-| ENG-001 pass/fail | Licence detection works both ways (no false positives, no misses) |
-| ENG-003 pass | CI workflow detection works |
-| SEC-001 pass | Doesn't flag clean code |
-| SEC-002 pass/fail | Dependency scanner detection works both ways |
+| Test class | What it verifies |
+|------------|-----------------|
+| `TestLicenceDetection` | Correctly identifies repos with/without a LICENCE file |
+| `TestCIWorkflowDetection` | Correctly identifies repos with GitHub Actions workflows |
+| `TestHTTPSDetection` | Correctly identifies repos free of plaintext HTTP URLs |
+| `TestDependencyScannerDetection` | Correctly identifies repos with/without dependency scanning |
 
-### test_new_standard.py (2 tests) — Scaffold command
+### test_new_standard.py — Scaffold command
 
 | Test | Why it exists |
 |------|--------------|
@@ -59,7 +58,7 @@ These test the tool that runs in consuming repos' CI:
 
 ## VS Code extension tests (`vscode-extension/src/test/suite/`)
 
-### glob.test.ts (12 tests) — Glob matching
+### glob.test.ts — Glob matching
 
 The glob logic is extracted into `src/glob.ts` (pure function, no VS Code dependency) so it can be tested directly with mocha — no electron runner needed.
 
@@ -78,7 +77,7 @@ The glob logic is extracted into `src/glob.ts` (pure function, no VS Code depend
 | `test file exclusion` | `**/test_*` matches pytest files | Python test exclusions work |
 | `tsconfig pattern` | `**/tsconfig*.json` matches variants | TS-001 check fires on the right files |
 
-### rulePatterns.test.ts (8 tests) — Rule regex patterns
+### rulePatterns.test.ts — Rule regex patterns
 
 Tests the actual regex patterns from `modules/*/rules.json` to verify they match what they should and don't false-positive:
 
@@ -93,7 +92,7 @@ Tests the actual regex patterns from `modules/*/rules.json` to verify they match
 | `TS-002: any type` | Matches `: any` annotation | TypeScript type safety check works |
 | `exclude patterns` | Comment lines skipped | Rules don't fire inside comments |
 
-### test_build_pipeline.py (8 tests) — End-to-end build
+### test_build_pipeline.py — End-to-end build
 
 Tests the full pipeline that CI and Pages deploy rely on:
 
@@ -147,12 +146,12 @@ Tests the full pipeline that CI and Pages deploy rely on:
 ## Running tests
 
 ```bash
-# Python tests (29 tests, ~3s)
+# Python tests
 pytest                           # all tests
 pytest tests/test_query.py       # just the query library
-pytest -k "test_check_eng_001"   # one specific test
+pytest -k "test_repo_with_licence"  # one specific test
 
-# VS Code extension tests (20 tests, <1s)
+# VS Code extension tests
 cd vscode-extension
 npm test                         # runs mocha on compiled output
 

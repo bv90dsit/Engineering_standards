@@ -1,4 +1,9 @@
-"""Tests for scripts/check_compliance.py."""
+"""Tests for the compliance checker tool (scripts/check_compliance.py).
+
+These verify that the checker correctly detects compliance/non-compliance
+when pointed at a repository. They test the detection logic, not the
+standards themselves.
+"""
 
 from __future__ import annotations
 
@@ -31,11 +36,11 @@ def run_check_compliance(
     )
 
 
-class TestCheckENG001:
-    """Tests for ENG-001: Open source — licence file check."""
+class TestLicenceDetection:
+    """Tests that the checker correctly detects presence/absence of a licence file."""
 
-    def test_check_eng_001_pass(self, tmp_path: Path):
-        """Repo with LICENCE file passes ENG-001."""
+    def test_repo_with_licence_passes(self, tmp_path: Path):
+        """Checker reports PASS when a LICENCE file exists."""
         # Create a fake repo with a LICENCE file
         (tmp_path / "LICENCE").write_text("MIT Licence\n")
         (tmp_path / ".git").mkdir()  # Fake git dir for ENG-002
@@ -45,8 +50,8 @@ class TestCheckENG001:
         assert result.returncode == 0 or "PASS" in result.stdout
         assert "Licence found" in result.stdout or "PASS" in result.stdout
 
-    def test_check_eng_001_fail(self, tmp_path: Path):
-        """Repo without LICENCE file fails ENG-001."""
+    def test_repo_without_licence_fails(self, tmp_path: Path):
+        """Checker reports FAIL when no LICENCE file exists."""
         # Create a bare repo with no licence
         (tmp_path / ".git").mkdir()
         (tmp_path / "README.md").write_text("# Project\n" * 12)
@@ -56,11 +61,11 @@ class TestCheckENG001:
         assert "No LICENCE" in result.stdout or "FAIL" in result.stdout
 
 
-class TestCheckENG003:
-    """Tests for ENG-003: CI workflows check."""
+class TestCIWorkflowDetection:
+    """Tests that the checker correctly detects CI workflow configuration."""
 
-    def test_check_eng_003_pass(self, tmp_path: Path):
-        """Repo with .github/workflows/*.yml passes ENG-003."""
+    def test_repo_with_workflows_passes(self, tmp_path: Path):
+        """Checker reports PASS when GitHub Actions workflows exist."""
         workflows_dir = tmp_path / ".github" / "workflows"
         workflows_dir.mkdir(parents=True)
         (workflows_dir / "ci.yml").write_text("name: CI\non: push\njobs: {}\n")
@@ -71,11 +76,11 @@ class TestCheckENG003:
         assert "CI workflows found" in result.stdout or "PASS" in result.stdout
 
 
-class TestCheckSEC001:
-    """Tests for SEC-001: HTTPS everywhere."""
+class TestHTTPSDetection:
+    """Tests that the checker correctly detects plaintext HTTP URLs."""
 
-    def test_check_sec_001_pass(self, tmp_path: Path):
-        """Repo with no http:// URLs passes SEC-001."""
+    def test_repo_with_only_https_passes(self, tmp_path: Path):
+        """Checker reports PASS when no http:// URLs found in source."""
         # Create a source file with only https URLs
         (tmp_path / "main.py").write_text('url = "https://example.com"\n')
         (tmp_path / ".git").mkdir()
@@ -84,11 +89,11 @@ class TestCheckSEC001:
         assert "No plaintext HTTP" in result.stdout or "PASS" in result.stdout
 
 
-class TestCheckSEC002:
-    """Tests for SEC-002: Dependency vulnerability scanning."""
+class TestDependencyScannerDetection:
+    """Tests that the checker correctly detects dependency scanning configuration."""
 
-    def test_check_sec_002_pass(self, tmp_path: Path):
-        """Repo with dependabot.yml passes SEC-002."""
+    def test_repo_with_dependabot_passes(self, tmp_path: Path):
+        """Checker reports PASS when dependabot.yml is configured."""
         github_dir = tmp_path / ".github"
         github_dir.mkdir()
         (github_dir / "dependabot.yml").write_text("version: 2\nupdates: []\n")
@@ -97,8 +102,8 @@ class TestCheckSEC002:
         result = run_check_compliance(tmp_path, category="SEC")
         assert "Dependency scanner configured" in result.stdout or "PASS" in result.stdout
 
-    def test_check_sec_002_fail(self, tmp_path: Path):
-        """Repo without any scanner config fails SEC-002."""
+    def test_repo_without_scanner_fails(self, tmp_path: Path):
+        """Checker reports FAIL when no dependency scanning is configured."""
         (tmp_path / ".git").mkdir()
         (tmp_path / "main.py").write_text('print("hello")\n')
 
