@@ -64,7 +64,7 @@ mkdir -p .claude/skills
 curl -sL https://raw.githubusercontent.com/bv90dsit/Engineering_standards/main/.claude/skills/uk-gov-standards.md \
   -o .claude/skills/uk-gov-standards.md
 ```
-See [`.claude/skills/uk-gov-standards.md`](.claude/skills/uk-gov-standards.md) for what's included.
+See [`.claude/skills/uk-gov-standards.md`](.claude/skills/uk-gov-standards.md) for what's included, and [`.claude/skills/README.md`](.claude/skills/README.md) for all available skills.
 
 **4. MCP server** — AI agents query standards and check code in real time ([details](mcp-server/README.md)):
 ```json
